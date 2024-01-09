@@ -133,20 +133,8 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
                 $relevance_query = '0';
             }
 
-            $lang = isset( $_REQUEST['lang'] ) ? sanitize_text_field( $_REQUEST['lang'] ) : '';
-            if ( $lang ) {
-                $terms = get_terms( array(
-                    'taxonomy'   => $this->taxonomy,
-                    'hide_empty' => false,
-                    'fields'     => 'ids',
-                    'lang'       => $lang
-                ) );
-                if ( $terms ) {
-                    $search_query .= sprintf( " AND ( " . $wpdb->terms . ".term_id IN ( %s ) )", implode( ',', $terms ) );
-                } else {
-                    $search_query .= " AND 1=2";
-                }
-            }
+            // For multilingual shops
+            $search_query .= $this->get_lang_query();
 
             $sql = "
 			SELECT
@@ -301,6 +289,60 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
             }
 
             return $relevance_array;
+
+        }
+
+        /**
+         * Get sql query for multilingual results
+         *
+         * @return string SQL query
+         */
+        private function get_lang_query() {
+
+            global $wpdb;
+
+            $search_query = '';
+
+            $lang = isset( $_REQUEST['lang'] ) ? sanitize_text_field( $_REQUEST['lang'] ) : '';
+
+            if ( $lang ) {
+
+                if ( defined( 'ICL_SITEPRESS_VERSION' ) ) {
+
+                    $tax_names_arr = array();
+                    foreach ( $this->taxonomy as $key => $tax_name ) {
+                        $tax_names_arr[] = 'tax_' . $tax_name;
+                    }
+
+                    $tax_names_arr = array_map( array( $this, 'prepare_tax_names' ), $tax_names_arr );
+                    $tax_names = implode( ',', $tax_names_arr );
+
+                    $search_query = " AND $wpdb->terms.term_id IN (
+                        SELECT element_id
+                        FROM {$wpdb->prefix}icl_translations
+                        WHERE language_code = '{$lang}'
+                        AND element_type IN ( {$tax_names} )
+                    )";
+
+                } else {
+
+                    $terms = get_terms( array(
+                        'taxonomy'   => $this->taxonomy,
+                        'hide_empty' => false,
+                        'fields'     => 'ids',
+                        'lang'       => $lang
+                    ) );
+                    if ( $terms ) {
+                        $search_query = sprintf( " AND ( " . $wpdb->terms . ".term_id IN ( %s ) )", implode( ',', $terms ) );
+                    } else {
+                        $search_query = " AND 1=2";
+                    }
+
+                }
+
+            }
+
+            return $search_query;
 
         }
 

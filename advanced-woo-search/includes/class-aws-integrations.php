@@ -100,11 +100,6 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                     add_action( 'wp_head', array( $this, 'jupiter_head_action' ) );
                 }
 
-                if ( 'Woodmart' === $this->current_theme ) {
-                    add_action( 'wp_head', array( $this, 'woodmart_head_action' ) );
-                    add_filter( 'aws_seamless_search_form_filter', array( $this, 'woodmart_seamless_search_form_filter' ), 10, 2 );
-                }
-
                 if ( 'Storefront' === $this->current_theme ) {
                     add_action( 'wp_footer', array( $this, 'storefront_footer_action' ) );
                 }
@@ -252,10 +247,6 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
 
             if ( 'Electro' === $this->current_theme ) {
                 add_filter( 'aws_searchbox_markup', array( $this, 'electro_searchbox_markup' ), 1, 2 );
-            }
-
-            if ( 'Woodmart' === $this->current_theme ) {
-                add_filter( 'woodmart_shop_page_link', array( $this, 'woodmart_shop_page_link' ), 9999 );
             }
 
             if ( 'Elessi Theme' === $this->current_theme ) {
@@ -435,6 +426,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             // GeneratePress theme
             if ( 'GeneratePress' === $this->current_theme ) {
                 include_once( AWS_DIR . '/includes/modules/class-aws-generatepress.php' );
+            }
+
+            // Woodmart theme
+            if ( 'Woodmart' === $this->current_theme ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-woodmart.php' );
             }
 
             // Product Filters for WooCommerce
@@ -792,51 +788,6 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             </script>
 
         <?php }
-
-        /*
-         * Woodmart theme
-         */
-        public function woodmart_head_action() { ?>
-
-             <style>
-
-                 .woodmart-search-full-screen .aws-container .aws-search-form {
-                     padding-top: 0;
-                     padding-right: 0;
-                     padding-bottom: 0;
-                     padding-left: 0;
-                     height: 110px;
-                     border: none;
-                     background-color: transparent;
-                     box-shadow: none;
-                 }
-
-                 .woodmart-search-full-screen .aws-container .aws-search-field {
-                     color: #333;
-                     text-align: center;
-                     font-weight: 600;
-                     font-size: 48px;
-                 }
-
-                 .woodmart-search-full-screen .aws-container .aws-search-form .aws-form-btn,
-                 .woodmart-search-full-screen .aws-container .aws-search-form.aws-show-clear.aws-form-active .aws-search-clear {
-                     display: none !important;
-                 }
-
-             </style>
-
-        <?php }
-
-        /*
-         * Woodmart theme: Filter default search form markup
-         */
-        public function woodmart_seamless_search_form_filter( $markup, $search_form ) {
-            if ( strpos( $search_form, 'wd-search-full-screen' ) !== false ) {
-                $pattern = '/(<form[\s\S]*?<\/form>)/i';
-                $markup = preg_replace( $pattern, $markup, $search_form );
-            }
-            return $markup;
-        }
 
         /*
          * Elessi theme
@@ -1786,10 +1737,6 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 $selectors[] = '.responsive-searchform';
             }
 
-            if ( 'Woodmart' === $this->current_theme ) {
-                $selectors[] = '.woodmart-search-form form, form.woodmart-ajax-search';
-            }
-
             if ( 'Venedor' === $this->current_theme ) {
                 $selectors[] = '#search-form form';
             }
@@ -2014,18 +1961,6 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             $pattern = '/<div class="aws-search-btn aws-form-btn">[\S\s]*?<\/div>/i';
             $markup = preg_replace( $pattern, '', $markup );
             return $markup;
-        }
-
-        /*
-         * Woodmart theme update search page pagination links
-         */
-        public function woodmart_shop_page_link( $link ) {
-            if ( isset( $_GET['type_aws'] ) && strpos( $link, 'type_aws' ) === false ) {
-                $link = add_query_arg( array(
-                    'type_aws' => 'true',
-                ), $link );
-            }
-            return $link;
         }
 
         /*
