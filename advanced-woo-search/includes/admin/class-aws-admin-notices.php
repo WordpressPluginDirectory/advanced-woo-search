@@ -64,6 +64,7 @@ if ( ! class_exists( 'AWS_Admin_Notices' ) ) :
                 && ! defined( 'TINVWL_FVERSION' ) && ! class_exists( 'WeDevs_Dokan' )
                 && ! ( defined( 'WCMp_PLUGIN_VERSION' ) || defined( 'MVX_PLUGIN_VERSION' ) )
                 && ! class_exists( 'WC_Memberships' )
+                && ! ( class_exists('Iconic_WSSV') || class_exists('JCK_WSSV') )
             ) {
                 return;
             }
@@ -121,6 +122,11 @@ if ( ! class_exists( 'AWS_Admin_Notices' ) ) :
             if ( class_exists( 'WC_Memberships' ) && ( ! $hide_option || array_search( 'wcmember', $hide_option ) === false ) ) {
                 $notice_message .= '<li>' . __( 'WooCommerce Memberships plugin.', 'advanced-woo-search' ) . ' <a target="_blank" href="https://advanced-woo-search.com/guide/woocommerce-memberships/?utm_source=wp-plugin&utm_medium=integration_notice&utm_campaign=wcmember">' . __( 'Learn more', 'advanced-woo-search' ) . '</a></li>';
                 $notice_id .= 'wcmember|';
+            }
+
+            if ( ( class_exists('Iconic_WSSV') || class_exists('JCK_WSSV') ) && ( ! $hide_option || array_search( 'singlevar', $hide_option ) === false ) ) {
+                $notice_message .= '<li>' . __( 'WooCommerce Show Single Variations by Iconic plugin.', 'advanced-woo-search' ) . ' <a target="_blank" href="https://advanced-woo-search.com/guide/woocommerce-show-single-variations-by-iconic/?utm_source=wp-plugin&utm_medium=integration_notice&utm_campaign=singlevar">' . __( 'Learn more', 'advanced-woo-search' ) . '</a></li>';
+                $notice_id .= 'singlevar|';
             }
 
             $notice_id = 'aws_hide_int_notices=' . urlencode( trim( $notice_id, '|' ) );

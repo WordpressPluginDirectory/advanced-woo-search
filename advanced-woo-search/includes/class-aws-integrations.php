@@ -2107,7 +2107,7 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                         var $navItems = jQuery('.dce-page-numbers a.page-numbers');
                         if ( $navItems.length > 0 ) {
                             $navItems.each(function(){
-                                var s = encodeURIComponent( '<?php echo $_GET['s']; ?>' );
+                                var s = encodeURIComponent( '<?php echo esc_attr( $_GET['s'] ); ?>' );
                                 var href = jQuery(this).attr( 'href' ) + '&post_type=product&type_aws=true&s=' + s;
                                 jQuery(this).attr( 'href', href );
                             });
