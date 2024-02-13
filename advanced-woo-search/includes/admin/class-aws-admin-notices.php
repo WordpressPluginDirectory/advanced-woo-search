@@ -56,7 +56,7 @@ if ( ! class_exists( 'AWS_Admin_Notices' ) ) :
          */
         public function plugins_integration_notice() {
 
-            if ( ! current_user_can( 'manage_options' ) ) {
+            if ( ! current_user_can( AWS_Helpers::user_admin_capability() ) ) {
                 return;
             }
 
@@ -172,7 +172,7 @@ if ( ! class_exists( 'AWS_Admin_Notices' ) ) :
                 return;
             }
 
-            if ( ! current_user_can( 'manage_options' ) ) {
+            if ( ! current_user_can( AWS_Helpers::user_admin_capability() ) ) {
                 return;
             }
 
@@ -195,7 +195,7 @@ if ( ! class_exists( 'AWS_Admin_Notices' ) ) :
                 return;
             }
 
-            if ( ! isset( $_POST["Submit"] ) || ! current_user_can( 'manage_options' ) ) {
+            if ( ! isset( $_POST["Submit"] ) || ! current_user_can( AWS_Helpers::user_admin_capability() ) ) {
                 return;
             }
 

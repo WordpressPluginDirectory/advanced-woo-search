@@ -251,6 +251,8 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
 
             if ( 'Elessi Theme' === $this->current_theme ) {
                 add_action( 'wp_enqueue_scripts', array( $this,  'elessi_wp_enqueue_scripts' ), 9999999 );
+                add_action( 'aws_search_page_filters', array( $this,  'elessi_aws_search_page_filters' ), 1 );
+                add_filter( 'woocommerce_get_filtered_term_product_counts_query', array( $this, 'elessi_woocommerce_get_filtered_term_product_counts_query' ), 9999999 );
             }
 
             // Product Visibility by User Role for WooCommerce plugin
@@ -1975,6 +1977,43 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                });
             ";
             wp_add_inline_script( 'aws-script', $script);
+        }
+
+        /*
+         * Elessi Theme fix for shop filters
+         */
+        public function elessi_aws_search_page_filters( $filters ) {
+
+            if ( isset( $_GET['on-sale'] ) && $_GET['on-sale'] === '1' ) {
+                $filters['on_sale'] = true;
+            }
+
+            if ( isset( $_GET['in-stock'] ) && $_GET['in-stock'] === '1' ) {
+                $filters['in_status'] = true;
+            }
+
+            if ( isset( $_GET['min_price'] ) ) {
+                $filters['price_min'] = intval( $_GET['min_price'] );
+            }
+
+            if ( isset( $_GET['max_price'] ) ) {
+                $filters['price_max'] = intval( $_GET['max_price'] );
+            }
+
+            return $filters;
+
+        }
+
+        /*
+         * Elessi Theme fix for shop filters products count
+         */
+        public function elessi_woocommerce_get_filtered_term_product_counts_query( $query ) {
+            if ( isset ($_GET['s'] ) && $_GET['s'] && isset( $_GET['type_aws'] ) ) {
+                global $wpdb;
+                $regex = "/AND \({$wpdb->posts}\.post_title.*?\)/i";
+                $query['where'] = preg_replace( $regex, '', $query['where'] );
+            }
+            return $query;
         }
 
         /*

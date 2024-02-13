@@ -304,6 +304,7 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                 "desc"  => __( "Maximal total number of search results. Larger values can lead to slower search speed.", "advanced-woo-search" ),
                 "id"    => "search_page_res_num",
                 "value" => 100,
+                "min" => 0,
                 "type"  => "number"
             );
 
@@ -312,6 +313,7 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                 "desc"  => __( "Number of search results per page. Empty or 0 - use theme default value.", "advanced-woo-search" ),
                 "id"    => "search_page_res_per_page",
                 "value" => '',
+                "min" => 0,
                 "type"  => "number"
             );
 
@@ -350,6 +352,15 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                 "id"    => "search_timeout",
                 "value" => 300,
                 'min'   => 100,
+                "type"  => "number"
+            );
+
+            $options['performance'][] = array(
+                "name"  => __( "Search words number", "advanced-woo-search" ),
+                "desc"  => __( "The maximum number of words allowed for the search. All extra words will be removed from the search query.", "advanced-woo-search" ),
+                "id"    => "search_words_num",
+                "value" => 6,
+                'min'   => 1,
                 "type"  => "number"
             );
 
@@ -489,6 +500,7 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                 "desc"  => __( "Minimum number of characters required to run ajax search.", "advanced-woo-search" ),
                 "id"    => "min_chars",
                 "value" => 1,
+                "min" => 1,
                 "type"  => "number"
             );
 
@@ -595,6 +607,7 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                 "desc"  => __( "Maximal allowed number of words for product description.", "advanced-woo-search" ),
                 "id"    => "excerpt_length",
                 "value" => 20,
+                "min" => 0,
                 "type"  => "number"
             );
 
@@ -603,6 +616,7 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                 "desc"  => __( "Maximum number of displayed products search results.", "advanced-woo-search" ),
                 "id"    => "results_num",
                 "value" => 10,
+                "min" => 0,
                 "type"  => "number"
             );
 
@@ -611,6 +625,7 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                 "desc"  => __( "Maximum number of displayed archive pages search results.", "advanced-woo-search" ),
                 "id"    => "pages_results_num",
                 "value" => 10,
+                "min" => 0,
                 "type"  => "number"
             );
 

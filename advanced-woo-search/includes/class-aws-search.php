@@ -135,6 +135,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             $search_in         = AWS()->get_settings( 'search_in' );
             $outofstock        = AWS()->get_settings( 'outofstock' );
             $search_rule       = AWS()->get_settings( 'search_rule' );
+            $search_words_num  = AWS()->get_settings( 'search_words_num' );
 
             $search_in_arr = array();
 
@@ -153,12 +154,13 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             $custom_tax_array = array();
 
             $this->data['s'] = $s;
-            $this->data['results_num']  = $results_num ? $results_num : 10;
+            $this->data['results_num']  = $results_num;
             $this->data['pages_results_num']  = $pages_results_num;
             $this->data['search_terms'] = array();
             $this->data['search_in']    = $search_in_arr;
             $this->data['outofstock']   = $outofstock;
             $this->data['search_rule']   = $search_rule;
+            $this->data['search_words_num'] = $search_words_num;
 
             $search_array = array_unique( explode( ' ', $s ) );
 
@@ -171,6 +173,10 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                         $this->data['search_terms'][] = $search_term;
                     }
                 }
+            }
+
+            if ( $this->data['search_words_num'] && count( $this->data['search_terms'] ) > intval( $this->data['search_words_num'] ) ) {
+                $this->data['search_terms'] = array_slice( $this->data['search_terms'], 0, intval( $this->data['search_words_num'] ) );
             }
 
 //            if ( empty( $this->data['search_terms'] ) ) {
@@ -186,7 +192,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 
             if ( ! empty( $this->data['search_terms'] ) ) {
 
-                if ( ! empty( $this->data['search_in'] ) ) {
+                if ( ! empty( $this->data['search_in'] ) && $this->data['results_num'] ) {
 
                     $posts_ids = $this->query_index_table();
 
@@ -596,7 +602,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 
                         }
 
-                        $excerpt = wp_trim_words( $excerpt, $excerpt_length, '...' );
+                        $excerpt = $excerpt_length ? wp_trim_words( $excerpt, $excerpt_length, '...' ) : '';
 
                     }
 

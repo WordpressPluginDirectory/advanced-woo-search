@@ -119,6 +119,9 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
              * @param int
              */
             $terms_number = apply_filters( 'aws_search_terms_number', $this->results_num );
+            if ( ! $terms_number ) {
+                return array();
+            }
 
             $excludes_array = $this->get_excluded_terms();
             if ( $excludes_array && ! empty( $excludes_array ) ) {

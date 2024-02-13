@@ -726,6 +726,12 @@ msgstr ""
 msgid "Time after user input that script is waiting before sending a search event to the server, ms."
 msgstr ""
 
+msgid "Search words number"
+msgstr ""
+
+msgid "The maximum number of words allowed for the search. All extra words will be removed from the search query."
+msgstr ""
+
 msgid "Index table options"
 msgstr ""
 

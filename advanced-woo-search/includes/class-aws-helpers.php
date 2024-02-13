@@ -1120,6 +1120,21 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
 
         }
 
+        /*
+         * Check for incorrect filtering rules and return them
+         * @return string
+         */
+        static public function user_admin_capability() {
+
+            /**
+             * What capability current user must have to view settings page
+             * @since 2.99
+             * @param string $capability Minimal capability required to view plugin settings page
+             */
+            return apply_filters( 'aws_admin_capability', 'manage_options' );
+
+        }
+
     }
 
 endif;

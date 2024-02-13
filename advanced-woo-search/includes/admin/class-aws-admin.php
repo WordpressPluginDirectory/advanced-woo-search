@@ -66,9 +66,9 @@ class AWS_Admin {
      * Add options page
      */
     public function add_admin_page() {
-        add_menu_page( esc_html__( 'Adv. Woo Search', 'advanced-woo-search' ), esc_html__( 'Adv. Woo Search', 'advanced-woo-search' ), 'manage_options', 'aws-options', array( &$this, 'display_admin_page' ), 'dashicons-search', 70 );
-        add_submenu_page( 'aws-options', __( 'Settings', 'advanced-woo-search' ), __( 'Settings', 'advanced-woo-search'), 'manage_options', 'aws-options', array( $this, 'display_admin_page' ) );
-        add_submenu_page( 'aws-options', __( 'Premium', 'advanced-woo-search' ),  '<span style="color:rgba(255, 255, 91, 0.8);">' . __( 'Premium', 'advanced-woo-search' ) . '</span>', 'manage_options', admin_url( 'admin.php?page=aws-options&tab=premium' ) );
+        add_menu_page( esc_html__( 'Adv. Woo Search', 'advanced-woo-search' ), esc_html__( 'Adv. Woo Search', 'advanced-woo-search' ), AWS_Helpers::user_admin_capability(), 'aws-options', array( &$this, 'display_admin_page' ), 'dashicons-search', 70 );
+        add_submenu_page( 'aws-options', __( 'Settings', 'advanced-woo-search' ), __( 'Settings', 'advanced-woo-search'), AWS_Helpers::user_admin_capability(), 'aws-options', array( $this, 'display_admin_page' ) );
+        add_submenu_page( 'aws-options', __( 'Premium', 'advanced-woo-search' ),  '<span style="color:rgba(255, 255, 91, 0.8);">' . __( 'Premium', 'advanced-woo-search' ) . '</span>', AWS_Helpers::user_admin_capability(), admin_url( 'admin.php?page=aws-options&tab=premium' ) );
     }
 
     /**
@@ -97,7 +97,7 @@ class AWS_Admin {
 
         $tabs_html = '<h2 class="nav-tab-wrapper woo-nav-tab-wrapper">'.$tabs_html.'</h2>';
 
-        if ( isset( $_POST["Submit"] ) && current_user_can( 'manage_options' ) && isset( $_POST["_wpnonce"] ) && wp_verify_nonce( $_POST["_wpnonce"], 'plugin-settings' ) ) {
+        if ( isset( $_POST["Submit"] ) && current_user_can( AWS_Helpers::user_admin_capability() ) && isset( $_POST["_wpnonce"] ) && wp_verify_nonce( $_POST["_wpnonce"], 'plugin-settings' ) ) {
             AWS_Admin_Options::update_settings();
         }
 

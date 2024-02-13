@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/donate/?hosted_button_id=FDRDNZE6XAKE8
 Tags: widget, plugin, woocommerce, search, product search, woocommerce search, ajax search, live search, custom search, ajax, shortcode, better search, relevance search, relevant search, search by sku, search plugin, shop, store, wordpress search, wp ajax search, wp search, wp search plugin, sidebar, ecommerce, merketing, products, category search, instant-search, search highlight, woocommerce advanced search, woocommerce live search, WooCommerce Plugin, woocommerce product search
 Requires at least: 4.0
 Tested up to: 6.4
-Stable tag: 2.98
+Stable tag: 3.00
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -169,6 +169,14 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 4. Plugin settings page. Search results options
 
 == Changelog ==
+
+= 3.00 ( 2024-02-12 ) =
+* Add - New option to limit maximal number of search words
+
+= 2.99 ( 2024-02-05 ) =
+* Update - Plugin settings page. Set minimal values for some options
+* Update - Support for Elessi theme. Fix shop filters
+* Dev - Add aws_admin_capability filter
 
 = 2.98 ( 2024-01-22 ) =
 * Update - Remove plugin options during uninstall

@@ -35,7 +35,7 @@ if ( ! class_exists( 'AWS_Markup' ) ) :
             $table_name = $wpdb->prefix . AWS_INDEX_TABLE_NAME;
 
             if ( $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" ) != $table_name  ) {
-                if ( current_user_can( 'manage_options' ) ) {
+                if ( current_user_can( AWS_Helpers::user_admin_capability() ) ) {
                     echo 'Please go to <a href="' . admin_url( 'admin.php?page=aws-options' ) . '">plugins settings page</a> and click on "Reindex table" button.';
                 }
                 return;

@@ -43,11 +43,11 @@ if ( ! class_exists( 'AWS_Versions' ) ) :
             $current_version = get_option( 'aws_plugin_ver' );
             $reindex_version = get_option( 'aws_reindex_version' );
 
-            if ( ! ( $reindex_version ) && current_user_can( 'manage_options' ) ) {
+            if ( ! ( $reindex_version ) && current_user_can( AWS_Helpers::user_admin_capability() ) ) {
                 add_action( 'admin_notices', array( $this, 'admin_notice_no_index' ) );
             }
 
-            if ( $reindex_version && version_compare( $reindex_version, '1.23', '<' ) && current_user_can( 'manage_options' ) ) {
+            if ( $reindex_version && version_compare( $reindex_version, '1.23', '<' ) && current_user_can( AWS_Helpers::user_admin_capability() ) ) {
                 add_action( 'admin_notices', array( $this, 'admin_notice_reindex' ) );
             }
 
@@ -438,6 +438,20 @@ if ( ! class_exists( 'AWS_Versions' ) ) :
                     if ( $settings ) {
                         if ( ! isset( $settings['index_shortcodes'] ) ) {
                             $settings['index_shortcodes'] = 'true';
+                            update_option( 'aws_settings', $settings );
+                        }
+
+                    }
+
+                }
+
+                if ( version_compare( $current_version, '3.00', '<' ) ) {
+
+                    $settings = get_option( 'aws_settings' );
+
+                    if ( $settings ) {
+                        if ( ! isset( $settings['search_words_num'] ) ) {
+                            $settings['search_words_num'] = 6;
                             update_option( 'aws_settings', $settings );
                         }
 
