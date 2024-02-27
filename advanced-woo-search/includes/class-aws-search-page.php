@@ -441,7 +441,7 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
          */
         function body_class( $classes ) {
             foreach( $classes as $class ) {
-                if ( strpos( $class, 'elementor-page-' ) !== false ) {
+                if ( $class && strpos( $class, 'elementor-page-' ) !== false ) {
                     $this->data['is_elementor'] = true;
                     break;
                 }
