@@ -58,6 +58,16 @@ if ( ! class_exists( 'AWS_Table_Data' ) ) :
          */
         public function scrap_data() {
 
+            /**
+             * Fires before starting to scrap product data for index table
+             * @since 3.02
+             * @param object $this->product Current product
+             * @param integer $this->id Current product ID
+             * @param string $this->lang Current language
+             * @param array $this->options Array of index options
+             */
+            do_action( 'aws_index_before_scrapping', $this->product, $this->id, $this->lang, $this->options );
+
             $product = $this->product;
 
             $data = array();
@@ -333,6 +343,16 @@ if ( ! class_exists( 'AWS_Table_Data' ) ) :
             }
 
             $this->scraped_data[] = $data;
+
+            /**
+             * Fires after starting to scrap product data for index table
+             * @since 3.02
+             * @param object $this->product Current product
+             * @param integer $this->id Current product ID
+             * @param string $this->lang Current language
+             * @param array $this->options Array of index options
+             */
+            do_action( 'aws_index_after_scrapping', $this->product, $this->id, $this->lang, $this->options );
 
             return $this->scraped_data;
 

@@ -45,6 +45,9 @@ if (!class_exists('AWS_WPML')) :
 
             add_filter( 'aws_indexed_data', array( $this, 'indexed_data_trans_fallback' ), 1, 2 );
 
+            add_action( 'aws_index_before_scrapping', array( $this, 'aws_index_before_scrapping' ), 1, 4 );
+            add_action( 'aws_index_after_scrapping', array( $this, 'aws_index_after_scrapping' ), 1, 4 );
+
         }
 
         /*
@@ -105,6 +108,33 @@ if (!class_exists('AWS_WPML')) :
             }
 
             return $data;
+
+        }
+
+        /*
+         * Switch language during index if needed
+         */
+        public function aws_index_before_scrapping( $product, $id, $lang, $options ) {
+
+            global $sitepress;
+
+            if ( $sitepress ) {
+                $current_lang = $sitepress->get_current_language();
+                if ( $current_lang !== $lang ) {
+                    $this->data['current_lang'] = $current_lang;
+                    $sitepress->switch_lang( $lang );
+                }
+            }
+
+        }
+
+        public function aws_index_after_scrapping( $product, $id, $lang, $options ) {
+
+            global $sitepress;
+
+            if ( $sitepress && isset( $this->data['current_lang'] ) ) {
+                $sitepress->switch_lang( $this->data['current_lang'] );
+            }
 
         }
 
