@@ -100,6 +100,19 @@
     display: inline-block;
 }
 
+/* Cache button */
+#aws-clear-cache .loader {
+    display: none;
+    width: 20px;
+    height: 20px;
+    background: url('../img/loader-1.GIF') no-repeat 50% 50%;
+    margin-left: 15px;
+    margin-top: 4px;
+}
+#aws-clear-cache.loading .loader {
+    display: inline-block;
+}
+
 #aws_form .aws-heading {
     margin-right: -40px;
 }

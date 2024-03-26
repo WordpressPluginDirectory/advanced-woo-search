@@ -319,6 +319,7 @@ if ( ! class_exists( 'AWS_Order' ) ) :
 
                 case 'price':
                 case 'price-asc':
+                case 'low_high':
 
                     if ( isset( $this->products[0]['f_price'] ) ) {
                         usort( $this->products, array( $this, 'compare_price_asc' ) );
@@ -327,6 +328,7 @@ if ( ! class_exists( 'AWS_Order' ) ) :
                     break;
 
                 case 'price-desc':
+                case 'high_low':
 
                     if ( isset( $this->products[0]['f_price'] ) ) {
                         usort( $this->products, array( $this, 'compare_price_desc' ) );
@@ -387,6 +389,7 @@ if ( ! class_exists( 'AWS_Order' ) ) :
 
                 case 'title':
                 case 'title-desc':
+                case 'za':
 
                     if ( isset( $this->products[0]['title'] ) ) {
                         usort( $this->products, array( $this, 'compare_title' ) );
@@ -395,6 +398,7 @@ if ( ! class_exists( 'AWS_Order' ) ) :
                     break;
 
                 case 'title-asc':
+                case 'az':
 
                     if ( isset( $this->products[0]['title'] ) ) {
                         usort( $this->products, array( $this, 'compare_title' ) );

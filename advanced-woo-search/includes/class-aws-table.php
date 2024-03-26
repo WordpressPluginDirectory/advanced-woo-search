@@ -162,10 +162,6 @@ if ( ! class_exists( 'AWS_Table' ) ) :
 
                     $index_meta['offset'] = absint( $index_meta['offset'] + $posts_per_page );
 
-                    if ( $index_meta['offset'] >= $index_meta['found_posts'] ) {
-                        $index_meta['offset'] = $index_meta['found_posts'];
-                    }
-
                     set_transient( 'aws_index_processed', $index_meta, 60*60 );
 
                 } else {

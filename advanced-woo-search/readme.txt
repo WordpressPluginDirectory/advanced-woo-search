@@ -3,8 +3,8 @@ Contributors: Mihail Barinov
 Donate link: https://www.paypal.com/donate/?hosted_button_id=FDRDNZE6XAKE8
 Tags: woocommerce, search, product search, woocommerce search, live search
 Requires at least: 4.0
-Tested up to: 6.4
-Stable tag: 3.02
+Tested up to: 6.5
+Stable tag: 3.03
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -171,6 +171,12 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 == Changelog ==
 
 [View full changelog](https://advanced-woo-search.com/guide/free-version/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
+
+= 3.03 ( 2024-03-25 ) =
+* Update - Tested with WC 8.7
+* Update - Add loading icon for clear cache button inside settings page
+* Update - New values for orderby for better integration with themes
+* Fix - Bug with adding new products during index process
 
 = 3.02 ( 2024-03-12 ) =
 * Update - Integration for WPML plugin. Fix indexation for product taxonomies
@@ -397,14 +403,3 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 * Update - Admin page integration notices
 * Update - Search form shortcode parameters
 * Fix - Issue with search results caching for certain user roles
-
-= 2.54 ( 2022-05-16 ) =
-* Add - Support for Gecko theme
-* Update - Tested with WC 6.5
-* Update - Admin page integration notices
-* Update - Support for Be theme
-* Fix - Translations for stock statuses inside search results
-* Fix - Error notice for Elementor plugin search module
-* Fix - Php error notice about default options values
-* Fix - Length of products search results descriptions
-* Dev - Fix error with empty search query for results page

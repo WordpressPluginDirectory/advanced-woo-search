@@ -51,6 +51,9 @@ jQuery(document).ready(function ($) {
                 processed = response.data.offset;
 
                 processed = Math.floor( processed / toProcess * 100 );
+                if ( processed > 100 ) {
+                    processed = 100;
+                }
 
                 syncData = response.data;
 
@@ -122,8 +125,8 @@ jQuery(document).ready(function ($) {
             },
             dataType: "json",
             success: function (data) {
-                alert('Cache cleared!');
                 $clearCacheBlock.removeClass('loading');
+                alert('Cache cleared!');
             }
         });
 
