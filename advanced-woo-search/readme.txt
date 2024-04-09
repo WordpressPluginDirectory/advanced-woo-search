@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/donate/?hosted_button_id=FDRDNZE6XAKE8
 Tags: woocommerce, search, product search, woocommerce search, live search
 Requires at least: 4.0
 Tested up to: 6.5
-Stable tag: 3.03
+Stable tag: 3.04
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -171,6 +171,10 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 == Changelog ==
 
 [View full changelog](https://advanced-woo-search.com/guide/free-version/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
+
+= 3.04 ( 2024-04-08 ) =
+* Add - Support for WooCommerce Product Search plugin
+* Update - Values for search page filters
 
 = 3.03 ( 2024-03-25 ) =
 * Update - Tested with WC 8.7
@@ -397,9 +401,3 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 
 = 2.56 ( 2022-06-13 ) =
 * Fix - Bug with search form shortcodes error when id value is not specified
-
-= 2.55 ( 2022-05-30 ) =
-* Add - Support for Savoy theme
-* Update - Admin page integration notices
-* Update - Search form shortcode parameters
-* Fix - Issue with search results caching for certain user roles

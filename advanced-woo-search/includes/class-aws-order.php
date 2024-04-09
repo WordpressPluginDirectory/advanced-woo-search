@@ -55,6 +55,14 @@ if ( ! class_exists( 'AWS_Order' ) ) :
 
             }
 
+            if ( ! isset( $filters['on_sale'] ) && isset( $_GET['on_sale'] ) ) {
+                $filters['on_sale'] = in_array( sanitize_text_field( $_GET['on_sale'] ), array( '1', 'true', true, 'yes' ) );
+            }
+
+            if ( ! isset( $filters['in_status'] ) && isset( $_GET['in_stock'] ) ) {
+                $filters['in_status'] = in_array( sanitize_text_field( $_GET['in_stock'] ), array( '1', 'true', true, 'yes', 'instock', 'in_stock' ) );
+            }
+
             if ( ! isset( $filters['price_min'] ) && isset( $_GET['min_price'] ) ) {
                 $filters['price_min'] = sanitize_text_field( $_GET['min_price'] );
             }
@@ -70,8 +78,16 @@ if ( ! class_exists( 'AWS_Order' ) ) :
                 $filters['price_min'] = 0;
             }
 
-            if ( isset( $_GET['rating_filter'] ) && $_GET['rating_filter'] ) {
-                $filters['rating'] = explode( ',', sanitize_text_field( $_GET['rating_filter'] ) );
+            if ( ! isset( $filters['rating'] ) ) {
+                $ratingf = false;
+                if ( isset( $_GET['rating_filter'] ) && $_GET['rating_filter'] ) {
+                    $ratingf = $_GET['rating_filter'];
+                } elseif ( isset( $_GET['rating'] ) && $_GET['rating'] ) {
+                    $ratingf = $_GET['rating'];
+                }
+                if ( $ratingf ) {
+                    $filters['rating'] = explode( ',', sanitize_text_field( $ratingf ) );
+                }
             }
 
             if ( isset( $_GET['filtering'] ) && $_GET['filtering'] && isset( $_GET['filter_product_brand'] ) ) {
@@ -108,7 +124,7 @@ if ( ! class_exists( 'AWS_Order' ) ) :
              */
             $filters = apply_filters( 'aws_search_page_filters', $filters );
 
-
+            
             foreach( $this->products as $post_array ) {
 
                 if ( isset( $filters['in_status'] ) ) {

@@ -290,6 +290,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 add_filter( 'aws_search_pre_filter_products', array( $this, 'dfm_search_pre_filter_products' ) );
             }
 
+            // WooCommerce Product Search
+            if ( defined('WOO_PS_PLUGIN_VERSION') ) {
+                add_action( 'aws_search_page_filters', array( $this,  'wps_aws_search_page_filters' ), 1 );
+            }
+
         }
         
         /**
@@ -2236,6 +2241,25 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             }
 
             return $products_array;
+
+        }
+
+        /*
+         * WooCommerce Product Search plugin - fix filters for s page
+         */
+        public function wps_aws_search_page_filters( $filters ) {
+
+            if ( isset( $_GET['ixwpst'] ) && $_GET['ixwpst'] && is_array( $_GET['ixwpst'] ) ) {
+                foreach( $_GET['ixwpst'] as $tax => $terms ) {
+                    $filters['tax'][$tax] = array(
+                        'terms' => $terms,
+                        'operator' => 'AND',
+                        'include_parent' => true,
+                    );
+                }
+            }
+
+            return $filters;
 
         }
 
