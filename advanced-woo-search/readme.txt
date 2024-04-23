@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/donate/?hosted_button_id=FDRDNZE6XAKE8
 Tags: woocommerce, search, product search, woocommerce search, live search
 Requires at least: 4.0
 Tested up to: 6.5
-Stable tag: 3.04
+Stable tag: 3.05
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,19 +20,20 @@ Advanced Woo Search - powerful search plugin for WooCommerce. Supports **AJAX** 
 
 * **Products search** - Search across all your WooCommerce products
 * **Search in** - Search in product **title**, **content**, **excerpt**, **categories**, **tags**, **ID** and **sku**. Or just in some of them
+* **Terms search** - Search for product categories and tags
+* **Smart ordering** - Search results ordered by the priority of source where they were found
+* Supports **variable products**
+* **Plurals** support
+* **Synonyms** support
+* **Misspelling** correction ( fuzzy search )
+* **Search results page** support. Plugin search results will be integrated to your current page layout.
 * **Settings page** - User-friendly settings page with lot of options
 * **Shortcode** and **widget** - Use shortcode and widget to place search box anywhere you want
 * **Product image** - Each search result contains product image
 * **Product price** - Each search result contains product price
-* **Terms search** - Search for product categories and tags
-* **Smart ordering** - Search results ordered by the priority of source where they were found
 * **Fast** - Nothing extra. Just what you need for proper work
 * **Stop Words** support to exclude certain words from search.
-* Supports **variable products**
-* **Search results page** support. Plugin search results will be integrated to your current page layout.
 * Automatically synchronize all product data. No need to re-index all content manually after every change.
-* **Plurals** support
-* **Synonyms** support
 * Diacritical marks support
 * Google Analytics support
 * Seamless integration option for easy replacing your current search form
@@ -171,6 +172,13 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 == Changelog ==
 
 [View full changelog](https://advanced-woo-search.com/guide/free-version/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
+
+= 3.05 ( 2024-04-22 ) =
+* Add - Feature to fix misspellings inside search queries
+* Add - Support for Open Shop theme
+* Add - Support for Advance Product Search by themehunk
+* Update - Tested with WC 8.8
+* Fix - Search results sorting inside results page when using custom filters
 
 = 3.04 ( 2024-04-08 ) =
 * Add - Support for WooCommerce Product Search plugin
@@ -394,10 +402,3 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 
 = 2.58 ( 2022-07-11 ) =
 * Fix - Bug with synonyms words indexation
-
-= 2.57 ( 2022-06-27 ) =
-* Update - Integration for BeTheme
-* Update - Tested with WC 6.6
-
-= 2.56 ( 2022-06-13 ) =
-* Fix - Bug with search form shortcodes error when id value is not specified

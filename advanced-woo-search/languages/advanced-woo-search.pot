@@ -396,6 +396,12 @@ msgstr ""
 msgid "Comma separated list of synonym words. Each group of synonyms must be on separated text line."
 msgstr ""
 
+msgid "Misspelling fix"
+msgstr ""
+
+msgid "Fix typos inside search words %s."
+msgstr ""
+
 #: includes/options.php:42
 msgid "Use Google Analytics"
 msgstr ""

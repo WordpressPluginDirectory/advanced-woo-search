@@ -217,9 +217,18 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                     add_action( 'wp_enqueue_scripts', array( $this, 'hestia_wp_enqueue_scripts' ) );
                 }
 
+                if ( 'Open Shop' === $this->current_theme ) {
+                    add_action( 'wp_head', array( $this, 'open_shop_wp_head' ) );
+                }
+
                 // WP Bottom Menu
                 if ( defined( 'WP_BOTTOM_MENU_VERSION' ) ) {
                     add_action( 'wp_head', array( $this, 'wp_bottom_menu_wp_head' ) );
+                }
+
+                // Advance Product Search by themehunk
+                if ( class_exists( 'TH_Advance_Product_Search' ) ) {
+                    add_filter( 'thaps_form_html', array( $this, 'aps_thaps_form_html' ) );
                 }
 
             }
@@ -1642,6 +1651,18 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
         }
 
         /*
+         * Open Shop theme header styles
+         */
+        public function open_shop_wp_head() { ?>
+            <style>
+                .below-header-bar .aws-container {
+                    max-width: 550px;
+                    margin: 0 auto;
+                }
+            </style>
+        <?php }
+
+        /*
          * WP Bottom Menu
          */
         public function wp_bottom_menu_wp_head() { ?>
@@ -1659,6 +1680,14 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             </script>
 
         <?php }
+
+        /*
+         * Advance Product Search by themehunk
+         */
+        public function aps_thaps_form_html( $html ) {
+            $output = aws_get_search_form( false );
+            return $output;
+        }
 
         /*
          * Exclude product categories

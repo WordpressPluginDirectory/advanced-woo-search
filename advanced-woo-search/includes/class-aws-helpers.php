@@ -1143,6 +1143,99 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
 
         }
 
+        /**
+         * Get array of similar words from the index
+         * @param array $data Search data
+         * @return array $new_terms Similar terms array
+         */
+        static public function get_similar_terms( $data ) {
+
+            global $wpdb;
+
+            $fuzzy_params = array(
+                'min_terms_length' => 3,
+                'term_like_prefix' => 2,
+                'max_similar_terms' => 50,
+                'min_distance' => 2,
+            );
+
+            /**
+             * Filter fuzzy search related parameters
+             * @since 3.05
+             * @param array $fuzzy_params Array of fuzzy search parameters
+             * @param array $data Array of search parameters
+             */
+            $fuzzy_params = apply_filters( 'aws_fuzzy_params', $fuzzy_params, $data );
+
+            $new_terms = array();
+
+            $search_terms = isset( $data['search_terms'] ) ? $data['search_terms'] : array();
+
+            $query_stock = isset( $data['query_params'] ) && isset( $data['query_params']['stock'] ) ? $data['query_params']['stock'] : '';
+            $query_visibility = isset( $data['query_params'] ) && isset( $data['query_params']['visibility'] ) ? $data['query_params']['visibility'] : '';
+            $query_exclude_products = isset( $data['query_params'] ) && isset( $data['query_params']['exclude_products'] ) ? $data['query_params']['exclude_products'] : '';
+            $query_lang = isset( $data['query_params'] ) && isset( $data['query_params']['lang'] ) ? $data['query_params']['lang'] : '';
+
+            foreach ( $search_terms as $search_term ) {
+
+                if ( strlen( $search_term ) > $fuzzy_params['min_terms_length'] ) {
+
+                    $keyword_like = $wpdb->esc_like( substr( $search_term, 0, $fuzzy_params['term_like_prefix'] ) ) . "%";
+
+                    $table_name = $wpdb->prefix . AWS_INDEX_TABLE_NAME;
+
+                    $sql = "SELECT term, count
+                        FROM
+                            {$table_name}
+                        WHERE
+                            term LIKE '{$keyword_like}'
+                            {$query_stock}
+                            {$query_visibility}
+                            {$query_exclude_products}
+                            {$query_lang}
+                        GROUP BY term
+                        ORDER BY count DESC
+                        LIMIT 0, {$fuzzy_params['max_similar_terms']}
+                    ";
+
+                    $matches = $wpdb->get_results( $sql, ARRAY_A );
+
+                    $top_distance = 10;
+                    $temp_matches = array();
+
+                    if ( $matches ) {
+
+                        $distances = array();
+                        foreach ( $matches as $key => $match ) {
+
+                            $distance = levenshtein( $match['term'], $search_term );
+
+                            if ( $distance <= $fuzzy_params['min_distance'] ) {
+
+                                if ( $distance < $top_distance ) {
+                                    $top_distance = $distance;
+                                    $temp_matches = array();
+                                    $temp_matches[] = $match['term'];
+                                } elseif ( $distance === $top_distance ) {
+                                    $temp_matches[] = $match['term'];
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                    $new_terms = array_merge( $new_terms, $temp_matches );
+
+                }
+
+            }
+
+            return $new_terms;
+
+        }
+
         /*
          * Check for incorrect filtering rules and return them
          * @return string

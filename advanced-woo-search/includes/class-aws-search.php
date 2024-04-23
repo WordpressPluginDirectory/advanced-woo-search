@@ -136,6 +136,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             $outofstock        = AWS()->get_settings( 'outofstock' );
             $search_rule       = AWS()->get_settings( 'search_rule' );
             $search_words_num  = AWS()->get_settings( 'search_words_num' );
+            $fuzzy             = AWS()->get_settings( 'fuzzy' );
 
             $search_in_arr = array();
 
@@ -196,6 +197,15 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 
                     $posts_ids = $this->query_index_table();
 
+                    // try to fix misspellings
+                    if ( empty( $posts_ids ) && $fuzzy === 'true' ) {
+                        $similar_terms = AWS_Helpers::get_similar_terms( $this->data );
+                        if ( ! empty( $similar_terms ) ) {
+                            $this->data['search_terms'] = $similar_terms;
+                            $posts_ids = $this->query_index_table();
+                        }
+                    }
+
                     /**
                      * Filters array of products ids
                      *
@@ -205,7 +215,6 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                      * @param string $s Search query
                      */
                     $posts_ids = apply_filters( 'aws_search_results_products_ids', $posts_ids, $s );
-
 
                     $products_array = $this->get_products( $posts_ids );
 
@@ -484,6 +493,8 @@ if ( ! class_exists( 'AWS_Search' ) ) :
              * @param array $query Query string
              */
             $sql = apply_filters( 'aws_search_query_string', $sql );
+
+            $this->data['query_params'] = $query;
 
             $this->data['sql'] = $sql;
 

@@ -27,7 +27,7 @@ if ( ! class_exists( 'AWS_Order' ) ) :
             $this->filter_results( $query );
 
             // Order
-            if ( $query->query && ( isset( $query->query['orderby'] ) || isset( $query->query_vars['orderby'] ) ) ) {
+            if ( $query->query && ( isset( $query->query['orderby'] ) || isset( $query->query_vars['orderby'] ) || isset( $_GET['orderby'] ) ) ) {
                 $this->order( $query );
             }
 
@@ -301,7 +301,11 @@ if ( ! class_exists( 'AWS_Order' ) ) :
          */
         private function order( $query ) {
 
-            if ( isset( $query->query['orderby'] ) ) {
+            if ( isset( $_GET['orderby'] ) && $_GET['orderby'] ) {
+
+                $order_by = sanitize_text_field( $_GET['orderby'] );
+
+            } elseif ( isset( $query->query['orderby'] ) ) {
 
                 $order_by = $query->query['orderby'];
 
