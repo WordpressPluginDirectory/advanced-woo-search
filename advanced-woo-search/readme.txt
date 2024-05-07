@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/donate/?hosted_button_id=FDRDNZE6XAKE8
 Tags: woocommerce, search, product search, woocommerce search, live search
 Requires at least: 4.0
 Tested up to: 6.5
-Stable tag: 3.05
+Stable tag: 3.06
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -172,6 +172,12 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 == Changelog ==
 
 [View full changelog](https://advanced-woo-search.com/guide/free-version/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
+
+= 3.06 ( 2024-05-06 ) =
+* Add - Required plugins dependencies
+* Update - Formula to calculate relevance score
+* Update - Support for Zephyr theme
+* Dev - New class for terms suggestions
 
 = 3.05 ( 2024-04-22 ) =
 * Add - Feature to fix misspellings inside search queries
@@ -399,6 +405,3 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 * Fix - WPML plugin integration bug with taxonomies search
 * Fix - Integration bug for WooCommerce Product Filter by WooBeWoo plugin
 * Dev - Add aws_ajax_request_params js hook
-
-= 2.58 ( 2022-07-11 ) =
-* Fix - Bug with synonyms words indexation

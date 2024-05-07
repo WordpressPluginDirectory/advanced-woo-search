@@ -221,6 +221,10 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                     add_action( 'wp_head', array( $this, 'open_shop_wp_head' ) );
                 }
 
+                if ( 'Zephyr' === $this->current_theme ) {
+                    add_action( 'wp_head', array( $this, 'zephyr_wp_head' ) );
+                }
+
                 // WP Bottom Menu
                 if ( defined( 'WP_BOTTOM_MENU_VERSION' ) ) {
                     add_action( 'wp_head', array( $this, 'wp_bottom_menu_wp_head' ) );
@@ -1658,6 +1662,25 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 .below-header-bar .aws-container {
                     max-width: 550px;
                     margin: 0 auto;
+                }
+            </style>
+        <?php }
+
+        /*
+         * Zephyr theme search form styles
+         */
+        public function zephyr_wp_head() { ?>
+            <style>
+                .header_hor .aws-container {
+                    width: 100%;
+                }
+                .header_hor .aws-container .aws-search-field {
+                    color: rgb(53, 65, 91);
+                    font-size: 16px;
+                }
+                .header_hor .aws-container .aws-search-form .aws-form-btn {
+                    background: transparent;
+                    border: none;
                 }
             </style>
         <?php }

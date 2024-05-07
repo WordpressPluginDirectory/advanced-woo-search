@@ -199,11 +199,15 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 
                     // try to fix misspellings
                     if ( empty( $posts_ids ) && $fuzzy === 'true' ) {
-                        $similar_terms = AWS_Helpers::get_similar_terms( $this->data );
+
+                        $similar_terms_obj = new AWS_Similar_Terms( $this->data );
+                        $similar_terms = $similar_terms_obj->get_similar_terms();
+
                         if ( ! empty( $similar_terms ) ) {
                             $this->data['search_terms'] = $similar_terms;
                             $posts_ids = $this->query_index_table();
                         }
+
                     }
 
                     /**
@@ -322,6 +326,15 @@ if ( ! class_exists( 'AWS_Search' ) ) :
              */
             $this->data['search_terms'] = apply_filters( 'aws_search_terms', $this->data['search_terms'] );
 
+
+            /**
+             * Multiplier for relevance score depending on number of terms repeats
+             * @since 3.06
+             * @param array $this->data Search parameters
+             */
+            $count_multiplier = apply_filters( 'aws_relevance_count_multiplier', '1 + (count-1)/5', $this->data );
+
+
             $relevance_scores = AWS_Helpers::get_relevance_scores( $this->data );
 
             foreach ( $this->data['search_terms'] as $search_term ) {
@@ -395,10 +408,10 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                         $relevance = $relevance_params[$search_in_term]['full'];
                         $relevance_like = $relevance_params[$search_in_term]['like'];
 
-                        $relevance_array[$search_in_term][] = $wpdb->prepare( "( case when ( term_source = '%s' AND term = '%s' ) then {$relevance} * count else 0 end )", $search_in_term, $search_term );
+                        $relevance_array[$search_in_term][] = $wpdb->prepare( "( case when ( term_source = '%s' AND term = '%s' ) then {$relevance} * ( {$count_multiplier} ) else 0 end )", $search_in_term, $search_term );
 
                         if ( $is_normal_term ) {
-                            $relevance_array[$search_in_term][] = $wpdb->prepare( "( case when ( term_source = '%s' AND term LIKE %s ) then {$relevance_like} * count else 0 end )", $search_in_term, $like );
+                            $relevance_array[$search_in_term][] = $wpdb->prepare( "( case when ( term_source = '%s' AND term LIKE %s ) then {$relevance_like} * ( {$count_multiplier} ) else 0 end )", $search_in_term, $like );
                         }
 
                     }
