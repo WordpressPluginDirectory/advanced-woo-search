@@ -101,11 +101,29 @@ class AWS_Admin {
             AWS_Admin_Options::update_settings();
         }
 
+
+        echo '<div id="aws-admin-header">';
+            echo '<div class="inner">';
+                echo '<div class="logo">';
+                    echo '<img src="' . AWS_URL . '/assets/img/logo.png' . '" alt="' . esc_html( 'logo', 'advanced-woo-search' ) . '">';
+                    echo '<span class="title">';
+                        echo esc_html( 'Advanced Woo Search', 'advanced-woo-search' );
+                    echo '</span>';
+                    echo '<span class="version">';
+                        echo 'v' . AWS_VERSION;
+                    echo '</span>';
+                echo '</div>';
+                echo '<div class="btns">';
+                    echo '<a class="button button-docs" href="https://advanced-woo-search.com/guide/?utm_source=wp-plugin&utm_medium=header&utm_campaign=guide" target="_blank">' . esc_html( 'Documentation', 'advanced-woo-search' ) . '</a>';
+                    echo '<a class="button button-support" href="https://advanced-woo-search.com/contact/?utm_source=wp-plugin&utm_medium=header&utm_campaign=support" target="_blank">' . esc_html( 'Support', 'advanced-woo-search' ) . '</a>';
+                echo '</div>';
+            echo '</div>';
+        echo '</div>';
+
+
         echo '<div class="wrap">';
 
         echo '<h1></h1>';
-
-        echo '<h1 class="aws-instance-name">Advanced Woo Search</h1>';
 
         echo $tabs_html;
 

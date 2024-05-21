@@ -211,6 +211,89 @@ h1.aws-instance-name {
     top: -4px;
 }
 
+/* Admin header */
+#aws-admin-header {
+    margin: 0 0 20px -20px;
+    padding: 0;
+    border-bottom: 1px solid #c3c4c7;
+    background: #fff;
+}
+
+#aws-admin-header .inner {
+    display: flex;
+    position: relative;
+    padding: 20px 22px;
+    margin: 0 auto;
+    justify-content: space-between
+}
+
+#aws-admin-header .inner .logo {
+    font-size: 21px;
+    font-weight: 400;
+    line-height: 1;
+}
+
+#aws-admin-header .inner .logo img {
+    width: 32px;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+#aws-admin-header .inner .logo .title {
+    vertical-align: middle;
+}
+
+#aws-admin-header .inner .logo .version {
+    background: #f0f0f1;
+    display: inline-block;
+    padding: 0 8px;
+    border-radius: 13px;
+    height: 26px;
+    line-height: 26px;
+    white-space: nowrap;
+    box-sizing: border-box;
+    color: #1d2327;
+    font-size: 12px;
+    vertical-align: middle;
+    margin-left: 6px;
+}
+
+#aws-admin-header .inner .btns {
+}
+
+#aws-admin-header .inner .btns a {
+    padding: 6px 12px;
+    line-height: 1;
+    margin-left: 5px;
+}
+
+#aws-admin-header .inner .btns a:before {
+    speak: none;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
+    text-indent: 0;
+    text-align: center;
+    font-family: Dashicons;
+    line-height: 1;
+    margin-right: 4px;
+    vertical-align: text-top;
+    font-size: 15px;
+}
+#aws-admin-header .inner .btns a.button-docs:before {
+    content: "\f318";
+}
+#aws-admin-header .inner .btns a.button-support:before {
+    content: "\f466";
+}
+
+@media screen and (max-width: 782px) {
+    #aws-admin-header .inner .btns {
+        display: none;
+    }
+}
 
 /* Table */
 .aws-table {

@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/donate/?hosted_button_id=FDRDNZE6XAKE8
 Tags: woocommerce, search, product search, woocommerce search, live search
 Requires at least: 4.0
 Tested up to: 6.5
-Stable tag: 3.06
+Stable tag: 3.07
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -172,6 +172,9 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 == Changelog ==
 
 [View full changelog](https://advanced-woo-search.com/guide/free-version/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
+
+= 3.07 ( 2024-05-20 ) =
+* Add - Header for plugin admin page
 
 = 3.06 ( 2024-05-06 ) =
 * Add - Required plugins dependencies
@@ -397,11 +400,3 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 * Update - Css for media styles
 * Update - Admin dashboard notices style
 * Update - Admin page text
-
-= 2.59 ( 2022-07-25 ) =
-* Add - Support for Vandana theme
-* Update - Tested with WC 6.7
-* Update - Admin dashboard plugin notices
-* Fix - WPML plugin integration bug with taxonomies search
-* Fix - Integration bug for WooCommerce Product Filter by WooBeWoo plugin
-* Dev - Add aws_ajax_request_params js hook

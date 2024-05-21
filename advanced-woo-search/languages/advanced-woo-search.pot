@@ -845,3 +845,9 @@ msgstr ""
 
 msgid "Maximum number of displayed archive pages search results."
 msgstr ""
+
+msgid "logo"
+msgstr ""
+
+msgid "Support"
+msgstr ""
