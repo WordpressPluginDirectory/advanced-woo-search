@@ -21,7 +21,7 @@ if ( ! class_exists( 'AWS_Order' ) ) :
          */
         public function __construct( $products, $query ) {
 
-            $this->products = $products;
+            $this->products = array_map( array($this, 'get_product_id'), $products );
 
             // Filter
             $this->filter_results( $query );
@@ -121,35 +121,49 @@ if ( ! class_exists( 'AWS_Order' ) ) :
              * Filter available search page filters before apply
              * @since 2.04
              * @param array $filters Filters
+             * @param object $query Current query ( since 3.08 )
              */
-            $filters = apply_filters( 'aws_search_page_filters', $filters );
+            $filters = apply_filters( 'aws_search_page_filters', $filters, $query );
 
-            
-            foreach( $this->products as $post_array ) {
+
+            foreach( $this->products as $product_id ) {
 
                 if ( isset( $filters['in_status'] ) ) {
-                    if ( $post_array['f_stock'] !== $filters['in_status'] ) {
+                    $f_stock = 'outofstock' !== get_post_meta( $product_id, '_stock_status', true );
+                    if ( $f_stock !== $filters['in_status'] ) {
                         continue;
                     }
                 }
 
                 if ( isset( $filters['on_sale'] ) ) {
-                    if ( $post_array['f_sale'] !== $filters['on_sale'] ) {
+
+                    $regular_price = get_post_meta( $product_id, '_regular_price', true );
+                    $sale_price = get_post_meta( $product_id, '_sale_price', true );
+
+                    $is_on_sale = false;
+                    if ( '' !== (string) $sale_price && $regular_price > $sale_price ) {
+                        $is_on_sale = true;
+                    }
+
+                    if ( $is_on_sale !== $filters['on_sale'] ) {
                         continue;
                     }
+
                 }
 
                 if ( isset( $filters['price_min'] ) && isset( $filters['price_max'] ) ) {
-                    if ( isset( $post_array['f_price'] ) && $post_array['f_price'] ) {
-                        if ( $post_array['f_price'] > $filters['price_max'] || $post_array['f_price'] < $filters['price_min'] ) {
+                    $price = get_post_meta( $product_id, '_price', true );
+                    if ( $price ) {
+                        if ( $price > $filters['price_max'] || $price < $filters['price_min'] ) {
                             continue;
                         }
                     }
                 }
 
                 if ( isset( $filters['rating'] ) && is_array( $filters['rating'] ) ) {
-                    if ( isset( $post_array['f_rating'] ) ) {
-                        if ( array_search( floor( $post_array['f_rating'] ), $filters['rating'] ) === false ) {
+                    $average_rating = get_post_meta( $product_id, '_wc_average_rating', true );
+                    if ( $average_rating ) {
+                        if ( array_search( floor( $average_rating ), $filters['rating'] ) === false ) {
                             continue;
                         }
                     }
@@ -157,12 +171,17 @@ if ( ! class_exists( 'AWS_Order' ) ) :
 
                 if ( isset( $filters['brand'] ) && is_array( $filters['brand'] ) ) {
 
+                    $parent_id = wp_get_post_parent_id( $product_id );
+                    if ( ! $parent_id ) {
+                        $parent_id = $product_id;
+                    }
+
                     $skip = true;
-                    $p_brands = get_the_terms( $post_array['id'], 'product_brand' );
+                    $p_brands = get_the_terms( $parent_id, 'product_brand' );
 
                     if ( ! is_wp_error( $p_brands ) && ! empty( $p_brands ) ) {
                         foreach ( $p_brands as $p_brand ) {
-                            if ( in_array( $p_brand->term_id,  $filters['brand'] ) ) {
+                            if ( in_array( $p_brand->term_id, $filters['brand'] ) ) {
                                 $skip = false;
                                 break;
                             }
@@ -181,7 +200,12 @@ if ( ! class_exists( 'AWS_Order' ) ) :
 
                     foreach( $filters['tax'] as $taxonomy => $taxonomy_terms ) {
 
-                        $terms = get_the_terms( $post_array['id'], $taxonomy );
+                        $parent_id = wp_get_post_parent_id( $product_id );
+                        if ( ! $parent_id ) {
+                            $parent_id = $product_id;
+                        }
+
+                        $terms = get_the_terms( $parent_id, $taxonomy );
                         $operator = isset( $taxonomy_terms['operator'] ) ? $taxonomy_terms['operator'] : 'OR';
                         $include_parent = isset( $taxonomy_terms['include_parent'] ) ? $taxonomy_terms['include_parent'] : false;
                         $term_arr = array();
@@ -199,7 +223,27 @@ if ( ! class_exists( 'AWS_Order' ) ) :
                                 }
                             }
                         } elseif( strpos( $taxonomy, 'pa_' ) !== 0 ) {
-                            $terms = get_the_terms( $post_array['id'], 'pa_' . $taxonomy );
+
+                            if ( $parent_id !== $product_id && class_exists( 'WC_Product_Variation' ) ) {
+                                $terms = array();
+                                $variation_product = new WC_Product_Variation( $product_id );
+                                if ( $variation_product && method_exists( $variation_product, 'get_attributes' ) ) {
+                                    $variation_attr = $variation_product->get_attributes();
+                                    if ( $variation_attr && is_array( $variation_attr ) ) {
+                                        foreach( $variation_attr as $variation_p_att => $variation_p_text ) {
+                                            if ( strpos( $variation_p_att, 'pa_' ) === 0 ) {
+                                                $attr_term = get_term_by( 'slug', $variation_p_text, $variation_p_att );
+                                                if ( ! is_wp_error( $attr_term ) && $attr_term && $attr_term->name ) {
+                                                    $terms[] = $attr_term;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            } else {
+                                $terms = get_the_terms( $product_id, 'pa_' . $taxonomy );
+                            }
+
                             if ( ! is_wp_error( $terms ) && ! empty( $terms ) ) {
                                 foreach ( $terms as $term ) {
                                     $term_arr[] = $term->term_id;
@@ -231,7 +275,7 @@ if ( ! class_exists( 'AWS_Order' ) ) :
 
                 if ( $attr_filter && ! empty( $attr_filter ) && is_array( $attr_filter ) ) {
 
-                    $product = wc_get_product( $post_array['id'] );
+                    $product = wc_get_product( $product_id );
                     $attributes = $product->get_attributes();
                     $product_terms_array = array();
                     $skip = true;
@@ -244,7 +288,7 @@ if ( ! class_exists( 'AWS_Order' ) ) :
                                     ( is_array( $attribute_object ) && isset( $attribute_object['is_taxonomy'] ) && $attribute_object['is_taxonomy'] )
                                 ) {
                                     if ( isset( $attr_filter[$attr_name] ) ) {
-                                        $product_terms = wp_get_object_terms( $post_array['id'], $attr_name );
+                                        $product_terms = wp_get_object_terms( $product_id, $attr_name );
 
                                         if ( ! is_wp_error( $product_terms ) && ! empty( $product_terms ) ) {
                                             foreach ( $product_terms as $product_term ) {
@@ -258,7 +302,6 @@ if ( ! class_exists( 'AWS_Order' ) ) :
                         }
 
                         if ( $product_terms_array ) {
-
 
                             foreach( $attr_filter as $attr_filter_name => $attr_filter_object ) {
 
@@ -283,16 +326,16 @@ if ( ! class_exists( 'AWS_Order' ) ) :
 
                 }
 
-                $new_products[] = $post_array;
+                $new_products[] = $product_id;
 
             }
 
             /**
              * Filter search results after search page filters applied
-             * @since 2.04
-             * @param array $new_products Products
+             * @since 3.08
+             * @param array $new_products Array of products IDs
              */
-            $this->products = apply_filters( 'aws_products_search_page_filtered', $new_products );
+            $this->products = apply_filters( 'aws_search_page_products_filtered', $new_products );
 
         }
 
@@ -341,69 +384,53 @@ if ( ! class_exists( 'AWS_Order' ) ) :
                 case 'price-asc':
                 case 'low_high':
 
-                    if ( isset( $this->products[0]['f_price'] ) ) {
-                        usort( $this->products, array( $this, 'compare_price_asc' ) );
-                    }
+                    usort( $this->products, array( $this, 'compare_price_asc' ) );
 
                     break;
 
                 case 'price-desc':
                 case 'high_low':
 
-                    if ( isset( $this->products[0]['f_price'] ) ) {
-                        usort( $this->products, array( $this, 'compare_price_desc' ) );
-                    }
+                    usort( $this->products, array( $this, 'compare_price_desc' ) );
 
                     break;
 
                 case 'date':
                 case 'date-desc':
 
-                    if ( isset( $this->products[0]['post_data'] ) ) {
-                        usort( $this->products, array( $this, 'compare_date' ) );
-                    }
+                    usort( $this->products, array( $this, 'compare_date' ) );
 
                     break;
 
                 case 'date-asc':
 
-                    if ( isset( $this->products[0]['post_data'] ) ) {
-                        usort( $this->products, array( $this, 'compare_date_asc' ) );
-                    }
+                    usort( $this->products, array( $this, 'compare_date_asc' ) );
 
                     break;
 
                 case 'rating':
                 case 'rating-desc':
 
-                    if ( isset( $this->products[0]['f_rating'] ) ) {
-                        usort( $this->products, array( $this, 'compare_rating' ) );
-                    }
+                    usort( $this->products, array( $this, 'compare_rating' ) );
 
                     break;
 
                 case 'rating-asc':
 
-                    if ( isset( $this->products[0]['f_rating'] ) ) {
-                        usort( $this->products, array( $this, 'compare_rating_asc' ) );
-                    }
+                    usort( $this->products, array( $this, 'compare_rating_asc' ) );
 
                     break;
 
                 case 'popularity':
                 case 'popularity-desc':
 
-                    if ( isset( $this->products[0]['f_reviews'] ) ) {
-                        usort( $this->products, array( $this, 'compare_reviews' ) );
-                    }
+                    usort( $this->products, array( $this, 'compare_reviews' ) );
 
                     break;
 
                 case 'popularity-asc':
 
-                    if ( isset( $this->products[0]['f_reviews'] ) ) {
-                        usort( $this->products, array( $this, 'compare_reviews_asc' ) );
-                    }
+                    usort( $this->products, array( $this, 'compare_reviews_asc' ) );
 
                     break;
 
@@ -411,35 +438,27 @@ if ( ! class_exists( 'AWS_Order' ) ) :
                 case 'title-desc':
                 case 'za':
 
-                    if ( isset( $this->products[0]['title'] ) ) {
-                        usort( $this->products, array( $this, 'compare_title' ) );
-                    }
+                    usort( $this->products, array( $this, 'compare_title' ) );
 
                     break;
 
                 case 'title-asc':
                 case 'az':
 
-                    if ( isset( $this->products[0]['title'] ) ) {
-                        usort( $this->products, array( $this, 'compare_title' ) );
-                        $this->products = array_reverse($this->products);
-                    }
+                    usort( $this->products, array( $this, 'compare_title' ) );
+                    $this->products = array_reverse($this->products);
 
                     break;
 
                 case 'stock_quantity-asc':
 
-                    if ( isset( $this->products[0]['id'] ) ) {
-                        usort( $this->products, array( $this, 'compare_f_quantity_asc' ) );
-                    }
+                    usort( $this->products, array( $this, 'compare_f_quantity_asc' ) );
 
                     break;
 
                 case 'stock_quantity-desc':
 
-                    if ( isset( $this->products[0]['id'] ) ) {
-                        usort( $this->products, array( $this, 'compare_f_quantity_desc' ) );
-                    }
+                    usort( $this->products, array( $this, 'compare_f_quantity_desc' ) );
 
                     break;
 
@@ -447,11 +466,11 @@ if ( ! class_exists( 'AWS_Order' ) ) :
 
             /**
              * Filter search results after ordering
-             * @since 2.00
-             * @param array $this->products Products
+             * @since 3.08
+             * @param array $this->products Array of products IDs
              * @param string $order_by Order by value
              */
-            $this->products = apply_filters( 'aws_products_order', $this->products, $order_by );
+            $this->products = apply_filters( 'aws_search_page_products_order', $this->products, $order_by );
 
         }
 
@@ -459,110 +478,198 @@ if ( ! class_exists( 'AWS_Order' ) ) :
          * Compare price values asc
          */
         private function compare_price_asc( $a, $b ) {
-            if ( ! is_numeric( $a['f_price'] ) || ! is_numeric( $b['f_price'] ) ) {
+
+            $price_a = get_post_meta( $a, '_price', true );
+            $price_b = get_post_meta( $b, '_price', true );
+
+            $price_a = intval( $price_a ) * 100;
+            $price_b = intval( $price_b ) * 100;
+
+            if ( ! is_numeric( $price_a ) || ! is_numeric( $price_b ) ) {
                 return 0;
             }
-            $a = intval( $a['f_price'] * 100 );
-            $b = intval( $b['f_price'] * 100 );
-            if ($a == $b) {
+
+            if ($price_a == $price_b) {
                 return 0;
             }
-            return ($a < $b) ? -1 : 1;
+
+            return ($price_a < $price_b) ? -1 : 1;
+
         }
 
         /*
          * Compare price values desc
          */
         private function compare_price_desc( $a, $b ) {
-            if ( ! is_numeric( $a['f_price'] ) || ! is_numeric( $b['f_price'] ) ) {
+
+            $price_a = get_post_meta( $a, '_price', true );
+            $price_b = get_post_meta( $b, '_price', true );
+
+            $price_a = intval( $price_a ) * 100;
+            $price_b = intval( $price_b ) * 100;
+
+            if ( ! is_numeric( $price_a ) || ! is_numeric( $price_b ) ) {
                 return 0;
             }
-            $a = intval( $a['f_price'] * 100 );
-            $b = intval( $b['f_price'] * 100 );
-            if ($a == $b) {
+
+            if ($price_a == $price_b) {
                 return 0;
             }
-            return ($a < $b) ? 1 : -1;
+
+            return ($price_a < $price_b) ? 1 : -1;
+
         }
 
         /*
          * Compare date
          */
         private function compare_date( $a, $b ) {
-            $a = strtotime( $a['post_data']->post_date );
-            $b = strtotime( $b['post_data']->post_date );
-            if ($a == $b) {
+
+            $post_a = get_post( $a );
+            $post_b = get_post( $b );
+
+            if ( ! $post_a || ! $post_b ) {
                 return 0;
             }
-            return ($a < $b) ? 1 : -1;
+
+            $date_a = strtotime( $post_a->post_date );
+            $date_b = strtotime( $post_b->post_date );
+
+            if ($date_a == $date_b) {
+                return 0;
+            }
+
+            return ($date_a < $date_b) ? 1 : -1;
+
         }
 
         /*
          * Compare date desc
          */
         private function compare_date_asc( $a, $b ) {
-            $a = strtotime( $a['post_data']->post_date );
-            $b = strtotime( $b['post_data']->post_date );
-            if ($a == $b) {
+
+            $post_a = get_post( $a );
+            $post_b = get_post( $b );
+
+            if ( ! $post_a || ! $post_b ) {
                 return 0;
             }
-            return ($a < $b) ? -1 : 1;
+
+            $date_a = strtotime( $post_a->post_date );
+            $date_b = strtotime( $post_b->post_date );
+
+            if ($date_a == $date_b) {
+                return 0;
+            }
+
+            return ($date_a < $date_b) ? -1 : 1;
+
         }
 
         /*
          * Compare rating
          */
         private function compare_rating( $a, $b ) {
-            $a = intval( $a['f_rating'] * 100 );
-            $b = intval( $b['f_rating'] * 100 );
-            if ($a == $b) {
+
+            $rating_a = get_post_meta( $a, '_wc_average_rating', true );
+            $rating_b = get_post_meta( $b, '_wc_average_rating', true );
+
+            if ( ! $rating_a || ! $rating_b ) {
                 return 0;
             }
-            return ($a < $b) ? 1 : -1;
+
+            $rating_a = intval( $rating_a * 100 );
+            $rating_b = intval( $rating_b * 100 );
+
+            if ($rating_a == $rating_b) {
+                return 0;
+            }
+
+            return ($rating_a < $rating_b) ? 1 : -1;
+
         }
 
         /*
          * Compare rating asc
          */
         private function compare_rating_asc( $a, $b ) {
-            $a = intval( $a['f_rating'] * 100 );
-            $b = intval( $b['f_rating'] * 100 );
-            if ($a == $b) {
+
+            $rating_a = get_post_meta( $a, '_wc_average_rating', true );
+            $rating_b = get_post_meta( $b, '_wc_average_rating', true );
+
+            if ( ! $rating_a || ! $rating_b ) {
                 return 0;
             }
-            return ($a < $b) ? -1 : 1;
+
+            $rating_a = intval( $rating_a * 100 );
+            $rating_b = intval( $rating_b * 100 );
+
+            if ($rating_a == $rating_b) {
+                return 0;
+            }
+
+            return ($rating_a < $rating_b) ? -1 : 1;
+
         }
 
         /*
          * Compare popularity
          */
         private function compare_reviews( $a, $b ) {
-            $a = intval( $a['f_reviews'] * 100 );
-            $b = intval( $b['f_reviews'] * 100 );
-            if ($a == $b) {
+
+            $reviews_a = get_post_meta( $a, '_wc_review_count', true );
+            $reviews_b = get_post_meta( $b, '_wc_review_count', true );
+
+            if ( ! $reviews_a || ! $reviews_b ) {
                 return 0;
             }
-            return ($a < $b) ? 1 : -1;
+
+            $reviews_a = intval( $reviews_a * 100 );
+            $reviews_b = intval( $reviews_b * 100 );
+
+            if ($reviews_a == $reviews_b) {
+                return 0;
+            }
+
+            return ($reviews_a < $reviews_b) ? 1 : -1;
+
         }
 
         /*
          * Compare rating asc
          */
         private function compare_reviews_asc( $a, $b ) {
-            $a = intval( $a['f_reviews'] * 100 );
-            $b = intval( $b['f_reviews'] * 100 );
-            if ($a == $b) {
+
+            $reviews_a = get_post_meta( $a, '_wc_review_count', true );
+            $reviews_b = get_post_meta( $b, '_wc_review_count', true );
+
+            if ( ! $reviews_a || ! $reviews_b ) {
                 return 0;
             }
-            return ($a < $b) ? -1 : 1;
+
+            $reviews_a = intval( $reviews_a * 100 );
+            $reviews_b = intval( $reviews_b * 100 );
+
+            if ($reviews_a == $reviews_b) {
+                return 0;
+            }
+
+            return ($reviews_a < $reviews_b) ? -1 : 1;
+
         }
 
         /*
-         * Compare title desc
+         * Compare titles
          */
         private function compare_title( $a, $b ) {
-            $res = strcasecmp( $a["title"], $b["title"] );
+
+            $title_a = get_the_title( $a );
+            $title_b = get_the_title( $b );
+
+            $res = strcasecmp( $title_a, $title_b );
+
             return $res;
+
         }
 
         /*
@@ -570,8 +677,8 @@ if ( ! class_exists( 'AWS_Order' ) ) :
          */
         private function compare_f_quantity_asc( $a, $b ) {
 
-            $product_a = wc_get_product( $a['id'] );
-            $product_b = wc_get_product( $b['id'] );
+            $product_a = wc_get_product( $a );
+            $product_b = wc_get_product( $b );
 
             if ( ! is_a( $product_a, 'WC_Product' ) || ! is_a( $product_b, 'WC_Product' ) ) {
                 return 0;
@@ -593,8 +700,8 @@ if ( ! class_exists( 'AWS_Order' ) ) :
          */
         private function compare_f_quantity_desc( $a, $b ) {
 
-            $product_a = wc_get_product( $a['id'] );
-            $product_b = wc_get_product( $b['id'] );
+            $product_a = wc_get_product( $a );
+            $product_b = wc_get_product( $b );
 
             if ( ! is_a( $product_a, 'WC_Product' ) || ! is_a( $product_b, 'WC_Product' ) ) {
                 return 0;
@@ -608,6 +715,27 @@ if ( ! class_exists( 'AWS_Order' ) ) :
             }
 
             return ($a_val > $b_val) ? -1 : 1;
+
+        }
+
+        /*
+         * Check that products array contains only IDs
+         */
+        public function get_product_id( $pr ) {
+
+            $product_id = $pr;
+
+            if ( is_array( $pr ) ) {
+
+                if ( isset( $pr['id'] ) ) {
+                    $product_id = $pr['id'];
+                } else {
+                    $product_id = 0;
+                }
+
+            }
+
+            return $product_id;
 
         }
 

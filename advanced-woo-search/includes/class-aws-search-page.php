@@ -58,13 +58,13 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
             add_filter( 'the_posts', array( $this, 'filter_the_posts' ), 999, 2 );
 
             // Add header
-		    add_action( 'pre_get_posts', array( $this, 'action_pre_get_posts' ), 5 );
+            add_action( 'pre_get_posts', array( $this, 'action_pre_get_posts' ), 5 );
 
             // Overwrite query
             add_action( 'pre_get_posts', array( $this, 'pre_get_posts_overwrite' ), 999 );
 
             // Nukes the FOUND_ROWS() database query
-		    add_filter( 'found_posts_query', array( $this, 'filter_found_posts_query' ), 5, 2 );
+            add_filter( 'found_posts_query', array( $this, 'filter_found_posts_query' ), 5, 2 );
 
             // Update found post query param
             add_filter( 'found_posts', array( $this, 'filter_found_posts' ), 999, 2 );
@@ -98,19 +98,20 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
         }
 
         /**
-        * Filter query string used for get_posts(). Query for posts and save for later.
-        * Return a query that will return nothing.
-        *
-        * @param string $request
-        * @param object $query
-        * @return string
-        */
+         * Filter query string used for get_posts(). Query for posts and save for later.
+         * Return a query that will return nothing.
+         *
+         * @param string $request
+         * @param object $query
+         * @return string
+         */
         public function filter_posts_request( $request, $query ) {
-            if ( ! $this->aws_searchpage_enabled( $query ) ) {
+            if ( ! AWS_Helpers::aws_searchpage_enabled( $query ) ) {
                 return $request;
             }
 
             $new_posts = array();
+
             $posts_per_page = apply_filters( 'aws_posts_per_page', $query->get( 'posts_per_page' ) );
             $paged = $query->query_vars['paged'] ? $query->query_vars['paged'] : 1;
             $search_res = $this->search( $query, $posts_per_page, $paged );
@@ -189,7 +190,7 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
          * @return array
          */
         public function filter_the_posts( $posts, $query ) {
-            if ( ! $this->aws_searchpage_enabled( $query )  || ! isset( $this->posts_by_query[spl_object_hash( $query )] ) ) {
+            if ( ! AWS_Helpers::aws_searchpage_enabled( $query ) || ! isset( $this->posts_by_query[spl_object_hash( $query )] ) ) {
                 return $posts;
             }
 
@@ -205,7 +206,7 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
          * @param $query
          */
         public function action_pre_get_posts( $query ) {
-            if ( ! $this->aws_searchpage_enabled( $query ) ) {
+            if ( ! AWS_Helpers::aws_searchpage_enabled( $query ) ) {
                 return;
             }
 
@@ -232,7 +233,7 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
          * @param $query
          */
         public function pre_get_posts_overwrite( $query ) {
-            if ( ! $this->aws_searchpage_enabled( $query ) ) {
+            if ( ! AWS_Helpers::aws_searchpage_enabled( $query ) ) {
                 return;
             }
 
@@ -266,10 +267,9 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
          * @return string
          */
         public function filter_found_posts_query( $sql, $query ) {
-            if ( ! $this->aws_searchpage_enabled( $query ) ) {
+            if ( ! AWS_Helpers::aws_searchpage_enabled( $query ) ) {
                 return $sql;
             }
-
             return '';
         }
 
@@ -313,13 +313,11 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
             $hash = hash( 'md2', $s );
 
             if ( isset( $this->data['search_res'][$hash] ) ) {
-                $posts_array = $this->data['search_res'][$hash];
+                $post_array_products = $this->data['search_res'][$hash];
             } else {
-                $posts_array = (array) aws_search( $s );
-                $this->data['search_res'][$hash] = $posts_array;
+                $post_array_products = (array) aws_search( $s, 'ids' );
+                $this->data['search_res'][$hash] = $post_array_products;
             }
-
-            $post_array_products = $posts_array['products'];
 
             // Filter and order output
             if ( $post_array_products && is_array( $post_array_products ) && ! empty( $post_array_products ) && is_object( $query ) ) {
@@ -336,9 +334,17 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
 
             $this->data['all_products'] = $post_array_products;
 
+            if ( $this->data['all_products'] ) {
+                foreach( $this->data['all_products'] as $sproduct ) {
+                    if ( ! is_array( $sproduct ) ) {
+                        $this->data['ids'][$sproduct] = $sproduct;
+                    }
+                }
+            }
+
             return array(
                 'all'      => $post_array_products,
-                'products' => $products
+                'products' => AWS_Search::factory()->get_products( $products ),
             );
 
         }
@@ -378,16 +384,6 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
         }
 
         /*
-        * Enable cache for WooCommerce filter widget
-        */
-        public function woocommerce_layered_nav_count_maybe_cache( $cache ) {
-            if ( ! isset( $_GET['type_aws'] ) ) {
-                return $cache;
-            }
-            return true;
-        }
-
-        /*
          * Change WooCommerce attributes filter widget query
          */
         public function woocommerce_get_filtered_term_product_counts_query( $query ) {
@@ -396,18 +392,16 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
             }
 
             $search = ' AND ' . WC_Query::get_main_search_query_sql();
-            $product_ids = array();
 
             $query['where'] = str_replace( $search, '', $query['where'] );
 
-            if ( isset( $this->data['all_products'] ) && $this->data['all_products'] ) {
+            if ( isset( $this->data['ids'] ) && $this->data['ids'] ) {
                 global $wpdb;
 
-                foreach( $this->data['all_products'] as $sproduct ) {
-                    $product_ids[] = $sproduct['id'];
-                }
+                $new_select_query = "SELECT DISTINCT {$wpdb->posts}.ID as parent_post_id, COUNT( DISTINCT {$wpdb->posts}.ID ) + ( SELECT COUNT( DISTINCT {$wpdb->posts}.ID ) FROM {$wpdb->posts} WHERE parent_post_id = {$wpdb->posts}.post_parent AND {$wpdb->posts}.ID IN (".implode( ',', array_map( 'absint', $this->data['ids'] ) ).") ) as term_count";
 
-                $query['where'] .= " AND {$wpdb->posts}.ID IN (". implode( ',', array_map( 'absint', $product_ids ) ) .")";
+                $query['select'] = str_replace( "SELECT COUNT( DISTINCT {$wpdb->posts}.ID ) as term_count", $new_select_query, $query['select'] );
+                $query['where'] .= " AND {$wpdb->posts}.ID IN (". implode( ',', array_map( 'absint', $this->data['ids'] ) ) .")";
 
             }
 
@@ -419,16 +413,12 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
          */
         public function woocommerce_price_filter_sql( $sql ) {
 
-            if ( isset( $_GET['type_aws'] ) && isset( $this->data['all_products'] ) && $this->data['all_products'] ) {
+            if ( isset( $_GET['type_aws'] ) && isset( $this->data['ids'] ) && $this->data['ids'] ) {
                 global $wpdb;
 
-                foreach( $this->data['all_products'] as $sproduct ) {
-                    $product_ids[] = $sproduct['id'];
-                }
-
                 $sql = "SELECT min( min_price ) as min_price, MAX( max_price ) as max_price
-                        FROM {$wpdb->wc_product_meta_lookup}
-                        WHERE product_id IN (". implode( ',', array_map( 'absint', $product_ids ) ) .")";
+				FROM {$wpdb->wc_product_meta_lookup}
+				WHERE product_id IN (". implode( ',', array_map( 'absint', $this->data['ids'] ) ) .")";
 
             }
 
@@ -460,29 +450,6 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
         }
 
         /**
-         * Check if we should override default search query
-         *
-         * @param string $query
-         * @return bool
-         */
-        private function aws_searchpage_enabled( $query ) {
-            $enabled = true;
-
-            $post_type_product = ( $query->get( 'post_type' ) && ( ( is_string( $query->get( 'post_type' ) ) && ( $query->get( 'post_type' ) === 'product' ) ) || ( is_array( $query->get( 'post_type' ) ) && in_array( 'product', $query->get( 'post_type' ) ) ) ) ) ? true :
-                ( ( isset( $_GET['post_type'] ) && $_GET['post_type'] === 'product' ) ? true : false );
-
-            if ( ( isset( $query->query_vars['s'] ) && ! isset( $_GET['type_aws'] ) ) ||
-                ! isset( $query->query_vars['s'] ) ||
-                ! $query->is_search() ||
-                ! $post_type_product
-            ) {
-                $enabled = false;
-            }
-
-            return apply_filters( 'aws_searchpage_enabled', $enabled, $query );
-        }
-
-        /**
          * Get current page search query
          *
          * @param object|bool $query
@@ -505,6 +472,9 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
 
         /*
          * Set posts objects with data
+         * @param $search_res Search results array
+         * @param $query $query
+         * @return array
          */
         private function set_posts_objects( $search_res, $query ) {
 
@@ -573,8 +543,8 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
         }
 
         /*
-         * Total maximal number of search results for results pages
-         */
+        * Total maximal number of search results for results pages
+        */
         public function aws_page_results( $num ) {
             $search_page_res_num = AWS()->get_settings( 'search_page_res_num' );
             if ( $search_page_res_num ) {
@@ -598,7 +568,7 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
          * Number of search results per page
          */
         public function woocommerce_product_query( $query ) {
-            if ( $this->aws_searchpage_enabled( $query ) && $query->get( 'posts_per_page' ) ) {
+            if ( AWS_Helpers::aws_searchpage_enabled( $query ) && $query->get( 'posts_per_page' ) ) {
                 $query->set( 'posts_per_page', $this->aws_posts_per_page( $query->get( 'posts_per_page' ) ) );
             }
         }

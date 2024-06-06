@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/donate/?hosted_button_id=FDRDNZE6XAKE8
 Tags: woocommerce, search, product search, woocommerce search, live search
 Requires at least: 4.0
 Tested up to: 6.5
-Stable tag: 3.07
+Stable tag: 3.08
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -172,6 +172,18 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 == Changelog ==
 
 [View full changelog](https://advanced-woo-search.com/guide/free-version/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
+
+= 3.08 ( 2024-06-05 ) =
+* Add - Integration for YITH WooCommerce Ajax Product Filter plugin
+* Update - Speed up search results page
+* Update - Integration with WOOF plugin
+* Update - Tested with WC 8.9
+* Update - Reduce the size of search results output
+* Fix - FaceWP plugin integration fix
+* Fix - Misspelling function now respect search terms sources
+* Dev - Replace aws_products_search_page_filtered and aws_products_order hooks
+* Dev - Add show_wcfm_badge filter
+* Dev - Update aws_searchpage_enabled function
 
 = 3.07 ( 2024-05-20 ) =
 * Add - Header for plugin admin page
@@ -388,15 +400,3 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 * Add - Archive pages number option
 * Update - Tested with WC 6.9
 * Fix - SQL query for language selection
-
-= 2.62 ( 2022-09-05 ) =
-* Dev - Add aws_create_cache_table action
-
-= 2.61 ( 2022-08-22 ) =
-* Update - Tested with WC 6.8
-* Update - Custom Product Tabs for WooCommerce plugin integration
-
-= 2.60 ( 2022-08-08 ) =
-* Update - Css for media styles
-* Update - Admin dashboard notices style
-* Update - Admin page text

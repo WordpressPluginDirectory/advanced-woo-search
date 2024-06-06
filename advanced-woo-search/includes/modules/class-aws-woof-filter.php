@@ -55,6 +55,8 @@ if (!class_exists('AWS_Woof_Filter_Init')) :
 
             add_filter( 'posts_where_request', array( $this, 'posts_where_request' ), 1 );
 
+            add_filter( 'woof_get_filtered_price_query', array( $this, 'get_filtered_price_query' ) );
+
             add_filter( 'aws_search_page_custom_data', array( $this, 'aws_search_page_custom_data' ) );
 
         }
@@ -160,6 +162,17 @@ if (!class_exists('AWS_Woof_Filter_Init')) :
                 $where .= " AND {$wpdb->posts}.ID IN ( " . implode( ',', $this->data['ids'] ) . " ) ";
             }
             return $where;
+        }
+
+        /*
+         * Fix price range filters
+         */
+        public function get_filtered_price_query( $sql ) {
+            if ( isset( $_GET['post_type'] ) && $_GET['post_type'] === 'product' && isset( $_GET['type_aws'] ) && $this->data && isset( $this->data['ids'] ) ) {
+                global $wpdb;
+                $sql .= " AND $wpdb->posts.ID IN(" . implode( ',', $this->data['ids'] ) . ")";
+            }
+            return $sql;
         }
 
         /*

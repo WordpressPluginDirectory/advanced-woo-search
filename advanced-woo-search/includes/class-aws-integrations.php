@@ -483,6 +483,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 include_once( AWS_DIR . '/includes/modules/class-aws-single-variations.php' );
             }
 
+            // YITH WooCommerce Ajax Product Filter
+            if ( defined( 'YITH_WCAN' ) ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-yith-wcan.php' );
+            }
+
         }
 
         /*

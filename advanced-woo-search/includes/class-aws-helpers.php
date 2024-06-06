@@ -1158,6 +1158,28 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
 
         }
 
+        /**
+         * Check if we should override default search query
+         * @param string $query
+         * @return bool
+         */
+        static public function aws_searchpage_enabled( $query ) {
+            $enabled = true;
+
+            $post_type_product = ( $query->get( 'post_type' ) && ( ( is_string( $query->get( 'post_type' ) ) && ( $query->get( 'post_type' ) === 'product' ) ) || ( is_array( $query->get( 'post_type' ) ) && in_array( 'product', $query->get( 'post_type' ) ) ) ) ) ? true :
+                ( ( isset( $_GET['post_type'] ) && $_GET['post_type'] === 'product' ) ? true : false );
+
+            if ( ( isset( $query->query_vars['s'] ) && ! isset( $_GET['type_aws'] ) ) ||
+                ! isset( $query->query_vars['s'] ) ||
+                ! $query->is_search() ||
+                ! $post_type_product
+            ) {
+                $enabled = false;
+            }
+
+            return apply_filters( 'aws_searchpage_enabled', $enabled, $query );
+        }
+
     }
 
 endif;

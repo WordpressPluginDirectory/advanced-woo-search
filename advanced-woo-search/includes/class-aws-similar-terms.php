@@ -38,7 +38,7 @@ if ( ! class_exists( 'AWS_Similar_Terms' ) ) :
             $fuzzy_params = array(
                 'min_terms_length' => 3,
                 'term_like_prefix' => 2,
-                'max_similar_terms' => 50,
+                'max_similar_terms' => 100,
                 'min_distance' => 2,
             );
 
@@ -112,6 +112,16 @@ if ( ! class_exists( 'AWS_Similar_Terms' ) ) :
 
             global $wpdb;
 
+            $query_sources = '';
+            if ( isset( $this->data['search_in'] ) && $this->data['search_in'] ) {
+                $search_in_arr_string = '';
+                foreach ( $this->data['search_in'] as $s_source ) {
+                    $search_in_arr_string .= "'" . $s_source . "',";
+                }
+                $search_in_arr_string = rtrim( $search_in_arr_string, "," );
+                $query_sources = sprintf( ' AND term_source IN ( %s )', $search_in_arr_string );
+            }
+
             $query_stock = isset( $this->data['query_params'] ) && isset( $this->data['query_params']['stock'] ) ? $this->data['query_params']['stock'] : '';
             $query_visibility = isset( $this->data['query_params'] ) && isset( $this->data['query_params']['visibility'] ) ? $this->data['query_params']['visibility'] : '';
             $query_exclude_products = isset( $this->data['query_params'] ) && isset( $this->data['query_params']['exclude_products'] ) ? $this->data['query_params']['exclude_products'] : '';
@@ -126,6 +136,7 @@ if ( ! class_exists( 'AWS_Similar_Terms' ) ) :
                         {$table_name}
                     WHERE
                         term LIKE '{$keyword_like}'
+                        {$query_sources}
                         {$query_stock}
                         {$query_visibility}
                         {$query_exclude_products}

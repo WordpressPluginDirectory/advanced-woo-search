@@ -91,7 +91,7 @@ if (!class_exists('AWS_FacetWP')) :
                         $products_ids[] = $product['id'];
                     }
                     foreach ( $search_res['all'] as $product ) {
-                        $all_products_ids[] = $product['id'];
+                        $all_products_ids[] = $product;
                     }
                     $post_ids = $all_products_ids;
                     $this->data['all_products_ids'] = $all_products_ids;

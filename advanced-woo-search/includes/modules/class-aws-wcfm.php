@@ -65,7 +65,9 @@ if ( ! class_exists( 'AWS_WCFM' ) ) :
          */
         function wcfm_excerpt_search_result( $excerpt, $post_id, $product ) {
 
-            if ( function_exists( 'wcfm_get_vendor_id_by_post' ) ) {
+            $show_vendor_info = apply_filters( 'show_wcfm_badge', true, $product );
+
+            if ( $show_vendor_info && function_exists( 'wcfm_get_vendor_id_by_post' ) ) {
 
                 $vendor_id = wcfm_get_vendor_id_by_post( $post_id );
 
