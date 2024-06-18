@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/donate/?hosted_button_id=FDRDNZE6XAKE8
 Tags: woocommerce, search, product search, woocommerce search, live search
 Requires at least: 4.0
 Tested up to: 6.5
-Stable tag: 3.08
+Stable tag: 3.09
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -172,6 +172,14 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 == Changelog ==
 
 [View full changelog](https://advanced-woo-search.com/guide/free-version/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
+
+= 3.09 ( 2024-06-17 ) =
+* Add - Support for The7 theme
+* Update - Integration with Shoptimizer theme
+* Fix - Disable misspelling fix for numeric search terms
+* Dev - Add new parameter for aws_search_results_products_ids filter
+* Dev - Add aws_search_no_results filter
+* Dev - Add aws_search_custom_results_data and aws_search_top_text filters
 
 = 3.08 ( 2024-06-05 ) =
 * Add - Integration for YITH WooCommerce Ajax Product Filter plugin
@@ -391,12 +399,4 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 = 2.65 ( 2022-10-17 ) =
 * Add - Support for Pustaka theme
 * Update - Tested with WC 7.0
-* Fix - SQL query for language selection
-
-= 2.64 ( 2022-10-03 ) =
-* Update - Minify assets
-
-= 2.63 ( 2022-09-19 ) =
-* Add - Archive pages number option
-* Update - Tested with WC 6.9
 * Fix - SQL query for language selection

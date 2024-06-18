@@ -307,6 +307,11 @@
     border: 0;
 }
 
+.aws-search-result .aws_top_text {
+    width: 100%;
+    padding: 10px 8px;
+    border-bottom: 1px solid #ccc;
+}
 
 .aws-search-result .aws_result_item:hover,
 .aws-search-result .aws_result_item.hovered {

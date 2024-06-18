@@ -212,22 +212,6 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 
                     }
 
-                    /**
-                     * Filters array of products ids
-                     *
-                     * @since 1.53
-                     *
-                     * @param array $posts_ids Array of products ids
-                     * @param string $s Search query
-                     */
-                    $posts_ids = apply_filters( 'aws_search_results_products_ids', $posts_ids, $s );
-
-                    if ( $output === 'all' ) {
-
-                        $products_array = $this->get_products( $posts_ids );
-
-                    }
-
                 }
 
                 if ( $output === 'all' ) {
@@ -261,18 +245,39 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 
             }
 
+            /**
+             * Filters array of products ids
+             * @since 1.53
+             * @param array $posts_ids Array of products ids
+             * @param string $s Search query
+             * @param array $this->data Array of search data ( since 3.09 )
+             */
+            $posts_ids = apply_filters( 'aws_search_results_products_ids', $posts_ids, $s, $this->data );
+
+            if ( empty( $posts_ids ) && empty( $custom_tax_array ) ) {
+
+                /**
+                 * If no search results - apply filter to add custom ones
+                 * @since 3.09
+                 * @param array $posts_ids Array of products ids
+                 * @param string $s Search query
+                 * @param array $this->data Array of search data
+                 */
+                $posts_ids = apply_filters( 'aws_search_no_results', $posts_ids, $s, $this->data );
+
+            }
 
             // Return array of its to short-circuit search return
             if ( $output === 'ids' ) {
                 return $posts_ids;
             }
 
+            $products_array = $this->get_products( $posts_ids );
 
             $result_array = array(
                 'tax'      => $custom_tax_array,
                 'products' => $products_array,
             );
-
 
             /**
              * Filters array of all results data before they displayed in search results
@@ -283,6 +288,8 @@ if ( ! class_exists( 'AWS_Search' ) ) :
              * @param string $s Search query
              */
             $result_array = apply_filters( 'aws_search_results_all', $result_array, $s );
+
+            $result_array['data'] = AWS_Helpers::get_custom_results_data( array( 'products' => $products_array, 'tax' => $custom_tax_array ), $this->data );
 
             if ( $cache === 'true' && ! $keyword && $output === 'all' ) {
                 AWS()->cache->insert_into_cache_table( $cache_option_name, $result_array );

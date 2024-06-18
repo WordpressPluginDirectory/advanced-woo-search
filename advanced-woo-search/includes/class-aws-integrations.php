@@ -225,6 +225,10 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                     add_action( 'wp_head', array( $this, 'zephyr_wp_head' ) );
                 }
 
+                if ( 'Shoptimizer' === $this->current_theme ) {
+                    add_action( 'wp_enqueue_scripts', array( $this, 'shoptimizer_wp_enqueue_scripts' ) );
+                }
+
                 // WP Bottom Menu
                 if ( defined( 'WP_BOTTOM_MENU_VERSION' ) ) {
                     add_action( 'wp_head', array( $this, 'wp_bottom_menu_wp_head' ) );
@@ -446,6 +450,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             // GeneratePress theme
             if ( 'GeneratePress' === $this->current_theme ) {
                 include_once( AWS_DIR . '/includes/modules/class-aws-generatepress.php' );
+            }
+
+            // The7 theme
+            if ( 'The7' === $this->current_theme ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-the7.php' );
             }
 
             // Woodmart theme
@@ -1689,6 +1698,36 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 }
             </style>
         <?php }
+
+        /*
+         * Shoptimizer fix search form inside dialog window
+         */
+        public function shoptimizer_wp_enqueue_scripts() {
+
+            $script = "
+                function aws_results_append_to( container, options  ) {
+                    if ( options.form.closest('.shoptimizer-modal').length > 0 ) {
+                        return '.shoptimizer-modal .site-search';
+                    }
+                    return container;
+                }
+                function aws_results_layout( styles, options  ) {
+                    if ( options.form.closest('.shoptimizer-modal').length > 0 ) {
+                        var offset = options.form.offset();
+                        var dialogOffset = options.form.closest('.site-search').offset();
+                        styles.left = offset.left - dialogOffset.left;
+                        styles.top = offset.top - dialogOffset.top + options.form.innerHeight();
+                    }
+                    return styles;
+                }
+                AwsHooks.add_filter( 'aws_results_append_to', aws_results_append_to );
+                AwsHooks.add_filter( 'aws_results_layout', aws_results_layout );
+            ";
+
+            wp_add_inline_script( 'aws-script', $script);
+            wp_add_inline_script( 'aws-pro-script', $script);
+
+        }
 
         /*
          * WP Bottom Menu

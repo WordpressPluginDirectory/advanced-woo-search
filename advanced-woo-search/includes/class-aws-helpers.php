@@ -1180,6 +1180,24 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
             return apply_filters( 'aws_searchpage_enabled', $enabled, $query );
         }
 
+        /**
+         * Get array of custom data for search results output
+         * @param array $results Search results
+         * @param array $s_data Search related data
+         * @return array
+         */
+        static public function get_custom_results_data( $results, $s_data ) {
+
+            $results_data = array();
+
+            $results_data['top_text'] = apply_filters( 'aws_search_top_text', '', $results, $s_data );
+
+            $results_data = apply_filters( 'aws_search_custom_results_data', $results_data, $results, $s_data );
+
+            return (array) $results_data;
+
+        }
+
     }
 
 endif;

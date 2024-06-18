@@ -163,6 +163,10 @@ AwsHooks.filters = AwsHooks.filters || {};
 
                 var html = '<ul>';
 
+                if ( typeof response.data !== 'undefined' && typeof response.data.top_text !== 'undefined' && response.data.top_text ) {
+                    html += '<li class="aws_top_text">' + response.data.top_text + '</li>';
+                }
+
                 if ( typeof response.tax !== 'undefined' ) {
 
                     $.each(response.tax, function (i, taxes) {

@@ -40,6 +40,7 @@ if ( ! class_exists( 'AWS_Similar_Terms' ) ) :
                 'term_like_prefix' => 2,
                 'max_similar_terms' => 100,
                 'min_distance' => 2,
+                'allow_numeric' => false,
             );
 
             /**
@@ -65,6 +66,10 @@ if ( ! class_exists( 'AWS_Similar_Terms' ) ) :
             foreach ( $this->search_terms as $search_term ) {
 
                 if ( strlen( $search_term ) > $this->fuzzy_params['min_terms_length'] ) {
+
+                    if ( ! $this->fuzzy_params['allow_numeric'] && is_numeric( $search_term ) ) {
+                        continue;
+                    }
 
                     // find similar terms inside index table
                     $matches = $this->get_all_similar( $search_term );
