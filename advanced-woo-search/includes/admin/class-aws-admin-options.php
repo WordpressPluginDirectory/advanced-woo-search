@@ -270,13 +270,15 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
 
             $options['general'][] = array(
                 "name"  => __( "Misspelling fix", "advanced-woo-search" ),
-                "desc"  => sprintf( __( "Fix typos inside search words %s.", "advanced-woo-search" ), '( lapto<b>t</b> -> lapto<b>p</b> )' ),
+                "desc"  => sprintf( __( "Fix typos inside search words %s.", "advanced-woo-search" ), '( lapto<b>t</b> -> lapto<b>p</b> )' ) . '<br>' . __( "Applied if the current search query returns no results.", "advanced-woo-search" ),
                 "id"    => "fuzzy",
                 "value" => 'true',
                 "type"  => "radio",
                 'choices' => array(
-                    'true'  => __( 'On', 'advanced-woo-search' ),
-                    'false'  => __( 'Off', 'advanced-woo-search' ),
+                    'true'  => __( 'On. Automatically search for fixed terms.', 'advanced-woo-search' ),
+                    'true_text'  => __( "On. Additionally show text \"Showing results for ...\" with a list of fixed terms at the top of search results.", 'advanced-woo-search' ),
+                    'false'  => __( 'Off. Totally disable misspelling fix.', 'advanced-woo-search' ),
+                    'false_text'  => __( "Off. Instead show text \"Did you mean ...\" with a clickable list of fixed terms at the top of search results.", 'advanced-woo-search' ),
                 )
             );
 
@@ -580,7 +582,7 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                 "name"  => __( "Form Styling", "advanced-woo-search" ),
                 "desc"  => __( "Choose search form layout", "advanced-woo-search" ) . '<br>' . __( "Filter button will be visible only if you have more than one active filter for current search form instance.", "advanced-woo-search" ),
                 "id"    => "buttons_order",
-                "value" => '1',
+                "value" => '2',
                 "type"  => "radio-image",
                 'choices' => array(
                     '1' => 'btn-layout1.png',

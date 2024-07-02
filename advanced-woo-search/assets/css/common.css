@@ -482,6 +482,28 @@
     background: #f5f5f5;
 }
 
+.aws-search-result .aws_terms_suggestions {
+    line-height: 1.7;
+}
+
+.aws-search-result .aws_term_suggestion {
+    color: #222;
+    vertical-align: middle;
+
+}
+
+.aws-search-result a.aws_term_suggestion {
+    color: #222;
+    background: #ededed;
+    border: 0;
+    border-radius: 3px;
+    font-size: 13px;
+    padding: 2px 5px;
+}
+.aws-search-result a.aws_term_suggestion:hover {
+    background-color: #dad8da;
+}
+
 /* Mobile form overlay */
 
 body.aws-overlay {

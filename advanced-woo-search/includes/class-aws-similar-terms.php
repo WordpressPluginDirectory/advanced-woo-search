@@ -61,6 +61,7 @@ if ( ! class_exists( 'AWS_Similar_Terms' ) ) :
             global $wpdb;
 
             $new_terms = array();
+            $new_terms['all'] = array();
             $and_search_groupds = array();
 
             foreach ( $this->search_terms as $search_term ) {
@@ -100,7 +101,14 @@ if ( ! class_exists( 'AWS_Similar_Terms' ) ) :
 
                     }
 
-                    $new_terms = array_merge( $new_terms, $temp_matches );
+                    if ( ! empty( $temp_matches ) ) {
+                        $new_terms['pairs'][] = array(
+                            'old' => $search_term,
+                            'new' => $temp_matches
+                        );
+                    }
+
+                    $new_terms['all'] = array_merge( $new_terms['all'], $temp_matches );
 
                 }
 

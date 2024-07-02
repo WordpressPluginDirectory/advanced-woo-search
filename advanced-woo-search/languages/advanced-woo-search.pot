@@ -402,6 +402,9 @@ msgstr ""
 msgid "Fix typos inside search words %s."
 msgstr ""
 
+msgid "Applied if the current search query returns no results."
+msgstr ""
+
 #: includes/options.php:42
 msgid "Use Google Analytics"
 msgstr ""
@@ -850,4 +853,22 @@ msgid "logo"
 msgstr ""
 
 msgid "Support"
+msgstr ""
+
+msgid "Showing results for"
+msgstr ""
+
+msgid "Did you mean:"
+msgstr ""
+
+msgid "On. Automatically search for fixed terms."
+msgstr ""
+
+msgid "On. Additionally show text \"Showing results for ...\" with a list of fixed terms at the top of search results."
+msgstr ""
+
+msgid "Off. Totally disable misspelling fix."
+msgstr ""
+
+msgid "Off. Instead show text \"Did you mean ...\" with a clickable list of fixed terms at the top of search results."
 msgstr ""

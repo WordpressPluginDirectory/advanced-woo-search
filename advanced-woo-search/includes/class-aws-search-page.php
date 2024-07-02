@@ -342,9 +342,22 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
                 }
             }
 
+            /**
+             * Return only current page products IDs id needed
+             * @since 3.10
+             * @param bool $return_only_ids
+             * @param object|bool $query Search query object
+             * @param array $this->data Search data array
+             */
+            $return_only_ids = apply_filters( 'aws_search_page_posts_objects_ids', false, $query, $this->data );
+
+            if ( ! $return_only_ids ) {
+                $products = AWS_Search::factory()->get_products( $products );
+            }
+
             return array(
                 'all'      => $post_array_products,
-                'products' => AWS_Search::factory()->get_products( $products ),
+                'products' => $products,
             );
 
         }
@@ -480,53 +493,62 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
 
             $new_posts = array();
 
-            foreach ( $search_res['products'] as $post_array ) {
-                $post = new stdClass();
+            if ( ! empty( $search_res['products'] ) && is_array( $search_res['products'][0] ) ) {
 
-                $post_array = (array) $post_array;
-                $post_data = $post_array['post_data'];
+                foreach ( $search_res['products'] as $post_array ) {
+                    $post = new stdClass();
 
-                $post->ID = ( isset( $post_array['parent_id'] ) && $post_array['parent_id'] ) ? $post_array['parent_id'] : $post_data->ID;
-                $post->site_id = get_current_blog_id();
+                    $post_array = (array) $post_array;
+                    $post_data = $post_array['post_data'];
 
-                if ( ! empty( $post_data->site_id ) ) {
-                    $post->site_id = $post_data->site_id;
-                }
+                    $post->ID = ( isset( $post_array['parent_id'] ) && $post_array['parent_id'] ) ? $post_array['parent_id'] : $post_data->ID;
+                    $post->site_id = get_current_blog_id();
 
-                $post_return_args = array(
-                    'post_type',
-                    'post_author',
-                    'post_name',
-                    'post_status',
-                    'post_title',
-                    'post_parent',
-                    'post_content',
-                    'post_excerpt',
-                    'post_date',
-                    'post_date_gmt',
-                    'post_modified',
-                    'post_modified_gmt',
-                    'post_mime_type',
-                    'comment_count',
-                    'comment_status',
-                    'ping_status',
-                    'menu_order',
-                    'permalink',
-                    'terms',
-                    'post_meta'
-                );
+                    if ( ! empty( $post_data->site_id ) ) {
+                        $post->site_id = $post_data->site_id;
+                    }
 
-                foreach ( $post_return_args as $key ) {
-                    if ( isset( $post_data->$key ) ) {
-                        $post->$key = $post_data->$key;
+                    $post_return_args = array(
+                        'post_type',
+                        'post_author',
+                        'post_name',
+                        'post_status',
+                        'post_title',
+                        'post_parent',
+                        'post_content',
+                        'post_excerpt',
+                        'post_date',
+                        'post_date_gmt',
+                        'post_modified',
+                        'post_modified_gmt',
+                        'post_mime_type',
+                        'comment_count',
+                        'comment_status',
+                        'ping_status',
+                        'menu_order',
+                        'permalink',
+                        'terms',
+                        'post_meta'
+                    );
+
+                    foreach ( $post_return_args as $key ) {
+                        if ( isset( $post_data->$key ) ) {
+                            $post->$key = $post_data->$key;
+                        }
+                    }
+
+                    $post->awssearch = true; // Super useful for debugging
+
+                    if ( $post ) {
+                        $new_posts[] = $post;
                     }
                 }
 
-                $post->awssearch = true; // Super useful for debugging
+            } else {
 
-                if ( $post ) {
-                    $new_posts[] = $post;
-                }
+                // return only products IDs
+                $new_posts = $search_res['products'];
+
             }
 
             /**

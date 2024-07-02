@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/donate/?hosted_button_id=FDRDNZE6XAKE8
 Tags: woocommerce, search, product search, woocommerce search, live search
 Requires at least: 4.0
 Tested up to: 6.5
-Stable tag: 3.09
+Stable tag: 3.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -172,6 +172,20 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 == Changelog ==
 
 [View full changelog](https://advanced-woo-search.com/guide/free-version/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
+
+= 3.10 ( 2024-07-01 ) =
+* Add - New option to show fixed terms list inside search results
+* Add - Support for Hitek theme
+* Update - Change default value for Form Styling option
+* Update - Tested with WC 9.0
+* Update - Integration with Bricks theme
+* Fix - Return content and short description for post object inside search page
+* Dev - Add aws_search_fixed_terms_suggestions_num filter
+* Dev - Add js event aws_search_force to force search with specific terms
+* Dev - Add old/new pairs for similar terms output
+* Dev - Add generate_combinations helper function
+* Dev - Add aws_search_page_posts_objects_ids filter hook
+* Dev - Add aws_search_notices filter
 
 = 3.09 ( 2024-06-17 ) =
 * Add - Support for The7 theme
@@ -380,23 +394,3 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 
 = 2.69 ( 2022-12-12 ) =
 * Fix - OrderBy value for search results page query
-
-= 2.68 ( 2022-11-28 ) =
-* Update - Support for Perfect Brands for WooCommerce plugin
-* Update - Stop words list
-
-= 2.67 ( 2022-11-14 ) =
-* Update - Tested with WC 7.1
-* Update - Flatsome theme support
-* Fix - Search results page filtering by product attributes
-* Dev - Add aws_sync_index_table filter
-
-= 2.66 ( 2022-10-31 ) =
-* Add - Support for XStore theme
-* Update - Integration with WooCommerce Product Filter by WooBeWoo plugin
-* Update - Hooks for index table products sync
-
-= 2.65 ( 2022-10-17 ) =
-* Add - Support for Pustaka theme
-* Update - Tested with WC 7.0
-* Fix - SQL query for language selection

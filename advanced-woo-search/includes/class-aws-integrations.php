@@ -229,6 +229,10 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                     add_action( 'wp_enqueue_scripts', array( $this, 'shoptimizer_wp_enqueue_scripts' ) );
                 }
 
+                if ( 'Hitek' === $this->current_theme ) {
+                    add_action( 'xts_after_search_wrapper', array( $this, 'xts_after_search_wrapper' ) );
+                }
+
                 // WP Bottom Menu
                 if ( defined( 'WP_BOTTOM_MENU_VERSION' ) ) {
                     add_action( 'wp_head', array( $this, 'wp_bottom_menu_wp_head' ) );
@@ -1726,6 +1730,29 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
 
             wp_add_inline_script( 'aws-script', $script);
             wp_add_inline_script( 'aws-pro-script', $script);
+
+        }
+
+        /*
+         * Add search form inside Hitek theme header
+         */
+        public function xts_after_search_wrapper() {
+
+            echo '<style>
+                .xts-header form.searchform, 
+                .xts-search-wrapper form.searchform {
+                    display: none;
+                }
+                .xts-search-wrapper.xts-search-full-screen .aws-container {
+                    margin: 0 35px;
+                    padding-top: 30px;
+                }
+                .xts-search-full-screen .xts-search-close {
+                    top: -110px;
+                }
+            </style>';
+
+            aws_get_search_form();
 
         }
 

@@ -1189,12 +1189,96 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
         static public function get_custom_results_data( $results, $s_data ) {
 
             $results_data = array();
+            $notices = array();
 
             $results_data['top_text'] = apply_filters( 'aws_search_top_text', '', $results, $s_data );
+
+            $results_data['notices'] = apply_filters( 'aws_search_notices', $notices, $results, $s_data );
 
             $results_data = apply_filters( 'aws_search_custom_results_data', $results_data, $results, $s_data );
 
             return (array) $results_data;
+
+        }
+
+        /**
+         * Generate all possible combinations or array items
+         * @param array $array_groups
+         * @return array
+         */
+        static public function generate_combinations( $array_groups ) {
+
+            $groups = array( array() );
+            foreach ( $array_groups as $array ) {
+                $tmp = array();
+                foreach ($groups as $resultItem) {
+                    foreach ($array as $item) {
+                        $tmp[] = array_merge( $resultItem, array( $item ) );
+                    }
+                }
+                $groups = $tmp;
+            }
+
+            return $groups;
+
+        }
+
+        /**
+         * Get variations of suggested fixed terms that was misspelled
+         * @param array $data Search related data
+         * @param int $max_terms_to_suggest Max number of suggested terms variations
+         * @return array
+         */
+        static public function get_fixed_terms_suggestions( $data, $max_terms_to_suggest = 3 ) {
+
+            /**
+             * Filter number of suggested fixed terms
+             * @since 3.10
+             * @param int $max_terms_to_suggest Max number of fixed terms suggestions
+             * @param array $data Array of search parameters
+             */
+            $max_terms_to_suggest = apply_filters( 'aws_search_fixed_terms_suggestions_num', $max_terms_to_suggest, $data );
+
+            $terms_suggestions = array();
+
+            if ( isset( $data['similar_terms'] ) && isset( $data['similar_terms']['pairs'] ) ) {
+
+                $terms_pairs = $data['similar_terms']['pairs'];
+                $s = $data['s'];
+
+                $similar_groupds = array();
+                foreach ( $terms_pairs as $pair ) {
+                    $tmp = array();
+                    if ( ! empty( $pair['new'] ) ) {
+                        foreach ( $pair['new'] as $new_term ) {
+                            $tmp[] = array(
+                                'old' => $pair['old'],
+                                'new' => $new_term,
+                            );
+                        }
+                    }
+                    $similar_groupds[] = $tmp;
+                }
+
+                $terms_groups = AWS_Helpers::generate_combinations( $similar_groupds );
+
+                if ( ! empty( $terms_groups ) ) {
+                    $count = 0;
+                    foreach ( $terms_groups as $terms_group ) {
+                        if ( ++$count > $max_terms_to_suggest ) {
+                            break;
+                        }
+                        $new_s = $s;
+                        foreach ( $terms_group as $terms ) {
+                            $new_s = str_replace( $terms['old'], $terms['new'], $new_s );
+                        }
+                        $terms_suggestions[] = $new_s;
+                    }
+                }
+
+            }
+
+            return $terms_suggestions;
 
         }
 

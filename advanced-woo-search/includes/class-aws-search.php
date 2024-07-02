@@ -162,6 +162,8 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             $this->data['outofstock']   = $outofstock;
             $this->data['search_rule']   = $search_rule;
             $this->data['search_words_num'] = $search_words_num;
+            $this->data['fuzzy'] = $fuzzy;
+            $this->data['is_search_page'] = !! $keyword;
 
             $search_array = array_unique( explode( ' ', $s ) );
 
@@ -200,14 +202,20 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                     $posts_ids = $this->query_index_table();
 
                     // try to fix misspellings
-                    if ( empty( $posts_ids ) && $fuzzy === 'true' ) {
+                    if ( empty( $posts_ids ) && ( $fuzzy === 'true' || $fuzzy === 'true_text' ) ) {
 
                         $similar_terms_obj = new AWS_Similar_Terms( $this->data );
-                        $similar_terms = $similar_terms_obj->get_similar_terms();
+                        $similar_terms_res = $similar_terms_obj->get_similar_terms();
 
-                        if ( ! empty( $similar_terms ) ) {
+                        if ( ! empty( $similar_terms_res ) && ! empty( $similar_terms_res['all'] ) ) {
+
+                            $this->data['similar_terms'] = $similar_terms_res;
+
+                            $similar_terms = $similar_terms_res['all'];
+
                             $this->data['search_terms'] = $similar_terms;
                             $posts_ids = $this->query_index_table();
+
                         }
 
                     }
@@ -726,8 +734,10 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                     $title   = apply_filters( 'aws_title_search_result', $title, $post_id, $product );
                     $excerpt = apply_filters( 'aws_excerpt_search_result', $excerpt, $post_id, $product );
 
-                    $post_data->post_content = '';
-                    $post_data->post_excerpt = '';
+                    if ( ! isset( $this->data['is_search_page'] ) || ! $this->data['is_search_page'] ) {
+                        $post_data->post_content = '';
+                        $post_data->post_excerpt = '';
+                    }
 
                     $new_result = array(
                         'id'           => $post_id,
