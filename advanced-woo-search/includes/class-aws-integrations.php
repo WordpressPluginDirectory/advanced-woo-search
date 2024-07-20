@@ -501,6 +501,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 include_once( AWS_DIR . '/includes/modules/class-aws-yith-wcan.php' );
             }
 
+            // Filter Everything
+            if ( class_exists( 'FlrtFilter' ) ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-filter-everything.php' );
+            }
+
         }
 
         /*

@@ -154,23 +154,31 @@ if (!class_exists('AWS_Woobewoo_Filters')) :
 
                     $terms_arr = $isAnd ? $idsAnd : $idsOr;
 
-                    if ( preg_match( '/[a-z]/', $param ) ) {
-                        $new_terms_arr = array();
-                        foreach ( $terms_arr as $term_slug ) {
-                            $term = get_term_by('slug', $term_slug, $taxonomy );
-                            if ( $term ) {
-                                $new_terms_arr[] = $term->term_id;
-                            }
-                            if ( ! $term && strpos( $taxonomy, 'pa_' ) !== 0 ) {
-                                $term = get_term_by('slug', $term_slug, 'pa_' . $taxonomy );
+                    if ( isset( $filters['tax'] ) && isset( $filters['tax'][$taxonomy] ) && isset( $filters['tax'][$taxonomy]['terms'] ) ) {
+
+                        $terms_arr = $filters['tax'][$taxonomy]['terms'];
+
+                    } else {
+
+                        if ( preg_match( '/[a-z]/', $param ) ) {
+                            $new_terms_arr = array();
+                            foreach ( $terms_arr as $term_slug ) {
+                                $term = get_term_by('slug', $term_slug, $taxonomy );
                                 if ( $term ) {
                                     $new_terms_arr[] = $term->term_id;
                                 }
+                                if ( ! $term && strpos( $taxonomy, 'pa_' ) !== 0 ) {
+                                    $term = get_term_by('slug', $term_slug, 'pa_' . $taxonomy );
+                                    if ( $term ) {
+                                        $new_terms_arr[] = $term->term_id;
+                                    }
+                                }
+                            }
+                            if ( $new_terms_arr ) {
+                                $terms_arr = $new_terms_arr;
                             }
                         }
-                        if ( $new_terms_arr ) {
-                            $terms_arr = $new_terms_arr;
-                        }
+
                     }
 
                     $filters['tax'][$taxonomy] = array(

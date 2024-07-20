@@ -3,8 +3,8 @@ Contributors: Mihail Barinov
 Donate link: https://www.paypal.com/donate/?hosted_button_id=FDRDNZE6XAKE8
 Tags: woocommerce, search, product search, woocommerce search, live search
 Requires at least: 4.0
-Tested up to: 6.5
-Stable tag: 3.10
+Tested up to: 6.6
+Stable tag: 3.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -172,6 +172,22 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 == Changelog ==
 
 [View full changelog](https://advanced-woo-search.com/guide/free-version/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
+
+= 3.12 ( 2024-07-19 ) =
+* Fix - Bug with search results page taxonomies filters
+
+= 3.11 ( 2024-07-15 ) =
+* Add - Support for Filter Everything plugin
+* Update - Tested with WC 9.1
+* Update - Integration with WooCommerce Product Filter by WooBeWoo plugin
+* Update - Integration with Product Filters for WooCommerce plugin
+* Update - Integration with YITH WooCommerce Ajax Product Filter plugin
+* Update - Integration with BeRocket WooCommerce AJAX Products Filter plugin
+* Update - Filter for search results page. Inherit tax_query parameters
+* Update - Integration with Avada theme. Move js scripts to footer
+* Update - Integration with The7 theme. Fix submit button for search forms
+* Update - Admin notice about reindex on first plugin activation
+* Fix - Bug with calling search function inside wp admin orders page
 
 = 3.10 ( 2024-07-01 ) =
 * Add - New option to show fixed terms list inside search results
@@ -377,20 +393,3 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 * Update - Tested with WC 7.4
 * Update - FacetWP plugin integration
 * Update - WPBakery plugin support
-
-= 2.72 ( 2023-02-06 ) =
-* Add - MultiVendorX – WooCommerce Multivendor Marketplace plugin support
-* Update - Change relevance score for products title
-* Fix - WPML plugin bug when saving settings values
-
-= 2.71 ( 2023-01-23 ) =
-* Update - Tested with WC 7.3
-* Fix - Integration issue with Advanced Woo Labels plugin
-* Fix - Elementor search form widget
-* Fix - Index scheduled products
-
-= 2.70 ( 2023-01-09 ) =
-* Update - Tested with WC 7.2
-
-= 2.69 ( 2022-12-12 ) =
-* Fix - OrderBy value for search results page query

@@ -72,34 +72,46 @@ if (!class_exists('AWS_Berocket_Filters')) :
                         $filters['price_max'] = intval( $matches[3] );
                     }
                 } elseif ( preg_match( '/(.+)\[(.+?)\]/', $get_filter, $matches ) ) {
+
                     $taxonomy = $matches[1];
                     $operator = strpos( $matches[2], '-' ) !== false ? 'OR' : 'AND';
                     $explode_char = strpos( $matches[2], '-' ) !== false ? '-' : '+';
                     $terms_arr = explode( $explode_char, $matches[2] );
-                    // if used slugs instead of IDs for terms
-                    if ( preg_match( '/[a-z]/', $matches[2] ) ) {
-                        $new_terms_arr = array();
-                        foreach ( $terms_arr as $term_slug ) {
-                            $term = get_term_by('slug', $term_slug, $taxonomy );
-                            if ( $term ) {
-                                $new_terms_arr[] = $term->term_id;
-                            }
-                            if ( ! $term && strpos( $taxonomy, 'pa_' ) !== 0 ) {
-                                $term = get_term_by('slug', $term_slug, 'pa_' . $taxonomy );
+
+                    if ( isset( $filters['tax'] ) && isset( $filters['tax'][$taxonomy] ) && isset( $filters['tax'][$taxonomy]['terms'] ) ) {
+
+                        $terms_arr = $filters['tax'][$taxonomy]['terms'];
+
+                    } else {
+
+                        // if used slugs instead of IDs for terms
+                        if ( preg_match( '/[a-z]/', $matches[2] ) ) {
+                            $new_terms_arr = array();
+                            foreach ( $terms_arr as $term_slug ) {
+                                $term = get_term_by('slug', $term_slug, $taxonomy );
                                 if ( $term ) {
                                     $new_terms_arr[] = $term->term_id;
                                 }
+                                if ( ! $term && strpos( $taxonomy, 'pa_' ) !== 0 ) {
+                                    $term = get_term_by('slug', $term_slug, 'pa_' . $taxonomy );
+                                    if ( $term ) {
+                                        $new_terms_arr[] = $term->term_id;
+                                    }
+                                }
+                            }
+                            if ( $new_terms_arr ) {
+                                $terms_arr = $new_terms_arr;
                             }
                         }
-                        if ( $new_terms_arr ) {
-                            $terms_arr = $new_terms_arr;
-                        }
+
                     }
+
                     $filters['tax'][$taxonomy] = array(
                         'terms' => $terms_arr,
                         'operator' => $operator,
                         'include_parent' => true,
                     );
+
                 }
 
             }

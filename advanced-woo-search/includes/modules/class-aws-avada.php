@@ -46,6 +46,7 @@ if ( ! class_exists( 'AWS_Avada' ) ) :
 
             if ( AWS()->get_settings( 'seamless' ) === 'true' ) {
                 add_action( 'wp_head', array( $this, 'avada_head_action' ) );
+                add_action( 'wp_footer', array( $this, 'avada_wp_footer' ) );
             }
 
             add_filter( 'aws_posts_per_page', array( $this, 'avada_posts_per_page' ), 2 );
@@ -83,6 +84,10 @@ if ( ! class_exists( 'AWS_Avada' ) ) :
                 }
 
             </style>
+
+        <?php }
+
+        public function avada_wp_footer() { ?>
 
             <script>
 

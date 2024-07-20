@@ -482,10 +482,18 @@ if ( ! class_exists( 'AWS_Versions' ) ) :
         /**
          * Admin notice for table first reindex
          */
-        public function admin_notice_no_index() { ?>
+        public function admin_notice_no_index() {
+
+            $button = '<a class="button button-secondary" href="'.esc_url( admin_url('admin.php?page=aws-options') ).'">'.esc_html__( 'Go to Settings Page', 'advanced-woo-search' ).'</a>';
+            if ( isset( $_GET['page'] ) && $_GET['page'] === 'aws-options' ) {
+                $button = '';
+            }
+            ?>
+
             <div class="updated notice is-dismissible">
-                <p><?php printf( esc_html__( 'Advanced Woo Search: Please go to the plugin setting page and start indexing your products. %s', 'advanced-woo-search' ), '<a class="button button-secondary" href="'.esc_url( admin_url('admin.php?page=aws-options') ).'">'.esc_html__( 'Go to Settings Page', 'advanced-woo-search' ).'</a>'  ); ?></p>
+                <p><?php printf( esc_html__( 'Advanced Woo Search: Please go to the plugin setting page and start indexing your products. %s', 'advanced-woo-search' ), $button ); ?></p>
             </div>
+
         <?php }
 
         /**

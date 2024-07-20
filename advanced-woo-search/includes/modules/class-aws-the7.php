@@ -50,6 +50,8 @@ if ( ! class_exists( 'AWS_The7' ) ) :
 
                 add_filter( 'aws_js_seamless_searchbox_markup', array( $this, 'aws_js_seamless_searchbox_markup' ), 1 );
 
+                add_action( 'wp_enqueue_scripts', array( $this, 'wp_enqueue_scripts' ), 999999 );
+
             }
 
         }
@@ -79,6 +81,21 @@ if ( ! class_exists( 'AWS_The7' ) ) :
 
             return $form_html;
 
+        }
+
+        /*
+         * Fix submit feature for search form
+         */
+        public function wp_enqueue_scripts() {
+            $script = "
+               jQuery( document.body ).on( 'click', '.aws_search_more', function(e) {     
+                    if ( ! jQuery('.aws-search-form.aws-form-active').is('form') ) {
+                        jQuery('.aws-search-form.aws-form-active').closest('form').submit();  
+                    }    
+               });
+            ";
+            wp_add_inline_script( 'aws-pro-script', $script);
+            wp_add_inline_script( 'aws-script', $script);
         }
 
     }

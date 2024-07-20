@@ -143,43 +143,46 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
          */
         public function posts_pre_query( $posts, $query ) {
 
-            /**
-             * Filter search results custom data array
-             * @since 2.19
-             * @param array $this->data Search results data array
-             * @param object $query Query
-             * @param array $posts Posts
-             */
-            $this->data = apply_filters( 'aws_search_page_custom_data', $this->data, $query, $posts );
-
             $post_type_product = $query->get( 'post_type' ) && ( ( is_string( $query->get( 'post_type' ) ) && ( $query->get( 'post_type' ) === 'product' ) ) || ( is_array( $query->get( 'post_type' ) ) && in_array( 'product', $query->get( 'post_type' ) ) ) );
 
-            if ( ( $query->is_main_query() || $query->is_search() || isset( $query->query_vars['s'] ) ) && $post_type_product && isset( $_GET['type_aws'] ) && $query->query &&
-                ( ( isset( $this->data['force_ids'] ) && $this->data['force_ids'] ) || ( isset( $this->data['is_elementor'] ) && $this->data['is_elementor'] ) || ( isset( $this->data['is_divi_s_page'] ) && $this->data['is_divi_s_page'] ) )
-            )
-            {
+            if ( ( $query->is_main_query() || $query->is_search() || isset( $query->query_vars['s'] ) ) && $post_type_product && isset( $_GET['type_aws'] ) && $query->query ) {
 
-                $products_ids = array();
-                $posts_per_page = apply_filters( 'aws_posts_per_page', $query->get( 'posts_per_page' ) );
-                $paged = $query->query_vars['paged'] ? $query->query_vars['paged'] : 1;
+                /**
+                 * Filter search results custom data array
+                 * @since 2.19
+                 * @param array $this->data Search results data array
+                 * @param object $query Query
+                 * @param array $posts Posts
+                 */
+                $this->data = apply_filters( 'aws_search_page_custom_data', $this->data, $query, $posts );
 
-                $search_res = $this->search( $query, $posts_per_page, $paged );
+                if ( ( isset( $this->data['force_ids'] ) && $this->data['force_ids'] ) || ( isset( $this->data['is_elementor'] ) && $this->data['is_elementor'] ) || ( isset( $this->data['is_divi_s_page'] ) && $this->data['is_divi_s_page'] ) ) {
 
-                if ( $search_res ) {
+                    $products_ids = array();
+                    $posts_per_page = apply_filters( 'aws_posts_per_page', $query->get( 'posts_per_page' ) );
+                    $paged = $query->query_vars['paged'] ? $query->query_vars['paged'] : 1;
 
-                    $query->found_posts = count( $search_res['all'] );
-                    $query->max_num_pages = ceil( count( $search_res['all'] ) / $posts_per_page );
+                    $search_res = $this->search( $query, $posts_per_page, $paged );
 
-                    foreach ( $search_res['products'] as $product ) {
-                        $products_ids[] = $product['id'];
+                    if ( $search_res ) {
+
+                        $query->found_posts = count( $search_res['all'] );
+                        $query->max_num_pages = ceil( count( $search_res['all'] ) / $posts_per_page );
+
+                        foreach ( $search_res['products'] as $product ) {
+                            $products_ids[] = $product['id'];
+                        }
+
+                        $posts = $products_ids;
+
                     }
-
-                    $posts = $products_ids;
 
                 }
 
             }
+
             return $posts;
+
         }
 
         /**

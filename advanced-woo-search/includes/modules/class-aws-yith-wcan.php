@@ -92,17 +92,25 @@ if ( ! class_exists( 'AWS_YITH_WCAN' ) ) :
                         $explode_char = strpos( $q_param, '+' ) !== false ? '+' : ',';
                         $terms_arr = explode( $explode_char, $q_param );
 
-                        if ( preg_match( '/[a-z]/', $q_param ) ) {
-                            $new_terms_arr = array();
-                            foreach ( $terms_arr as $term_slug ) {
-                                $term = get_term_by('slug', $term_slug, $taxonomy );
-                                if ( $term ) {
-                                    $new_terms_arr[] = $term->term_id;
+                        if ( isset( $filters['tax'] ) && isset( $filters['tax'][$taxonomy] ) && isset( $filters['tax'][$taxonomy]['terms'] ) ) {
+
+                            $terms_arr = $filters['tax'][$taxonomy]['terms'];
+
+                        } else {
+
+                            if ( preg_match( '/[a-z]/', $q_param ) ) {
+                                $new_terms_arr = array();
+                                foreach ( $terms_arr as $term_slug ) {
+                                    $term = get_term_by('slug', $term_slug, $taxonomy );
+                                    if ( $term ) {
+                                        $new_terms_arr[] = $term->term_id;
+                                    }
+                                }
+                                if ( $new_terms_arr ) {
+                                    $terms_arr = $new_terms_arr;
                                 }
                             }
-                            if ( $new_terms_arr ) {
-                                $terms_arr = $new_terms_arr;
-                            }
+
                         }
 
                         $filters['tax'][$taxonomy] = array(
