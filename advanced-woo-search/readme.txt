@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/donate/?hosted_button_id=FDRDNZE6XAKE8
 Tags: woocommerce, search, product search, woocommerce search, live search
 Requires at least: 4.0
 Tested up to: 6.6
-Stable tag: 3.12
+Stable tag: 3.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -172,6 +172,12 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 == Changelog ==
 
 [View full changelog](https://advanced-woo-search.com/guide/free-version/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
+
+= 3.13 ( 2024-08-05 ) =
+* Add - Integration with EAN for WooCommerce by WPFactory plugin
+* Fix - Bug with search results filtering via third party plugins
+* Fix - Bug when filtering product variations on search results page
+* Dev - New function to get current page id
 
 = 3.12 ( 2024-07-19 ) =
 * Fix - Bug with search results page taxonomies filters
@@ -388,8 +394,3 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 = 2.74 ( 2023-03-06 ) =
 * Add - WP-CLI support
 * Dev - Add aws_force_reindex_product action
-
-= 2.73 ( 2023-02-20 ) =
-* Update - Tested with WC 7.4
-* Update - FacetWP plugin integration
-* Update - WPBakery plugin support

@@ -84,7 +84,7 @@ if ( ! class_exists( 'AWS_Markup' ) ) :
                 'data-buttons-order' => $buttons_order,
                 'data-timeout'       => $search_timeout,
                 'data-is-mobile'     => wp_is_mobile() ? 'true' : 'false',
-                'data-page-id'       => get_queried_object_id(),
+                'data-page-id'       => AWS_Helpers::get_current_page_id(),
                 'data-tax'           => get_query_var('taxonomy')
             );
 

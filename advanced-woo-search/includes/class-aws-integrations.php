@@ -506,6 +506,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 include_once( AWS_DIR . '/includes/modules/class-aws-filter-everything.php' );
             }
 
+            //  EAN for WooCommerce by WPFactory
+            if ( class_exists( 'Alg_WC_EAN' ) ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-alg-wc-ean.php' );
+            }
+
         }
 
         /*

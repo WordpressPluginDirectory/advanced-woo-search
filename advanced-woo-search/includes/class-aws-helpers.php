@@ -836,6 +836,31 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
         }
 
         /*
+         * Get current page
+         *
+         * @return int Page ID
+         */
+        static public function get_current_page_id() {
+
+            global $wp_query;
+
+            if ( is_shop() ) {
+                $value = wc_get_page_id( 'shop' );
+            } elseif ( is_cart() ) {
+                $value = wc_get_page_id( 'cart' );
+            } elseif ( is_checkout() ) {
+                $value = wc_get_page_id( 'checkout' );
+            } elseif ( is_account_page() ) {
+                $value = wc_get_page_id( 'myaccount' );
+            } else {
+                $value = $wp_query->get_queried_object_id();
+            }
+
+            return $value;
+
+        }
+
+        /*
          * Get current active site language
          *
          * @return string Language code

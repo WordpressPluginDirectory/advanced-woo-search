@@ -254,6 +254,27 @@ if ( ! class_exists( 'AWS_Order' ) ) :
                             $parent_id = $product_id;
                         }
 
+                        if ( isset( $taxonomy_terms['terms'] ) && ! empty( $taxonomy_terms['terms'] ) ) {
+                            $new_terms_arr = array();
+                            foreach ( $taxonomy_terms['terms'] as $term_slug ) {
+                                if ( preg_match( '/[a-z]/', $term_slug ) ) {
+                                    $term = get_term_by('slug', $term_slug, $taxonomy );
+                                    if ( $term ) {
+                                        $new_terms_arr[] = $term->term_id;
+                                    }
+                                    if ( ! $term && strpos( $taxonomy, 'pa_' ) !== 0 ) {
+                                        $term = get_term_by('slug', $term_slug, 'pa_' . $taxonomy );
+                                        if ( $term ) {
+                                            $new_terms_arr[] = $term->term_id;
+                                        }
+                                    }
+                                }
+                            }
+                            if ( ! empty( $new_terms_arr ) ) {
+                                $taxonomy_terms['terms'] = $new_terms_arr;
+                            }
+                        }
+
                         $terms = get_the_terms( $parent_id, $taxonomy );
                         $operator = isset( $taxonomy_terms['operator'] ) ? $taxonomy_terms['operator'] : 'OR';
                         $include_parent = isset( $taxonomy_terms['include_parent'] ) ? $taxonomy_terms['include_parent'] : false;
@@ -325,6 +346,11 @@ if ( ! class_exists( 'AWS_Order' ) ) :
                 if ( $attr_filter && ! empty( $attr_filter ) && is_array( $attr_filter ) ) {
 
                     $product = wc_get_product( $product_id );
+
+                    if ( ! is_a( $product, 'WC_Product' ) ) {
+                        continue;
+                    }
+
                     $attributes = $product->get_attributes();
                     $product_terms_array = array();
                     $skip = true;
