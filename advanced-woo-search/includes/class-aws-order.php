@@ -56,11 +56,11 @@ if ( ! class_exists( 'AWS_Order' ) ) :
             }
 
             if ( ! isset( $filters['on_sale'] ) && isset( $_GET['on_sale'] ) ) {
-                $filters['on_sale'] = in_array( sanitize_text_field( $_GET['on_sale'] ), array( '1', 'true', true, 'yes' ) );
+                $filters['on_sale'] = in_array( strval(sanitize_text_field( $_GET['on_sale'] )), array( '1', 'true', 'yes' ) );
             }
 
             if ( ! isset( $filters['in_status'] ) && isset( $_GET['in_stock'] ) ) {
-                $filters['in_status'] = in_array( sanitize_text_field( $_GET['in_stock'] ), array( '1', 'true', true, 'yes', 'instock', 'in_stock' ) );
+                $filters['in_status'] = in_array( strval(sanitize_text_field( $_GET['in_stock'] )), array( '1', 'true', 'yes', 'instock', 'in_stock' ) );
             }
 
             if ( ! isset( $filters['price_min'] ) && isset( $_GET['min_price'] ) ) {
@@ -175,13 +175,52 @@ if ( ! class_exists( 'AWS_Order' ) ) :
             $filters = apply_filters( 'aws_search_page_filters', $filters, $query );
 
 
+            // Check attributes terms
+            if ( $attr_filter && ! empty( $attr_filter ) && is_array( $attr_filter ) ) {
+                foreach ( $attr_filter as $attr_name => $attr_arr ) {
+                    if ( ! isset( $attr_arr['field'] ) && isset( $attr_arr['terms'] ) && ! empty( $attr_arr['terms'] ) ) {
+
+                        $new_terms_arr = AWS_Helpers::check_terms( $attr_arr['terms'], $attr_name );
+
+                        if ( ! empty( $new_terms_arr ) ) {
+                            $attr_filter[$attr_name]['terms'] = $new_terms_arr;
+                            $attr_filter[$attr_name]['field'] = 'id';
+                        }
+
+                    }
+                }
+            }
+
+            // Check taxonomies terms
+            if ( isset( $filters['tax'] ) && is_array( $filters['tax'] ) ) {
+                foreach( $filters['tax'] as $taxonomy => $taxonomy_terms ) {
+                    if ( isset( $taxonomy_terms['terms'] ) && ! empty( $taxonomy_terms['terms'] ) ) {
+
+                        $new_terms_arr = AWS_Helpers::check_terms( $taxonomy_terms['terms'], $taxonomy );
+
+                        if ( ! empty( $new_terms_arr ) ) {
+                            $filters['tax'][$taxonomy]['terms'] = $new_terms_arr;
+                        }
+
+                    }
+                }
+            }
+
+
             foreach( $this->products as $product_id ) {
 
                 if ( isset( $filters['in_status'] ) ) {
-                    $f_stock = 'outofstock' !== get_post_meta( $product_id, '_stock_status', true );
+
+                    if ( is_bool( $filters['in_status'] ) ) {
+                        $f_stock = 'outofstock' !== get_post_meta( $product_id, '_stock_status', true );
+                    } else {
+                        $f_stock = get_post_meta( $product_id, '_stock_status', true );
+                    }
+
                     if ( $f_stock !== $filters['in_status'] ) {
                         continue;
                     }
+
                 }
 
                 if ( isset( $filters['on_sale'] ) ) {
@@ -252,27 +291,6 @@ if ( ! class_exists( 'AWS_Order' ) ) :
                         $parent_id = wp_get_post_parent_id( $product_id );
                         if ( ! $parent_id ) {
                             $parent_id = $product_id;
-                        }
-
-                        if ( isset( $taxonomy_terms['terms'] ) && ! empty( $taxonomy_terms['terms'] ) ) {
-                            $new_terms_arr = array();
-                            foreach ( $taxonomy_terms['terms'] as $term_slug ) {
-                                if ( preg_match( '/[a-z]/', $term_slug ) ) {
-                                    $term = get_term_by('slug', $term_slug, $taxonomy );
-                                    if ( $term ) {
-                                        $new_terms_arr[] = $term->term_id;
-                                    }
-                                    if ( ! $term && strpos( $taxonomy, 'pa_' ) !== 0 ) {
-                                        $term = get_term_by('slug', $term_slug, 'pa_' . $taxonomy );
-                                        if ( $term ) {
-                                            $new_terms_arr[] = $term->term_id;
-                                        }
-                                    }
-                                }
-                            }
-                            if ( ! empty( $new_terms_arr ) ) {
-                                $taxonomy_terms['terms'] = $new_terms_arr;
-                            }
                         }
 
                         $terms = get_the_terms( $parent_id, $taxonomy );
@@ -366,9 +384,13 @@ if ( ! class_exists( 'AWS_Order' ) ) :
                                         $product_terms = wp_get_object_terms( $product_id, $attr_name );
 
                                         if ( ! is_wp_error( $product_terms ) && ! empty( $product_terms ) ) {
+
+                                            $product_field = isset( $attr_filter[$attr_name]['field'] ) ? $attr_filter[$attr_name]['field'] : 'id';
+
                                             foreach ( $product_terms as $product_term ) {
-                                                $product_terms_array[] = ! empty( $attr_filter[$attr_name]['terms'] ) && preg_match( '/[a-z\-\.\,]/i', $attr_filter[$attr_name]['terms'][0] ) ? $product_term->slug : $product_term->term_id;
+                                                $product_terms_array[] = $product_field === 'slug' ? $product_term->slug : $product_term->term_id;
                                             }
+
                                         }
 
                                     }
@@ -512,6 +534,8 @@ if ( ! class_exists( 'AWS_Order' ) ) :
                 case 'title':
                 case 'title-desc':
                 case 'za':
+                case 'name':
+                case 'name_desc':
 
                     usort( $this->products, array( $this, 'compare_title' ) );
 
@@ -519,6 +543,7 @@ if ( ! class_exists( 'AWS_Order' ) ) :
 
                 case 'title-asc':
                 case 'az':
+                case 'name_asc':
 
                     usort( $this->products, array( $this, 'compare_title' ) );
                     $this->products = array_reverse($this->products);
@@ -534,6 +559,18 @@ if ( ! class_exists( 'AWS_Order' ) ) :
                 case 'stock_quantity-desc':
 
                     usort( $this->products, array( $this, 'compare_f_quantity_desc' ) );
+
+                    break;
+
+                case 'menu_order':
+
+                    usort( $this->products, array( $this, 'compare_menu_order' ) );
+
+                    break;
+
+                case 'sku':
+
+                    usort( $this->products, array( $this, 'compare_sku' ) );
 
                     break;
 
@@ -790,6 +827,62 @@ if ( ! class_exists( 'AWS_Order' ) ) :
             }
 
             return ($a_val > $b_val) ? -1 : 1;
+
+        }
+
+        /*
+         * Compare menu order
+         */
+        private function compare_menu_order( $a, $b ) {
+
+            $order_a = get_post_field( 'menu_order', $a);
+            $order_b = get_post_field( 'menu_order', $b);
+
+            if ($order_a === $order_b) {
+                return 0;
+            }
+
+            return ($order_a < $order_b) ? -1 : 1;
+
+        }
+
+        /*
+         * Compare menu order
+         */
+        private function compare_sku( $a, $b ) {
+
+            $sku_a = get_post_meta( $a, '_sku', true );
+            $sku_b = get_post_meta( $b, '_sku', true );
+
+            if ( ! $sku_a) {
+                $parent_id_a = wp_get_post_parent_id( $a );
+                if ( $parent_id_a ) {
+                    $sku_a = get_post_meta( $parent_id_a, '_sku', true );
+                }
+            }
+            if ( ! $sku_b) {
+                $parent_id_b = wp_get_post_parent_id( $b );
+                if ( $parent_id_b ) {
+                    $sku_b = get_post_meta( $parent_id_b, '_sku', true );
+                }
+            }
+
+            if ( ! $sku_a && ! $sku_b ) {
+                return 0;
+            }
+
+            if ( ! $sku_a ) {
+                return 1;
+            }
+
+            if ( ! $sku_b ) {
+                return -1;
+            }
+
+            if ($sku_a == $sku_b) {
+                return 0;
+            }
+            return ($sku_a < $sku_b) ? 1 : -1;
 
         }
 

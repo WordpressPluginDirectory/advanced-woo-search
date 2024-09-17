@@ -86,6 +86,9 @@ AwsHooks.filters = AwsHooks.filters || {};
             searchRequest: function() {
 
                 if ( ! d.ajaxSearch ) {
+                    if ( searchFor !== '' ) {
+                        methods.showResultsBlock();
+                    }
                     return;
                 }
 

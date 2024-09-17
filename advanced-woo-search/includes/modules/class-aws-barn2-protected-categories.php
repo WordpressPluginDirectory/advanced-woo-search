@@ -9,32 +9,32 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 
-if ( ! class_exists( 'AWL_Barn2PC' ) ) :
+if ( ! class_exists( 'AWS_Barn2PC' ) ) :
 
     /**
      * Class
      */
-    class AWL_Barn2PC {
+    class AWS_Barn2PC {
 
         /**
-         * Main AWL_Barn2PC Instance
+         * Main AWS_Barn2PC Instance
          *
-         * Ensures only one instance of AWL_Barn2PC is loaded or can be loaded.
+         * Ensures only one instance of AWS_Barn2PC is loaded or can be loaded.
          *
          * @static
-         * @return AWL_Barn2PC - Main instance
+         * @return AWS_Barn2PC - Main instance
          */
         protected static $_instance = null;
 
         private $data = array();
 
         /**
-         * Main AWL_Barn2PC Instance
+         * Main AWS_Barn2PC Instance
          *
-         * Ensures only one instance of AWL_Barn2PC is loaded or can be loaded.
+         * Ensures only one instance of AWS_Barn2PC is loaded or can be loaded.
          *
          * @static
-         * @return AWL_Barn2PC - Main instance
+         * @return AWS_Barn2PC - Main instance
          */
         public static function instance() {
             if ( is_null( self::$_instance ) ) {
@@ -132,4 +132,4 @@ if ( ! class_exists( 'AWL_Barn2PC' ) ) :
 
 endif;
 
-AWL_Barn2PC::instance();
+AWS_Barn2PC::instance();

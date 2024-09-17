@@ -148,36 +148,38 @@ if ( ! class_exists( 'AWS_Plurals' ) ) :
          * @param string $word Word in plural
          * @return string Word in singular
          */
-        public static function singularize( $word ) {
+        public static function singularize( $word, $lang = 'en' ) {
 
-            if ( isset( static::$_cache['singularize'][$word] ) ) {
-                return static::$_cache['singularize'][$word];
+            if ( isset( static::$_cache['singularize'][$lang][$word] ) ) {
+                return static::$_cache['singularize'][$lang][$word];
             }
 
             if ( isset( static::$_irregular[$word] ) ) {
-                static::$_cache['singularize'][$word] = static::$_irregular[$word];
-                return static::$_cache['singularize'][$word];
+                static::$_cache['singularize'][$lang][$word] = static::$_irregular[$word];
+                return static::$_cache['singularize'][$lang][$word];
             }
 
             if ( !isset( static::$_cache['uninflected'] ) ) {
                 static::$_cache['uninflected'] = '(?:' . implode('|', static::$_uninflected) . ')';
             }
 
+            if ( !isset( static::$_cache['singularize_rules'][$lang] ) ) {
+                static::$_cache['singularize_rules'][$lang] = apply_filters( 'aws_plurals_singular_rules', static::$_singular, $lang );
+            }
+
             if ( preg_match( '/^(' . static::$_cache['uninflected'] . ')$/i', $word, $regs ) ) {
-                static::$_cache['singularize'][$word] = $word;
+                static::$_cache['singularize'][$lang][$word] = $word;
                 return $word;
             }
 
-            if ( preg_match( '/(s|es|ies)$/i', $word, $match ) ) {
-                foreach ( static::$_singular as $rule => $replacement ) {
-                    if ( preg_match($rule, $word ) ) {
-                        static::$_cache['singularize'][$word] = preg_replace( $rule, $replacement, $word );
-                        return static::$_cache['singularize'][$word];
-                    }
+            foreach ( static::$_cache['singularize_rules'][$lang] as $rule => $replacement ) {
+                if ( preg_match($rule, $word ) ) {
+                    static::$_cache['singularize'][$lang][$word] = preg_replace( $rule, $replacement, $word );
+                    return static::$_cache['singularize'][$lang][$word];
                 }
             }
 
-            static::$_cache['singularize'][$word] = $word;
+            static::$_cache['singularize'][$lang][$word] = $word;
 
             return $word;
 

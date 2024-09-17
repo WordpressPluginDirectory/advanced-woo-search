@@ -233,6 +233,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                     add_action( 'xts_after_search_wrapper', array( $this, 'xts_after_search_wrapper' ) );
                 }
 
+                if ( 'Oxygen' === $this->current_theme ) {
+                    add_action( 'wp_before_load_template', array( $this, 'oxygen_wp_before_load_template' ) );
+                    add_action( 'wp_after_load_template', array( $this, 'oxygen_wp_after_load_template' ) );
+                }
+
                 // WP Bottom Menu
                 if ( defined( 'WP_BOTTOM_MENU_VERSION' ) ) {
                     add_action( 'wp_head', array( $this, 'wp_bottom_menu_wp_head' ) );
@@ -509,6 +514,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
             //  EAN for WooCommerce by WPFactory
             if ( class_exists( 'Alg_WC_EAN' ) ) {
                 include_once( AWS_DIR . '/includes/modules/class-aws-alg-wc-ean.php' );
+            }
+
+            // Breakdance builder
+            if ( defined( 'BREAKDANCE_PLUGIN_URL' ) ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-breakdance.php' );
             }
 
         }
@@ -1764,6 +1774,24 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
 
             aws_get_search_form();
 
+        }
+
+        /*
+         * Oxygen theme header search form
+         */
+        public function oxygen_wp_before_load_template( $_template_file ) {
+            if ( strpos( $_template_file, 'oxygen/sidebar-menu-top.php' ) !== false ) {
+                ob_start();
+            }
+        }
+        public function oxygen_wp_after_load_template( $_template_file ) {
+            if ( strpos( $_template_file, 'oxygen/sidebar-menu-top.php' ) !== false ) {
+                $deal_html = ob_get_contents();
+                ob_end_clean();
+                $form = aws_get_search_form( false );
+                $form = str_replace( 'aws-container', 'aws-container search-form',$form );
+                echo preg_replace('/\<form[\s\S]*?search-form[\s\S]*?<\/form>/', $form, $deal_html);
+            }
         }
 
         /*

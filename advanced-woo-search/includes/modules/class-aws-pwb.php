@@ -57,17 +57,6 @@ if ( ! class_exists( 'AWS_PWB' ) ) :
 
                 $terms_arr = explode( ',', $_GET['pwb-brand-filter'] );
 
-                if ( preg_match( '/[a-z]/', $_GET['pwb-brand-filter'] ) ) {
-                    $new_terms_arr = array();
-                    foreach ( $terms_arr as $term_slug ) {
-                        $term = get_term_by('slug', $term_slug, 'pwb-brand' );
-                        if ( $term ) {
-                            $new_terms_arr[] = $term->term_id;
-                        }
-                    }
-                    $terms_arr = $new_terms_arr;
-                }
-
                 $filters['tax']['pwb-brand'] = array(
                     'terms' => $terms_arr,
                     'operator' => 'OR'

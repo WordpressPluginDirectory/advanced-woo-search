@@ -7,30 +7,30 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.
 }
 
-if ( ! class_exists( 'AWL_Single_Variations' ) ) :
+if ( ! class_exists( 'AWS_Single_Variations' ) ) :
 
     /**
      * Class
      */
-    class AWL_Single_Variations {
+    class AWS_Single_Variations {
 
         /**
-         * Main AWL_Single_Variations Instance
+         * Main AWS_Single_Variations Instance
          *
-         * Ensures only one instance of AWL_Single_Variations is loaded or can be loaded.
+         * Ensures only one instance of AWS_Single_Variations is loaded or can be loaded.
          *
          * @static
-         * @return AWL_Single_Variations - Main instance
+         * @return AWS_Single_Variations - Main instance
          */
         protected static $_instance = null;
 
         /**
-         * Main AWL_Single_Variations Instance
+         * Main AWS_Single_Variations Instance
          *
-         * Ensures only one instance of AWL_Single_Variations is loaded or can be loaded.
+         * Ensures only one instance of AWS_Single_Variations is loaded or can be loaded.
          *
          * @static
-         * @return AWL_Single_Variations - Main instance
+         * @return AWS_Single_Variations - Main instance
          */
         public static function instance() {
             if ( is_null( self::$_instance ) ) {
@@ -83,4 +83,4 @@ if ( ! class_exists( 'AWL_Single_Variations' ) ) :
 
 endif;
 
-AWL_Single_Variations::instance();
+AWS_Single_Variations::instance();

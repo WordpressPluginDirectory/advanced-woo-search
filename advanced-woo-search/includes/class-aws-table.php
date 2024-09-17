@@ -534,7 +534,9 @@ if ( ! class_exists( 'AWS_Table' ) ) :
          */
         public function wp_after_insert_post( $post_id, $post, $update, $post_before ) {
 
-            if ( $update && $post->post_type === 'product' && $post_before && $post_before->post_status === 'future' ) {
+            if ( $update && $post->post_type === 'product' && $post_before &&
+                ( $post_before->post_status === 'future' || ( $post_before->post_status === 'trash' && $post->post_status === 'publish' ) )
+            ) {
                 $this->update_table( $post_id );
             }
 

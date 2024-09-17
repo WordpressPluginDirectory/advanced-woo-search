@@ -459,7 +459,7 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-msgid "Click on status icon to enable or disable search source."
+msgid "Click on the status icon to enable or disable the search source for products search."
 msgstr ""
 
 msgid "Search Source"

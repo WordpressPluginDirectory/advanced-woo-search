@@ -339,7 +339,7 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
 
             if ( $this->data['all_products'] ) {
                 foreach( $this->data['all_products'] as $sproduct ) {
-                    if ( ! is_array( $sproduct ) ) {
+                    if ( ! is_array( $sproduct ) && ! is_object( $sproduct ) ) {
                         $this->data['ids'][$sproduct] = $sproduct;
                     }
                 }

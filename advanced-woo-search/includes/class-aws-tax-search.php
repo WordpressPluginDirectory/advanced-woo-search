@@ -273,7 +273,7 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
 
                 $relevance = 40 + 2 * $search_term_len;
 
-                $search_term_norm = AWS_Plurals::singularize( $search_term );
+                $search_term_norm = AWS_Helpers::singularize( $search_term );
 
                 if ( $search_term_norm && $search_term_len > 3 && strlen( $search_term_norm ) > 2 ) {
                     $search_term = $search_term_norm;

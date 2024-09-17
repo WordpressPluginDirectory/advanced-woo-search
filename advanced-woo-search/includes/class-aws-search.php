@@ -96,6 +96,19 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                 do_action( 'wpml_switch_language', $this->lang );
             }
 
+            if ( $this->lang ) {
+                $current_lang = $this->lang;
+            } else {
+                $current_lang = AWS_Helpers::get_lang();
+            }
+
+            /**
+             * Filter current language code
+             * @since 1.59
+             * @param string $current_lang Lang code
+             */
+            $current_lang = apply_filters( 'aws_search_current_lang', $current_lang );
+
             $cache = AWS()->get_settings( 'cache' );
 
             $s = $keyword ? esc_attr( $keyword ) : ( isset( $_POST['keyword'] ) ? esc_attr( $_POST['keyword'] ) : '' );
@@ -164,6 +177,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             $this->data['search_words_num'] = $search_words_num;
             $this->data['fuzzy'] = $fuzzy;
             $this->data['is_search_page'] = !! $keyword;
+            $this->data['current_lang'] = $current_lang;
 
             $search_array = array_unique( explode( ' ', $s ) );
 
@@ -320,6 +334,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             $results_num      = $this->data['results_num'];
             $outofstock       = $this->data['outofstock'];
             $search_rule      = $this->data['search_rule'];
+            $current_lang     = $this->data['current_lang'];
 
             $reindex_version = get_option( 'aws_reindex_version' );
 
@@ -404,7 +419,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                  */
                 $relevance_params = apply_filters( 'aws_relevance_parameters', $relevance_params, $relevance_scores, $search_term, $this->data );
 
-                $search_term_norm = AWS_Plurals::singularize( $search_term );
+                $search_term_norm = AWS_Helpers::singularize( $search_term );
 
                 if ( $search_term_norm && $search_term_len > 3 && strlen( $search_term_norm ) > 2 ) {
                     $search_term = $search_term_norm;
@@ -476,20 +491,6 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             if ( $exclude_products_filter && is_array( $exclude_products_filter ) && ! empty( $exclude_products_filter ) ) {
                 $query['exclude_products'] = sprintf( ' AND ( id NOT IN ( %s ) )', implode( ',', $exclude_products_filter ) );
             }
-
-
-            if ( $this->lang ) {
-                $current_lang = $this->lang;
-            } else {
-                $current_lang = AWS_Helpers::get_lang();
-            }
-
-            /**
-             * Filter current language code
-             * @since 1.59
-             * @param string $current_lang Lang code
-             */
-            $current_lang = apply_filters( 'aws_search_current_lang', $current_lang );
 
             if ( $current_lang && $reindex_version && version_compare( $reindex_version, '1.20', '>=' ) ) {
                 $query['lang'] = $wpdb->prepare( " AND ( lang LIKE %s OR lang = '' )", '%' . $wpdb->esc_like( $current_lang ) . '%' );

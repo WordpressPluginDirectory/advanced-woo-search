@@ -208,7 +208,7 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
 
             $options['general'][] = array(
                 "name"       => __( "Search in", "advanced-woo-search" ),
-                "desc"       => __( "Click on status icon to enable or disable search source.", "advanced-woo-search" ),
+                "desc"       => __( "Click on the status icon to enable or disable the search source for products search.", "advanced-woo-search" ),
                 "table_head" => __( 'Search Source', 'advanced-woo-search' ),
                 "id"         => "search_in",
                 "value"      => array(
