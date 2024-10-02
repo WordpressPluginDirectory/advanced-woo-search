@@ -43,10 +43,27 @@ if (!class_exists('AWS_WPML')) :
          */
         public function __construct() {
 
+            add_action( 'wp_after_insert_post', array( $this, 'wp_after_insert_post' ), 10, 4 );
+
             add_filter( 'aws_indexed_data', array( $this, 'indexed_data_trans_fallback' ), 1, 2 );
+
+            add_filter( 'aws_indexed_data', array( $this, 'fix_visibility_for_quick_edit' ), 1, 2 );
 
             add_action( 'aws_index_before_scrapping', array( $this, 'aws_index_before_scrapping' ), 1, 4 );
             add_action( 'aws_index_after_scrapping', array( $this, 'aws_index_after_scrapping' ), 1, 4 );
+
+        }
+
+        /*
+         * Index duplicated product
+         */
+        public function wp_after_insert_post( $post_id, $post, $update, $post_before ) {
+
+            if ( $post_id && $post->post_type === 'product' && $post->post_status === 'publish' && ! $update && isset( $_REQUEST['action'] ) && $_REQUEST['action'] === 'make_duplicates' ) {
+
+                do_action( 'aws_reindex_product', $post_id );
+
+            }
 
         }
 
@@ -105,6 +122,19 @@ if (!class_exists('AWS_WPML')) :
 
                 }
 
+            }
+
+            return $data;
+
+        }
+
+        /*
+         * Fix visibility change bug when using quick edit
+         */
+        public function fix_visibility_for_quick_edit( $data, $id ) {
+
+            if ( is_ajax() && isset( $_REQUEST['action'] ) && $_REQUEST['action'] === 'inline-save' && isset( $_REQUEST['_visibility'] ) && $_REQUEST['_visibility'] ) {
+                $data['visibility'] = esc_attr( $_REQUEST['_visibility'] );
             }
 
             return $data;

@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/donate/?hosted_button_id=FDRDNZE6XAKE8
 Tags: woocommerce, search, product search, woocommerce search, live search
 Requires at least: 4.0
 Tested up to: 6.6
-Stable tag: 3.16
+Stable tag: 3.17
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -172,6 +172,13 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 == Changelog ==
 
 [View full changelog](https://advanced-woo-search.com/guide/free-version/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
+
+= 3.17 ( 2024-10-01 ) =
+* Add - Support for Shopical theme
+* Add - Support for WooCommerce Product Table by Barn2 plugin
+* Fix - Index duplicated products when using WPML plugin
+* Fix - Bug with quick edit feature when using WPML plugin
+* Dev - New check for currently active plugins
 
 = 3.16 ( 2024-09-16 ) =
 * Add - Greek to latin characters replace
@@ -385,10 +392,3 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 
 = 2.80 ( 2023-05-29 ) =
 * Add - Support for WP Bottom Menu plugin
-
-= 2.79 ( 2023-05-15 ) =
-* Add - Support for WooCommerce custom orders tables
-* Update - Tested with WC 7.7
-* Update - Taxonomies pages search. Fix terms normalization
-* Fix - FacetWP plugin integration issue with pagination
-* Fix - Relevance score calculation for one letter words

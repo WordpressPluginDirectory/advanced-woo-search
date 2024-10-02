@@ -27,6 +27,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
         private $child_theme = '';
 
         /**
+         * @var AWS_Integrations Active plugins arrray
+         */
+        public $active_plugins = array();
+
+        /**
          * @var AWS_Integrations The single instance of the class
          */
         protected static $_instance = null;
@@ -60,6 +65,15 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                     $this->current_theme = $theme->parent()->get( 'Name' );
                 }
             }
+
+            $active_plugins = get_option( 'active_plugins', array() );
+
+            if ( is_multisite() ) {
+                $network_active_plugins = get_site_option( 'active_sitewide_plugins', array() );
+                $active_plugins = array_merge( $active_plugins, array_keys( $network_active_plugins ) );
+            }
+
+            $this->active_plugins = $active_plugins;
 
             $this->includes();
 
@@ -417,6 +431,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
 
             if ( class_exists( 'WC_PPC_Util' ) || class_exists( '\Barn2\Plugin\WC_Protected_Categories\Util' ) ) {
                 include_once( AWS_DIR . '/includes/modules/class-aws-barn2-protected-categories.php' );
+            }
+
+            // WooCommerce Product Table plugin by Barn2
+            if ( class_exists( 'Barn2\Plugin\WC_Product_Table\Product_Table' ) ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-barn2-product-table.php' );
             }
 
             // WC Marketplace - https://wc-marketplace.com/
@@ -1984,6 +2003,10 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
 
             if ( 'Sinatra' === $this->current_theme ) {
                 $selectors[] = '.si-header-widgets .si-search-form';
+            }
+
+            if ( 'Shopical' === $this->current_theme ) {
+                $selectors[] = '.search .search-form-wrapper';
             }
 
             // WCFM - WooCommerce Multivendor Marketplace
