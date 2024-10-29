@@ -1246,10 +1246,13 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
 
             $results_data = array();
             $notices = array();
+            $custom_top_results = array();
 
             $results_data['top_text'] = apply_filters( 'aws_search_top_text', '', $results, $s_data );
 
             $results_data['notices'] = apply_filters( 'aws_search_notices', $notices, $results, $s_data );
+
+            $results_data['top_results'] = apply_filters( 'aws_search_custom_top_results', $custom_top_results, $results, $s_data );
 
             $results_data = apply_filters( 'aws_search_custom_results_data', $results_data, $results, $s_data );
 

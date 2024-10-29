@@ -108,8 +108,10 @@ if ( ! class_exists( 'AWS_Cache' ) ) :
             $charset_collate = $wpdb->get_charset_collate();
 
             $sql = "CREATE TABLE {$this->cache_table_name} (
+                      cacheid BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
                       name VARCHAR(100) NOT NULL,
-                      value LONGTEXT NOT NULL
+                      value LONGTEXT NOT NULL,
+                      PRIMARY KEY (cacheid)
                 ) $charset_collate;";
 
             require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );

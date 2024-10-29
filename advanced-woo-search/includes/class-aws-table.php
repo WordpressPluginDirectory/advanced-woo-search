@@ -310,6 +310,7 @@ if ( ! class_exists( 'AWS_Table' ) ) :
             }
 
             $sql = "CREATE TABLE {$this->table_name} (
+                      k BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
                       id BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
                       term VARCHAR(50) NOT NULL DEFAULT 0,
                       term_source VARCHAR(50) NOT NULL DEFAULT 0,
@@ -320,6 +321,7 @@ if ( ! class_exists( 'AWS_Table' ) ) :
                       term_id BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
                       visibility VARCHAR(20) NOT NULL DEFAULT 0,
                       lang VARCHAR(20) NOT NULL DEFAULT 0,
+                      PRIMARY KEY (k),
                       KEY id (id),
                       {$terms_key}
                       KEY term_id (term_id),

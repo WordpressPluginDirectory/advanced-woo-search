@@ -240,12 +240,13 @@ if ( ! class_exists( 'AWS_Admin_Page_Premium' ) ) :
                 echo '<div class="features-item">';
                     echo '<div class="column">';
                         echo '<h4 class="title">';
-                            echo __( 'WCFM / Dokan Plugins Support', 'advanced-woo-search' );
+                            echo __( 'WCFM / Dokan / WC Vendors Plugins Support', 'advanced-woo-search' );
                         echo '</h4>';
                         echo '<p class="desc">';
-                            echo sprintf( esc_html__( "Build-in integration with %sWCFM Multivendor Marketplace%s and %sDokan WooCommerce Multivendor Marketplace%s plugins. Show vendor information for each product, search for vendors, use plugin search form inside vendors stores, filter search results based on specific vendor shop parameters.", 'advanced-woo-search' ), '<b>', '</b>', '<b>', '</b>' );
+                            echo sprintf( esc_html__( "Build-in integration with %sWCFM Multivendor Marketplace%s, %sWC Vendors%s and %sDokan WooCommerce Multivendor Marketplace%s plugins. Show vendor information for each product, search for vendors, use plugin search form inside vendors stores, filter search results based on specific vendor shop parameters.", 'advanced-woo-search' ), '<b>', '</b>', '<b>', '</b>', '<b>', '</b>' );
                             echo '<br><a href="https://advanced-woo-search.com/features/wcfm-plugin-support/?utm_source=plugin&utm_medium=premium-tab&utm_campaign=aws-pro-plugin" target="_blank">' . __( 'Learn more', 'advanced-woo-search' ) . ' (WCFM)</a>';
                             echo '<br><a href="https://advanced-woo-search.com/features/dokan-plugin-support/?utm_source=plugin&utm_medium=premium-tab&utm_campaign=aws-pro-plugin" target="_blank">' . __( 'Learn more', 'advanced-woo-search' ) . ' (Dokan)</a>';
+                            echo '<br><a href="https://advanced-woo-search.com/features/wc-vendors-plugin-support/?utm_source=plugin&utm_medium=premium-tab&utm_campaign=aws-pro-plugin" target="_blank">' . __( 'Learn more', 'advanced-woo-search' ) . ' (WC Vendors)</a>';
                         echo '</p>';
                     echo '</div>';
                     echo '<div class="column">';

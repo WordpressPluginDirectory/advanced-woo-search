@@ -146,15 +146,21 @@ if ( ! class_exists( 'AWS_Langs' ) ) :
             $plurals = array();
 
             $plurals['it'] = array(
-                '/i$/i' => 'o',
-                '/e$/i' => 'a',
+                '/uomini$/i' => 'uomo',
+                '/dei$/i' => 'dio',
+                '/abili$/i' => 'abile',
+                '/che$/i' => 'ca',
+                '/ce$/i' => 'cia',
+                '/ghe/i' => 'ga',
                 '/chi$/i' => 'co',
                 '/ghi$/i' => 'go',
                 '/ci$/i' => 'ca',
                 '/gi$/i' => 'ga',
+                '/ni$/i' => 'ne',
                 '/ie$/i' => 'io',
-                '/uomini$/i' => 'uomo',
-                '/dei$/i' => 'dio'
+                '/ii$/i' => 'io',
+                '/i$/i' => 'o',
+                '/e$/i' => 'a',
             );
 
             $plurals['de'] = array(

@@ -184,6 +184,38 @@ AwsHooks.filters = AwsHooks.filters || {};
                         });
                     }
 
+                    if ( typeof response.data.top_results !== 'undefined' ) {
+
+                        $.each(response.data.top_results, function (i, topResults) {
+
+                            var topResultsName = i;
+
+                            if ( ( typeof topResults !== 'undefined' ) && topResults.length > 0 ) {
+
+                                $.each(topResults, function (i, topResult) {
+
+                                     html += '<li class="aws_result_item aws_result_top_custom_item aws_result_top_custom_item_' + topResultsName + '" style="position:relative;">';
+                                        html += '<div class="aws_result_link">';
+                                            html += '<a class="aws_result_link_top" href="' + topResult.link + '">' + topResult.name + '</a>';
+                                            html += '<span class="aws_result_content">';
+                                                html += '<span class="aws_result_title">';
+                                                    html += topResult.name;
+                                                html += '</span>';
+                                                if ( ( typeof topResult.content !== 'undefined' ) && topResult.content ) {
+                                                    html += '<span class="aws_result_excerpt">' + topResult.content + '</span>';
+                                                }
+                                            html += '</span>';
+                                        html += '</div>';
+                                     html += '</li>';
+
+                                });
+
+                            }
+
+                        });
+
+                    }
+
                 }
 
                 if ( typeof response.tax !== 'undefined' ) {

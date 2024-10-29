@@ -13,6 +13,11 @@ if ( ! class_exists( 'AWS_Admin_Notices' ) ) :
     class AWS_Admin_Notices {
 
         /**
+         * @var AWS_Admin_Notices Active plugins arrray
+         */
+        public $active_plugins = array();
+
+        /**
          * @var AWS_Admin_Notices The single instance of the class
          */
         protected static $_instance = null;
@@ -36,6 +41,15 @@ if ( ! class_exists( 'AWS_Admin_Notices' ) ) :
          * Constructor
          */
         public function __construct() {
+
+            $active_plugins = get_option( 'active_plugins', array() );
+
+            if ( is_multisite() ) {
+                $network_active_plugins = get_site_option( 'active_sitewide_plugins', array() );
+                $active_plugins = array_merge( $active_plugins, array_keys( $network_active_plugins ) );
+            }
+
+            $this->active_plugins = $active_plugins;
 
             // Welcome notice
             add_action( 'admin_notices', array( $this, 'display_welcome_header' ), 1 );
@@ -65,6 +79,7 @@ if ( ! class_exists( 'AWS_Admin_Notices' ) ) :
                 && ! ( defined( 'WCMp_PLUGIN_VERSION' ) || defined( 'MVX_PLUGIN_VERSION' ) )
                 && ! class_exists( 'WC_Memberships' )
                 && ! ( class_exists('Iconic_WSSV') || class_exists('JCK_WSSV') )
+                && ! in_array( 'wc-vendors/class-wc-vendors.php', $this->active_plugins )
             ) {
                 return;
             }
@@ -127,6 +142,11 @@ if ( ! class_exists( 'AWS_Admin_Notices' ) ) :
             if ( ( class_exists('Iconic_WSSV') || class_exists('JCK_WSSV') ) && ( ! $hide_option || array_search( 'singlevar', $hide_option ) === false ) ) {
                 $notice_message .= '<li>' . __( 'WooCommerce Show Single Variations by Iconic plugin.', 'advanced-woo-search' ) . ' <a target="_blank" href="https://advanced-woo-search.com/guide/woocommerce-show-single-variations-by-iconic/?utm_source=wp-plugin&utm_medium=integration_notice&utm_campaign=singlevar">' . __( 'Learn more', 'advanced-woo-search' ) . '</a></li>';
                 $notice_id .= 'singlevar|';
+            }
+
+            if ( in_array( 'wc-vendors/class-wc-vendors.php', $this->active_plugins ) && ( ! $hide_option || array_search( 'wcvendors', $hide_option ) === false ) ) {
+                $notice_message .= '<li>' . __( 'WC Vendors plugin.', 'advanced-woo-search' ) . ' <a target="_blank" href="https://advanced-woo-search.com/features/wc-vendors-plugin-support/?utm_source=wp-plugin&utm_medium=integration_notice&utm_campaign=wcvendors">' . __( 'Learn more', 'advanced-woo-search' ) . '</a></li>';
+                $notice_id .= 'wcvendors|';
             }
 
             $notice_id = 'aws_hide_int_notices=' . urlencode( trim( $notice_id, '|' ) );

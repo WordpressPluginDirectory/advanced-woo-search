@@ -540,6 +540,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 include_once( AWS_DIR . '/includes/modules/class-aws-breakdance.php' );
             }
 
+            // Crocoblock plugins
+            if ( in_array( 'jet-blocks/jet-blocks.php', $this->active_plugins ) || in_array( 'jet-elements/jet-elements.php', $this->active_plugins ) || in_array( 'jet-woo-builder/jet-woo-builder.php', $this->active_plugins ) ) {
+                include_once( AWS_DIR . '/includes/modules/class-aws-crocoblock.php' );
+            }
+
         }
 
         /*
