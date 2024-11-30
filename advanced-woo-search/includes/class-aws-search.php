@@ -336,7 +336,8 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             $search_rule      = $this->data['search_rule'];
             $current_lang     = $this->data['current_lang'];
 
-            $reindex_version = get_option( 'aws_reindex_version' );
+            $reindex_version = AWS()->option_vars->get_reindex_version();
+            $index_table_version = AWS()->option_vars->get_index_table_version();
 
             $query = array();
 
@@ -476,6 +477,10 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 
                 $query['visibility'] = " AND visibility NOT IN ( 'hidden', 'catalog' )";
 
+            }
+
+            if ( $index_table_version && version_compare( $index_table_version, '3.21', '>=' ) ) {
+                $query['visibility'] = " AND visibility NOT IN ( 0, 3 )";
             }
 
 

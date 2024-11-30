@@ -90,7 +90,7 @@ if ( ! class_exists( 'AWS_Admin_Page_Premium' ) ) :
                             echo __( 'Archive Pages Search', 'advanced-woo-search' );
                         echo '</h4>';
                         echo '<p class="desc">';
-                            echo sprintf( esc_html__( "Search for WooCommerce product %scustom taxonomies%s and %sattributes archive pages%s. Display them right inside search results list along with the product search results.", 'advanced-woo-search' ), '<b>', '</b>', '<b>', '</b>' );
+                            echo sprintf( esc_html__( "Search for WooCommerce product %scustom taxonomies%s and %sattributes archive pages%s. Display them right inside the search results list along with the product search results.", 'advanced-woo-search' ), '<b>', '</b>', '<b>', '</b>' );
                             echo '<br><a href="https://advanced-woo-search.com/features/terms-pages-search/?utm_source=plugin&utm_medium=premium-tab&utm_campaign=aws-pro-plugin" target="_blank">' . __( 'Learn more', 'advanced-woo-search' ) . '</a>';
                         echo '</p>';
                     echo '</div>';
@@ -141,7 +141,7 @@ if ( ! class_exists( 'AWS_Admin_Page_Premium' ) ) :
                             echo __( 'Search Form Instances', 'advanced-woo-search' );
                         echo '</h4>';
                         echo '<p class="desc">';
-                            echo sprintf( esc_html__( "Unlimited amount of search form instances with totally different settings and products look. You can create totally different search forms for any of your needs. Each instance is %sindependent%s and has its own %sset of settings%s.", 'advanced-woo-search' ), '<b>', '</b>', '<b>', '</b>' );
+                            echo sprintf( esc_html__( "Unlimited number of search form instances with totally different settings and products look. You can create totally different search forms for any of your needs. Each instance is %sindependent%s and has its own %sset of settings%s.", 'advanced-woo-search' ), '<b>', '</b>', '<b>', '</b>' );
                             echo '<br><a href="https://advanced-woo-search.com/features/search-form-instances/?utm_source=plugin&utm_medium=premium-tab&utm_campaign=aws-pro-plugin" target="_blank">' . __( 'Learn more', 'advanced-woo-search' ) . '</a>';
                         echo '</p>';
                     echo '</div>';
@@ -175,7 +175,7 @@ if ( ! class_exists( 'AWS_Admin_Page_Premium' ) ) :
                             echo __( 'Add to Cart Button', 'advanced-woo-search' );
                         echo '</h4>';
                         echo '<p class="desc">';
-                            echo sprintf( esc_html__( "Display %sAdd to Cart%s button right inside the search results. This makes it possible to add the product to the cart without visiting the product page. This button works perfect also and with product variations.", 'advanced-woo-search' ), '<b>', '</b>' );
+                            echo sprintf( esc_html__( "Display %sAdd to Cart%s button right inside the search results. This makes it possible to add the product to the cart without visiting the product page. This button works perfectly also and with product variations.", 'advanced-woo-search' ), '<b>', '</b>' );
                             echo '<br><a href="https://advanced-woo-search.com/features/add-to-cart-button/?utm_source=plugin&utm_medium=premium-tab&utm_campaign=aws-pro-plugin" target="_blank">' . __( 'Learn more', 'advanced-woo-search' ) . '</a>';
                         echo '</p>';
                     echo '</div>';
@@ -226,7 +226,7 @@ if ( ! class_exists( 'AWS_Admin_Page_Premium' ) ) :
                             echo __( 'ACF Plugin Support', 'advanced-woo-search' );
                         echo '</h4>';
                         echo '<p class="desc">';
-                            echo sprintf( esc_html__( "All fields that were created with the help of %sAdvanced Custom Fields%s plugin are available for search. Also use a special build-in filters to display any ACF field value right inside the search results list.", 'advanced-woo-search' ), '<b>', '</b>' );
+                            echo sprintf( esc_html__( "All fields that were created with the help of %sAdvanced Custom Fields%s plugin are available for search. Also use a special built-in filter to display any ACF field value right inside the search results list.", 'advanced-woo-search' ), '<b>', '</b>' );
                             echo '<br><a href="https://advanced-woo-search.com/features/acf-plugin-support/?utm_source=plugin&utm_medium=premium-tab&utm_campaign=aws-pro-plugin" target="_blank">' . __( 'Learn more', 'advanced-woo-search' ) . '</a>';
                         echo '</p>';
                     echo '</div>';

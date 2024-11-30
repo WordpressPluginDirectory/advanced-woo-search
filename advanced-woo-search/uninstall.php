@@ -29,6 +29,7 @@ if ( ! function_exists( 'aws_is_plugin_installed' ) ) {
 delete_option( 'aws_settings' );
 delete_option( 'aws_plugin_ver' );
 delete_option( 'aws_reindex_version' );
+delete_option( 'aws_table_version' );
 delete_option( 'aws_activation_time' );
 delete_option( 'aws_cron_job' );
 delete_option( 'aws_hide_welcome_notice' );

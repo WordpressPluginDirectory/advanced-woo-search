@@ -43,7 +43,7 @@ if ( ! class_exists( 'AWS_Langs' ) ) :
          */
         public function __construct() {
 
-            $reindex_version = get_option( 'aws_reindex_version' );
+            $reindex_version = AWS()->option_vars->get_reindex_version();
 
             // On search start
             add_filter( 'aws_search_current_lang', array( $this, 'aws_search_current_lang' ) );

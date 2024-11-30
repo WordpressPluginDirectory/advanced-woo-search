@@ -43,11 +43,7 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
          */
         static public function is_table_not_exist() {
 
-            global $wpdb;
-
-            $table_name = $wpdb->prefix . AWS_INDEX_TABLE_NAME;
-
-            return ( $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" ) != $table_name );
+            return AWS()->option_vars->is_index_table_not_exists();
 
         }
 
@@ -62,7 +58,7 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
 
             $indexed_products = 0;
 
-            if ( $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" ) === $table_name ) {
+            if ( ! AWS()->option_vars->is_index_table_not_exists() ) {
 
                 $sql = "SELECT COUNT(*) FROM {$table_name} GROUP BY ID;";
 
@@ -85,7 +81,7 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
 
             $return = false;
 
-            if ( $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" ) === $table_name ) {
+            if ( ! AWS()->option_vars->is_index_table_not_exists() ) {
 
                 $columns = $wpdb->get_row("
                     SELECT * FROM {$table_name} LIMIT 0, 1
@@ -114,7 +110,7 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
 
             $return = false;
 
-            if ( $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" ) === $table_name ) {
+            if ( ! AWS()->option_vars->is_index_table_not_exists() ) {
 
                 $columns = $wpdb->get_row("
                     SELECT * FROM {$table_name} LIMIT 0, 1
@@ -574,14 +570,14 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
             // Line feeds, carriage returns, tabs
             $string = preg_replace( '/[\x00-\x1F\x80-\x9F]/u', '', $string );
 
-            // Diacritical marks
-            $string = strtr( $string, AWS_Helpers::get_diacritic_chars() );
-
             if ( function_exists( 'mb_strtolower' ) ) {
                 $string = mb_strtolower( $string );
             } else {
                 $string = strtolower( $string );
             }
+
+            // Diacritical marks
+            $string = strtr( $string, AWS_Helpers::get_diacritic_chars() );
 
             /**
              * Filters normalized string

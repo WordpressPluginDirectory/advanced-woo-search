@@ -3,13 +3,13 @@
 /*
 Plugin Name: Advanced Woo Search
 Description: Advance ajax WooCommerce product search.
-Version: 3.19
+Version: 3.22
 Author: ILLID
 Author URI: https://advanced-woo-search.com/
 Text Domain: advanced-woo-search
 Requires Plugins: woocommerce
 WC requires at least: 3.0.0
-WC tested up to: 9.3.0
+WC tested up to: 9.4.0
 */
 
 
@@ -44,6 +44,16 @@ final class AWS_Main {
      * @var AWS_Main Cache instance
      */
     public $cache = null;
+
+    /**
+     * @var AWS_Main Table updates instance
+     */
+    public $table_updates = null;
+
+    /**
+     * @var AWS_Main Candition vars
+     */
+    public $option_vars = null;
 
 	/**
 	 * Main AWS_Main Instance
@@ -99,7 +109,7 @@ final class AWS_Main {
      */
     private function define_constants() {
 
-        $this->define( 'AWS_VERSION', '3.19' );
+        $this->define( 'AWS_VERSION', '3.22' );
 
         $this->define( 'AWS_DIR', plugin_dir_path( AWS_FILE ) );
         $this->define( 'AWS_URL', plugin_dir_url( AWS_FILE ) );
@@ -114,6 +124,7 @@ final class AWS_Main {
      */
     public function includes() {
 
+        include_once( 'includes/class-aws-option-vars.php' );
         include_once( 'includes/class-aws-helpers.php' );
         include_once( 'includes/class-aws-versions.php' );
         include_once( 'includes/class-aws-cache.php' );
@@ -121,6 +132,7 @@ final class AWS_Main {
         include_once( 'includes/class-aws-similar-terms.php' );
         include_once( 'includes/class-aws-table.php' );
         include_once( 'includes/class-aws-table-data.php' );
+        include_once( 'includes/class-aws-table-updates.php' );
         include_once( 'includes/class-aws-markup.php' );
         include_once( 'includes/class-aws-search.php' );
         include_once( 'includes/class-aws-tax-search.php' );
@@ -189,7 +201,9 @@ final class AWS_Main {
      * Init plugin classes
      */
     public function init() {
+        $this->option_vars = new AWS_Option_Vars();
         $this->cache = AWS_Cache::factory();
+        $this->table_updates = new AWS_Table_Updates();
         AWS_Integrations::instance();
         AWS_Hooks::instance();
         AWS_Langs::instance();

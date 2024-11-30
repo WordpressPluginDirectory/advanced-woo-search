@@ -48,8 +48,6 @@ if ( ! class_exists( 'AWS_YITH_WCAN' ) ) :
 
             add_filter( 'yith_wcan_query_supported_parameters', array( $this, 'yith_wcan_query_supported_parameters' ) );
 
-            add_filter( 'yith_wcan_suppress_cache', array( $this, 'yith_wcan_suppress_cache' ) );
-
             add_filter( 'aws_search_page_filters', array( $this, 'aws_search_page_filters' ), 10, 2 );
 
         }
@@ -65,16 +63,6 @@ if ( ! class_exists( 'AWS_YITH_WCAN' ) ) :
                 }
             }
             return $params;
-        }
-
-        /*
-         * Disable cache
-         */
-        public function yith_wcan_suppress_cache( $r ) {
-            if ( isset( $_GET['type_aws'] ) ) {
-                $r = true;
-            }
-            return $r;
         }
 
         /*

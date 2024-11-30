@@ -84,13 +84,13 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
             $search_query = '';
             $search_string_unfiltered = '';
 
-            if ( $this->search_rule === 'begins' ) {
-                $like = $wpdb->esc_like( $this->search_string_unfiltered ) . '%';
-            } else {
-                $like = '%' . $wpdb->esc_like( $this->search_string_unfiltered ) . '%';
-            }
+            $like = '%' . $wpdb->esc_like( $this->search_string_unfiltered ) . '%';
 
-            $filtered_terms_full = $wpdb->prepare( '( name LIKE %s )', $like );
+            if ( $this->search_rule === 'begins' ) {
+                $filtered_terms_full = $wpdb->prepare( '( name LIKE %s OR name LIKE %s )', $wpdb->esc_like( $this->search_string_unfiltered ) . '%', '% ' . $wpdb->esc_like( $this->search_string_unfiltered ) . '%' );
+            } else {
+                $filtered_terms_full = $wpdb->prepare( '( name LIKE %s )', $like );
+            }
 
             $search_array = array_map( array( 'AWS_Helpers', 'singularize' ), $this->search_terms  );
             $search_array = $this->synonyms( $search_array );
@@ -291,20 +291,26 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
                     $search_term = $search_term_norm;
                 }
 
-                if ( $this->search_rule === 'begins' ) {
-                    $like = $wpdb->esc_like( $search_term ) . '%';
-                    $like_unfiltered = $wpdb->esc_like( $this->search_string_unfiltered ) . '%';
-                } else {
-                    $like = '%' . $wpdb->esc_like( $search_term ) . '%';
-                    $like_unfiltered = '%' . $wpdb->esc_like( $this->search_string_unfiltered ) . '%';
-                }
+                $like = '%' . $wpdb->esc_like( $search_term ) . '%';
+                $like_unfiltered = '%' . $wpdb->esc_like( $this->search_string_unfiltered ) . '%';
 
-                $relevance_array[] = $wpdb->prepare( "( case when ( name LIKE %s ) then {$relevance} else 0 end )", $like );
+                if ( $this->search_rule === 'begins' ) {
+                    $relevance_array[] = $wpdb->prepare( "( case when ( name LIKE %s OR name LIKE %s ) then {$relevance} else 0 end )", $wpdb->esc_like( $search_term ) . '%', '% ' . $wpdb->esc_like( $search_term ) . '%' );
+                } else {
+                    $relevance_array[] = $wpdb->prepare( "( case when ( name LIKE %s ) then {$relevance} else 0 end )", $like );
+                }
 
                 if ( $terms_desc_search = apply_filters( 'aws_search_terms_description', false ) ) {
                     $relevance_desc = 10 + 2 * $search_term_len;
-                    $relevance_array[] = $wpdb->prepare( "( case when ( description LIKE %s ) then {$relevance_desc} else 0 end )", $like );
-                    $relevance_array[] = $wpdb->prepare( "( case when ( description LIKE %s ) then {$relevance_desc} else 0 end )", $like_unfiltered );
+
+                    if ( $this->search_rule === 'begins' ) {
+                        $relevance_array[] = $wpdb->prepare( "( case when ( description LIKE %s OR description LIKE %s ) then {$relevance_desc} else 0 end )", $wpdb->esc_like( $search_term ) . '%', '% ' . $wpdb->esc_like( $search_term ) . '%' );
+                        $relevance_array[] = $wpdb->prepare( "( case when ( description LIKE %s OR description LIKE %s ) then {$relevance_desc} else 0 end )", $wpdb->esc_like( $this->search_string_unfiltered ) . '%', '% ' . $wpdb->esc_like( $this->search_string_unfiltered ) . '%' );
+                    } else {
+                        $relevance_array[] = $wpdb->prepare( "( case when ( description LIKE %s ) then {$relevance_desc} else 0 end )", $like );
+                        $relevance_array[] = $wpdb->prepare( "( case when ( description LIKE %s ) then {$relevance_desc} else 0 end )", $like_unfiltered );
+                    }
+
                 }
 
             }
@@ -380,19 +386,23 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
 
             foreach ( $search_terms as $search_term ) {
 
+                $like = '%' . $wpdb->esc_like( $search_term ) . '%';
+                $like_unfiltered = '%' . $wpdb->esc_like( $this->search_string_unfiltered ) . '%';
+
                 if ( $this->search_rule === 'begins' ) {
-                    $like = $wpdb->esc_like( $search_term ) . '%';
-                    $like_unfiltered = $wpdb->esc_like( $this->search_string_unfiltered ) . '%';
+                    $search_array[] = $wpdb->prepare('( name LIKE %s OR name LIKE %s )', $wpdb->esc_like( $search_term ) . '%', '% ' . $wpdb->esc_like( $search_term ) . '%' );
                 } else {
-                    $like = '%' . $wpdb->esc_like( $search_term ) . '%';
-                    $like_unfiltered = '%' . $wpdb->esc_like( $this->search_string_unfiltered ) . '%';
+                    $search_array[] = $wpdb->prepare('( name LIKE %s )', $like );
                 }
 
-                $search_array[] = $wpdb->prepare('( name LIKE %s )', $like);
-
                 if ( $terms_desc_search = apply_filters( 'aws_search_terms_description', false ) ) {
-                    $search_array[] = $wpdb->prepare('( description LIKE %s )', $like);
-                    $search_array[] = $wpdb->prepare('( description LIKE %s )', $like_unfiltered );
+                    if ( $this->search_rule === 'begins' ) {
+                        $search_array[] = $wpdb->prepare('( description LIKE %s OR description LIKE %s )', $wpdb->esc_like( $search_term ) . '%', '% ' . $wpdb->esc_like( $search_term ) . '%');
+                        $search_array[] = $wpdb->prepare('( description LIKE %s OR description LIKE %s )', $wpdb->esc_like( $this->search_string_unfiltered ) . '%', '% ' . $wpdb->esc_like( $this->search_string_unfiltered ) . '%' );
+                    } else {
+                        $search_array[] = $wpdb->prepare('( description LIKE %s )', $like);
+                        $search_array[] = $wpdb->prepare('( description LIKE %s )', $like_unfiltered );
+                    }
                 }
 
             }
@@ -413,11 +423,11 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
             $no_normalized_str = AWS_Helpers::html2txt( $no_normalized_str );
             $no_normalized_str = trim( $no_normalized_str );
 
-            $no_normalized_str = strtr( $no_normalized_str, AWS_Helpers::get_diacritic_chars() );
-
             if ( function_exists( 'mb_strtolower' ) ) {
                 $no_normalized_str = mb_strtolower( $no_normalized_str );
             }
+
+            $no_normalized_str = strtr( $no_normalized_str, AWS_Helpers::get_diacritic_chars() );
 
             $search_array_chars = array_unique( explode( ' ', $no_normalized_str ) );
             $search_array_chars = AWS_Helpers::filter_stopwords( $search_array_chars );

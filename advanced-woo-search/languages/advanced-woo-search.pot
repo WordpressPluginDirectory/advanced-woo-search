@@ -591,7 +591,7 @@ msgstr ""
 msgid "Archive Pages Search"
 msgstr ""
 
-msgid "Search for WooCommerce product %scustom taxonomies%s and %sattributes archive pages%s. Display them right inside search results list along with the product search results."
+msgid "Search for WooCommerce product %scustom taxonomies%s and %sattributes archive pages%s. Display them right inside the search results list along with the product search results."
 msgstr ""
 
 msgid "Users Search"
@@ -609,7 +609,7 @@ msgstr ""
 msgid "Search Form Instances"
 msgstr ""
 
-msgid "Unlimited amount of search form instances with totally different settings and products look. You can create totally different search forms for any of your needs. Each instance is %sindependent%s and has its own %sset of settings%s."
+msgid "Unlimited number of search form instances with totally different settings and products look. You can create totally different search forms for any of your needs. Each instance is %sindependent%s and has its own %sset of settings%s."
 msgstr ""
 
 msgid "Search Logic Change"
@@ -621,7 +621,7 @@ msgstr ""
 msgid "Add to Cart Button"
 msgstr ""
 
-msgid "Display %sAdd to Cart%s button right inside the search results. This makes it possible to add the product to the cart without visiting the product page. This button works perfect also and with product variations."
+msgid "Display %sAdd to Cart%s button right inside the search results. This makes it possible to add the product to the cart without visiting the product page. This button works perfectly also and with product variations."
 msgstr ""
 
 msgid "Search Results Layouts"
@@ -639,7 +639,7 @@ msgstr ""
 msgid "ACF Plugin Support"
 msgstr ""
 
-msgid "All fields that were created with the help of %sAdvanced Custom Fields%s plugin are available for search. Also use a special build-in filters to display any ACF field value right inside the search results list."
+msgid "All fields that were created with the help of %sAdvanced Custom Fields%s plugin are available for search. Also use a special built-in filter to display any ACF field value right inside the search results list."
 msgstr ""
 
 msgid "You will benefit from our full support for any issues you have with this plugin."

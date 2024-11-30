@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/donate/?hosted_button_id=FDRDNZE6XAKE8
 Tags: woocommerce, search, product search, woocommerce search, live search
 Requires at least: 4.0
 Tested up to: 6.7
-Stable tag: 3.19
+Stable tag: 3.22
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -172,6 +172,20 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 == Changelog ==
 
 [View full changelog](https://advanced-woo-search.com/guide/free-version/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
+
+= 3.22 ( 2024-11-29 ) =
+* Update - Settings page descriptions
+
+= 3.21 ( 2024-11-26 ) =
+* Update - Tested with WC 9.4
+* Update - Improve search speed and update index table structure
+* Update - Structure of cache table
+* Dev - Update conditions for table check
+
+= 3.20 ( 2024-11-11 ) =
+* Update - Integration with YITH WooCommerce Ajax Product Filter plugin
+* Update - Taxonomies search when using Begins search logic
+* Fix - Bug with diacritical characters replacement
 
 = 3.19 ( 2024-10-28 ) =
 * Update - Add different search rules for taxonomies search
@@ -380,16 +394,3 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 = 2.85 ( 2023-08-07 ) =
 * Update - Special characters scrapping. Replace comma char with space
 * Fix - Bug with search form inside WCFM plugin vendor shop page
-
-= 2.84 ( 2023-07-24 ) =
-* Add - Support for ShopEngine plugin
-* Update - Support for GeneratePress theme
-* Update - Tested with WC 7.9
-* Dev - Add aws_pre_normalize_string filter
-
-
-= 2.83 ( 2023-07-10 ) =
-* Add - Support for WooCommerce Product Bundles plugin
-* Add - Support for Bricks Builder theme
-* Fix - Bug with block editor search module
-* Fix - Bug when searching for products with multiplication sign

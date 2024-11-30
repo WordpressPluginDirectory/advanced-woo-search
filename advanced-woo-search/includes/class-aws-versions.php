@@ -41,7 +41,7 @@ if ( ! class_exists( 'AWS_Versions' ) ) :
         public function setup() {
 
             $current_version = get_option( 'aws_plugin_ver' );
-            $reindex_version = get_option( 'aws_reindex_version' );
+            $reindex_version = AWS()->option_vars->get_reindex_version();
 
             if ( ! ( $reindex_version ) && current_user_can( AWS_Helpers::user_admin_capability() ) ) {
                 add_action( 'admin_notices', array( $this, 'admin_notice_no_index' ) );
@@ -149,7 +149,7 @@ if ( ! class_exists( 'AWS_Versions' ) ) :
 
                 if ( version_compare( $current_version, '1.43', '<' ) ) {
 
-                    if ( ! AWS_Helpers::is_table_not_exist() ) {
+                    if ( ! AWS()->option_vars->is_index_table_not_exists() ) {
 
                         global $wpdb;
                         $table_name =  $wpdb->prefix . AWS_INDEX_TABLE_NAME;
