@@ -118,12 +118,15 @@ if ( ! class_exists( 'AWS_Admin_Fields' ) ) :
                         <?php break;
 
                     case 'radio': ?>
+                        <?php
+                        $disabled = isset( $value['disabled'] ) && $value['disabled'] ? 'disabled' : '';
+                        ?>
                         <tr valign="top">
                             <th scope="row"><?php echo esc_html( $value['name'] ); ?></th>
                             <td>
                                 <?php foreach ( $value['choices'] as $val => $label ) { ?>
                                     <?php $option_val = isset( $plugin_options[ $value['id'] ] ) ? $plugin_options[ $value['id'] ] : ''; ?>
-                                    <input class="radio" type="radio" name="<?php echo esc_attr( $value['id'] ); ?>" id="<?php echo esc_attr( $value['id'].$val ); ?>" value="<?php echo esc_attr( $val ); ?>" <?php checked( $option_val, $val ); ?>> <label for="<?php echo esc_attr( $value['id'].$val ); ?>"><?php echo esc_html( $label ); ?></label><br>
+                                    <input <?php echo $disabled; ?> class="radio" type="radio" name="<?php echo esc_attr( $value['id'] ); ?>" id="<?php echo esc_attr( $value['id'].$val ); ?>" value="<?php echo esc_attr( $val ); ?>" <?php checked( $option_val, $val ); ?>> <label for="<?php echo esc_attr( $value['id'].$val ); ?>"><?php echo esc_html( $label ); ?></label><br>
                                 <?php } ?>
                                 <br><span class="description"><?php echo wp_kses_post( $value['desc'] ); ?></span>
                             </td>
@@ -179,7 +182,10 @@ if ( ! class_exists( 'AWS_Admin_Fields' ) ) :
                             <td>
                                 <ul class="img-select">
                                     <?php foreach ( $value['choices'] as $val => $img ) { ?>
-                                        <li class="option">
+                                        <?php
+                                        $style = isset( $value['styles'] ) &&  isset( $value['styles'][$val] ) ? 'style="' . $value['styles'][$val] . ';"' : '';
+                                        ?>
+                                        <li class="option" <?php echo $style; ?>>
                                             <input class="radio" type="radio" name="<?php echo esc_attr( $value['id'] ); ?>" id="<?php echo esc_attr( $value['id'].$val ); ?>" value="<?php echo esc_attr( $val ); ?>" <?php checked( $plugin_options[ $value['id'] ], $val ); ?>>
                                             <span class="ico" style="background: url('<?php echo esc_url( AWS_URL . 'assets/img/' . $img ); ?>') no-repeat 50% 50%;"></span>
                                         </li>

@@ -70,6 +70,13 @@ if (!class_exists('AWS_Gutenberg_Init')) :
                 AWS_VERSION
             );
 
+            wp_register_script(
+                'aws-gutenberg-nav-search-block',
+                AWS_URL . 'includes/modules/gutenberg/aws-gutenberg-nav-search-block.js',
+                $scripts,
+                AWS_VERSION
+            );
+
             wp_register_style(
                 'aws-gutenberg-styles-editor',
                 AWS_URL . 'assets/css/common.css',
@@ -80,6 +87,19 @@ if (!class_exists('AWS_Gutenberg_Init')) :
             register_block_type( 'advanced-woo-search/search-block', array(
                 'apiVersion' => 2,
                 'editor_script' => 'aws-gutenberg-search-block',
+                'editor_style' => 'aws-gutenberg-styles-editor',
+                'render_callback' => array( $this, 'search_block_dynamic_render_callback' ),
+                'attributes'      =>  array(
+                    'placeholder'   =>  array(
+                        'type'    => 'string',
+                        'default' => AWS_Helpers::translate( 'search_field_text', AWS()->get_settings( 'search_field_text' ) ),
+                    ),
+                ),
+            ) );
+
+            register_block_type( 'advanced-woo-search/nav-search-block', array(
+                'apiVersion' => 2,
+                'editor_script' => 'aws-gutenberg-nav-search-block',
                 'editor_style' => 'aws-gutenberg-styles-editor',
                 'render_callback' => array( $this, 'search_block_dynamic_render_callback' ),
                 'attributes'      =>  array(

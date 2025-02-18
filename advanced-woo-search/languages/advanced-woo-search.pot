@@ -636,6 +636,12 @@ msgstr ""
 msgid "Option to exclude or include products from search results by %sproduct ids%s, %staxonomies%s or %sattributes%s. Show only those products that you want. This option works great with the search form filters."
 msgstr ""
 
+msgid "Search Suggestions"
+msgstr ""
+
+msgid "Generate and show %sterms suggestions for current search query%s. Such suggestions will be visible at the top of the search results list."
+msgstr ""
+
 msgid "ACF Plugin Support"
 msgstr ""
 

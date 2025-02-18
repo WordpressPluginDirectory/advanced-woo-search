@@ -923,6 +923,29 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
         }
 
         /*
+         * Generate link for search results page term search
+         *
+         * @return string Search URL
+         */
+        static public function get_search_term_url( $s, $atts = array() ) {
+
+            $search_url = AWS_Helpers::get_search_url();
+            $current_lang = AWS_Helpers::get_lang();
+
+            $params = shortcode_atts( array(
+                's' => urlencode( sanitize_text_field( $s ) ),
+                'post_type' => 'product',
+                'type_aws' => 'true',
+                'lang' => $current_lang,
+            ), $atts );
+
+            $search_url = add_query_arg( $params, $search_url );
+
+            return $search_url;
+
+        }
+
+        /*
          * Get string with current product terms names
          *
          * @return string List of terms names

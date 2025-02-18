@@ -335,6 +335,11 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
                 add_action( 'aws_search_page_filters', array( $this,  'wps_aws_search_page_filters' ), 1 );
             }
 
+            // Yoast Premium
+            if ( in_array( 'wordpress-seo-premium/wp-seo-premium.php', $this->active_plugins ) ) {
+                add_filter( 'Yoast\WP\SEO\allowlist_permalink_vars', array( $this, 'yoast_allowlist_permalink_vars' ) );
+            }
+
         }
         
         /**
@@ -2450,6 +2455,17 @@ if ( ! class_exists( 'AWS_Integrations' ) ) :
 
             return $filters;
 
+        }
+
+        /*
+         * Yoast: Allow some permalink vars
+         */
+        public function yoast_allowlist_permalink_vars( $allowed_extravars ) {
+            $allowed_extravars[] = 'post_type';
+            $allowed_extravars[] = 'type_aws';
+            $allowed_extravars[] = 'aws_id';
+            $allowed_extravars[] = 'aws_filter';
+            return $allowed_extravars;
         }
 
     }

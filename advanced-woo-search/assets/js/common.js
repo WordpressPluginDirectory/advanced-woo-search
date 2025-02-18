@@ -194,9 +194,11 @@ AwsHooks.filters = AwsHooks.filters || {};
 
                                 $.each(topResults, function (i, topResult) {
 
-                                     html += '<li class="aws_result_item aws_result_top_custom_item aws_result_top_custom_item_' + topResultsName + '" style="position:relative;">';
+                                    var linkData = ( typeof topResult.link_data !== 'undefined' ) ? topResult.link_data : '';
+
+                                    html += '<li class="aws_result_item aws_result_top_custom_item aws_result_top_custom_item_' + topResultsName + '" style="position:relative;">';
                                         html += '<div class="aws_result_link">';
-                                            html += '<a class="aws_result_link_top" href="' + topResult.link + '">' + topResult.name + '</a>';
+                                            html += '<a class="aws_result_link_top" ' + linkData + ' href="' + topResult.link + '">' + topResult.name + '</a>';
                                             html += '<span class="aws_result_content">';
                                                 html += '<span class="aws_result_title">';
                                                     html += topResult.name;
@@ -206,7 +208,7 @@ AwsHooks.filters = AwsHooks.filters || {};
                                                 }
                                             html += '</span>';
                                         html += '</div>';
-                                     html += '</li>';
+                                    html += '</li>';
 
                                 });
 
@@ -460,7 +462,7 @@ AwsHooks.filters = AwsHooks.filters || {};
 
             },
 
-            forceNewSearch: function ( term ) {
+            forceNewSearch: function ( term, submit ) {
 
                 if ( term && term !== '' ) {
 
@@ -470,7 +472,7 @@ AwsHooks.filters = AwsHooks.filters || {};
                     window.setTimeout(function(){
                         methods.searchRequest();
                         $searchField.focus();
-                        if ( ! d.ajaxSearch ) {
+                        if ( submit || ! d.ajaxSearch ) {
                             $searchForm.submit();
                         }
                     }, 50);
@@ -694,7 +696,7 @@ AwsHooks.filters = AwsHooks.filters || {};
         });
 
         $searchField.on( 'aws_search_force', function (e, term) {
-            methods.forceNewSearch( term );
+            methods.forceNewSearch( term, false );
         });
 
         $searchForm.on( 'keypress', function(e) {
@@ -776,7 +778,8 @@ AwsHooks.filters = AwsHooks.filters || {};
         $( d.resultBlock ).on( 'click', '[data-aws-term-submit]', function(e) {
             e.preventDefault();
             var term = $(this).data('aws-term-submit');
-            methods.forceNewSearch( term );
+            var submit = $(this).data('aws-term-submit-form') ? true : false;
+            methods.forceNewSearch( term, submit );
         });
 
         $( self ).on( 'click', '.aws-mobile-fixed-close', function(e) {

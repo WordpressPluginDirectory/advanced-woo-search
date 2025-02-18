@@ -815,7 +815,15 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             $words = array();
             $excerpt_length = AWS()->get_settings( 'excerpt_length' );
 
-            foreach( $this->data['search_terms'] as $search_in ) {
+            $search_terms = array();
+
+            if ( ! empty( $this->data['search_terms'] ) ) {
+                $search_terms = array_fill_keys( $this->data['search_terms'], 1);
+                $search_terms = AWS_Helpers::get_synonyms( $search_terms );
+                $search_terms = array_keys( $search_terms );
+            }
+
+            foreach( $search_terms as $search_in ) {
 
                 $search_in = preg_quote( $search_in, '/' );
                 $exact_words[] = '\b' . $search_in . '\b';
@@ -898,7 +906,15 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 
             $pattern = array();
 
-            foreach( $this->data['search_terms'] as $search_in ) {
+            $search_terms = array();
+
+            if ( ! empty( $this->data['search_terms'] ) ) {
+                $search_terms = array_fill_keys( $this->data['search_terms'], 1);
+                $search_terms = AWS_Helpers::get_synonyms( $search_terms );
+                $search_terms = array_keys( $search_terms );
+            }
+
+            foreach( $search_terms as $search_in ) {
 
                 $search_in = preg_quote( $search_in, '/' );
 

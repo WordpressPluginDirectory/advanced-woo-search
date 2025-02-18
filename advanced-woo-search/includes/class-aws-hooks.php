@@ -19,6 +19,8 @@ if ( ! class_exists( 'AWS_Hooks' ) ) :
          */
         protected static $_instance = null;
 
+        protected $data = array();
+
         /**
          * Main AWS_Hooks Instance
          *
@@ -39,8 +41,42 @@ if ( ! class_exists( 'AWS_Hooks' ) ) :
          */
         public function __construct() {
 
+            // Get current search data
+            add_filter( 'aws_search_results_products_ids', array( $this, 'aws_search_results_products_ids' ), 1, 3 );
+
+            // Retrive current search data
+            add_filter( 'aws_current_search_data', array( $this, 'aws_current_search_data' ) );
+
+            // Retrive current search results
+            add_filter( 'aws_current_search_product_ids', array( $this, 'aws_current_search_product_ids' ) );
+
             add_filter( 'aws_search_notices', array( $this, 'aws_search_notices' ), 1, 3 );
             
+        }
+
+        /*
+         * Get current search data
+         */
+        public function aws_search_results_products_ids( $posts_ids, $s, $data ) {
+            $this->data['s_data'] = $data;
+            $this->data['posts_ids'] = $posts_ids;
+            return $posts_ids;
+        }
+
+        /*
+         * Retrive current search data
+         */
+        public function aws_current_search_data( $data ) {
+            $data = isset( $this->data['s_data'] ) ? $this->data['s_data'] : $data;
+            return $data;
+        }
+
+        /*
+         * Retrive current search results
+         */
+        public function aws_current_search_product_ids( $posts_ids ) {
+            $posts_ids = isset( $this->data['posts_ids'] ) ? $this->data['posts_ids'] : $posts_ids;
+            return $posts_ids;
         }
 
         /*

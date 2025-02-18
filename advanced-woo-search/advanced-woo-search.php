@@ -3,13 +3,13 @@
 /*
 Plugin Name: Advanced Woo Search
 Description: Advance ajax WooCommerce product search.
-Version: 3.22
+Version: 3.27
 Author: ILLID
 Author URI: https://advanced-woo-search.com/
 Text Domain: advanced-woo-search
 Requires Plugins: woocommerce
 WC requires at least: 3.0.0
-WC tested up to: 9.4.0
+WC tested up to: 9.6.0
 */
 
 
@@ -81,8 +81,6 @@ final class AWS_Main {
 
 		add_filter( 'widget_text', 'do_shortcode' );
 
-		add_shortcode( 'aws_search_form', array( $this, 'markup' ) );
-
 		add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
 
 		add_filter( 'plugin_action_links', array( $this, 'add_action_link' ), 10, 2 );
@@ -109,7 +107,7 @@ final class AWS_Main {
      */
     private function define_constants() {
 
-        $this->define( 'AWS_VERSION', '3.22' );
+        $this->define( 'AWS_VERSION', '3.27' );
 
         $this->define( 'AWS_DIR', plugin_dir_path( AWS_FILE ) );
         $this->define( 'AWS_URL', plugin_dir_url( AWS_FILE ) );
@@ -141,6 +139,7 @@ final class AWS_Main {
         include_once( 'includes/class-aws-integrations.php' );
         include_once( 'includes/class-aws-langs.php' );
         include_once( 'includes/class-aws-hooks.php' );
+        include_once( 'includes/class-aws-shortcodes.php' );
         include_once( 'includes/widget.php' );
 
         // Admin
@@ -206,6 +205,7 @@ final class AWS_Main {
         $this->table_updates = new AWS_Table_Updates();
         AWS_Integrations::instance();
         AWS_Hooks::instance();
+        AWS_Shortcodes::instance();
         AWS_Langs::instance();
     }
 

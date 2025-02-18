@@ -223,6 +223,23 @@ if ( ! class_exists( 'AWS_Admin_Page_Premium' ) ) :
                 echo '<div class="features-item">';
                     echo '<div class="column">';
                         echo '<h4 class="title">';
+                            echo __( 'Search Suggestions', 'advanced-woo-search' );
+                        echo '</h4>';
+                        echo '<p class="desc">';
+                            echo sprintf( esc_html__( "Generate and show %sterms suggestions for current search query%s. Such suggestions will be visible at the top of the search results list.", 'advanced-woo-search' ), '<b>', '</b>' );
+                            echo '<br><a href="https://advanced-woo-search.com/features/search-suggestions/?utm_source=plugin&utm_medium=premium-tab&utm_campaign=aws-pro-plugin" target="_blank">' . __( 'Learn more', 'advanced-woo-search' ) . '</a>';
+                        echo '</p>';
+                    echo '</div>';
+                    echo '<div class="column">';
+                        echo '<div class="img">';
+                            echo '<img alt="" src="' . AWS_URL . 'assets/img/pro/feature14.png' . '" />';
+                        echo '</div>';
+                    echo '</div>';
+                echo '</div>';
+
+                echo '<div class="features-item">';
+                    echo '<div class="column">';
+                        echo '<h4 class="title">';
                             echo __( 'ACF Plugin Support', 'advanced-woo-search' );
                         echo '</h4>';
                         echo '<p class="desc">';

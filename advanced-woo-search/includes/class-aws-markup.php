@@ -53,7 +53,7 @@ if ( ! class_exists( 'AWS_Markup' ) ) :
                 'use_analytics'  => AWS()->get_settings( 'use_analytics' ),
                 'buttons_order'  => AWS()->get_settings( 'buttons_order' ),
                 'search_timeout' => AWS()->get_settings( 'search_timeout' )
-            ), $this->atts ) );
+            ), $this->atts, 'aws_search_form' ) );
 
             $current_lang = AWS_Helpers::get_lang();
 
