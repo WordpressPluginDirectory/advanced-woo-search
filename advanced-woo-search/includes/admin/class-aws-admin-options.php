@@ -46,7 +46,7 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                     }
 
                     if ( $values['type'] === 'textarea' && isset( $values['allow_tags'] ) ) {
-                        $default_settings[$values['id']] = (string) addslashes( wp_kses( stripslashes( html_entity_decode( $values['value'] ) ), AWS_Helpers::get_kses( $values['allow_tags'] ) ) );
+                        $default_settings[$values['id']] = (string) wp_kses( stripslashes( html_entity_decode( $values['value'] ) ), AWS_Helpers::get_kses( $values['allow_tags'] ) );
                         continue;
                     }
 
@@ -105,7 +105,7 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                 $new_value = isset( $_POST[ $values['id'] ] ) ? $_POST[ $values['id'] ] : '';
 
                 if ( $values['type'] === 'textarea' && isset( $values['allow_tags'] ) ) {
-                    $update_settings[ $values['id'] ] = (string) addslashes( wp_kses( stripslashes( html_entity_decode( $new_value ) ), AWS_Helpers::get_kses( $values['allow_tags'] ) ) );
+                    $update_settings[ $values['id'] ] = (string) wp_kses( stripslashes( html_entity_decode( $new_value ) ), AWS_Helpers::get_kses( $values['allow_tags'] ) );
                     continue;
                 }
 
