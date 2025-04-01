@@ -56,7 +56,7 @@ if ( ! class_exists( 'AWS_Admin_Page_Premium' ) ) :
                             echo __( 'New Search Sources', 'advanced-woo-search' );
                         echo '</h4>';
                         echo '<p class="desc">';
-                            echo sprintf( esc_html__( 'Search additionally inside %sproduct attributes%s, %staxonomies%s and %scustom fields%s. Inside the plugin settings page it is possible to choose some specific sources that must be available for search ( for example only several product attributes ) or just search for all of them.', 'advanced-woo-search' ), '<b>', '</b>', '<b>', '</b>', '<b>', '</b>' );
+                            echo sprintf( esc_html__( 'Search additionally inside %sproduct attributes%s, %staxonomies%s, %scustom fields%s, %sunique number fields%s. Inside the plugin settings page it is possible to choose some specific sources that must be available for search ( for example only several product attributes ) or just search for all of them.', 'advanced-woo-search' ), '<b>', '</b>', '<b>', '</b>', '<b>', '</b>', '<b>', '</b>' );
                             echo '<br><a href="https://advanced-woo-search.com/features/search-sources/?utm_source=plugin&utm_medium=premium-tab&utm_campaign=aws-pro-plugin" target="_blank">' . __( 'Learn more', 'advanced-woo-search' ) . '</a>';
                         echo '</p>';
                     echo '</div>';

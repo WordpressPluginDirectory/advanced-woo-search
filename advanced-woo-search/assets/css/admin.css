@@ -75,7 +75,7 @@
     display: none;
     width: 20px;
     height: 20px;
-    background: url('../img/loader-1.GIF') no-repeat 50% 50%;
+    background: url('../img/loader.svg') no-repeat 50% 50%;
     margin-left: 15px;
     margin-top: 4px;
 }
@@ -105,7 +105,7 @@
     display: none;
     width: 20px;
     height: 20px;
-    background: url('../img/loader-1.GIF') no-repeat 50% 50%;
+    background: url('../img/loader.svg') no-repeat 50% 50%;
     margin-left: 15px;
     margin-top: 4px;
 }
@@ -437,7 +437,7 @@ h1.aws-instance-name {
     margin: 0 auto;
     width: 20px;
     height: 20px;
-    background: url('../img/loader-2.gif') no-repeat 50% 50%;
+    background: url('../img/loader-2.svg') no-repeat 50% 50%;
 }
 
 .aws-table.aws-table-sources td.aws-active.loading .aws-yes,

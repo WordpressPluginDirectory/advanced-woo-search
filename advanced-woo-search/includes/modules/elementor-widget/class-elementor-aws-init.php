@@ -85,6 +85,12 @@ if ( ! class_exists( 'AWS_Elementor_Init' ) ) :
          * Elementor replace search form widget
          */
         public function elementor_render_content( $content, $widget ) {
+
+            if ( method_exists( $widget, 'get_name' ) && $widget->get_name() === 'search' ) {
+                $content = preg_replace( '/<search[\S\s]*?<\/search>/i', aws_get_search_form( false ), $content );
+                return $content;
+            }
+
             if ( method_exists( $widget, 'get_name' ) && $widget->get_name() === 'search-form' ) {
                 if ( method_exists( $widget, 'get_settings' )  ) {
                     $settings = $widget->get_settings();
@@ -92,6 +98,8 @@ if ( ! class_exists( 'AWS_Elementor_Init' ) ) :
                         $content = '<style>
                             .elementor-search-form--skin-full_screen .elementor-search-form__container {
                                 overflow: hidden;
+                                align-items: flex-start !important;
+                                padding-top: 100px !important;
                             }
                             .elementor-search-form--full-screen .aws-container {
                                 width: 100%;

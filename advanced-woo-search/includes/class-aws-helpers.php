@@ -1201,7 +1201,9 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
                 'content' => 100,
                 'id'      => 300,
                 'sku'     => 300,
-                'other'   => 35
+                'other'   => 35,
+                'tax_name'  => 350,
+                'tax_desc'  => 100,
             );
 
             /**

@@ -12,6 +12,11 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
     class AWS_Tax_Search {
 
         /**
+         * @var array AWS_Tax_Search Data
+         */
+        private $data = array();
+
+        /**
          * @var array AWS_Tax_Search Taxonomy name
          */
         private $taxonomy;
@@ -58,6 +63,8 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
              * @param string $taxonomy Taxonomy name
              */
             $data = apply_filters( 'aws_tax_search_data', $data, $taxonomy );
+
+            $this->data = $data;
 
             $this->taxonomy = $taxonomy;
             $this->search_string = isset( $data['s'] ) ? $data['s'] : '';
@@ -279,29 +286,37 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
 
             $relevance_array = array();
 
+            $relevance_scores = AWS_Helpers::get_relevance_scores( $this->data );
+
+            $relevance_full = $relevance_scores['tax_name'] * 2;
+            $relevance_array[] = $wpdb->prepare( "( case when ( name = '%s' ) then {$relevance_full} else 0 end )", $this->search_string_unfiltered );
+
             foreach ( $this->search_terms as $search_term ) {
 
                 $search_term_len = strlen( $search_term );
 
-                $relevance = 40 + 2 * $search_term_len;
-
-                $search_term_norm = AWS_Helpers::singularize( $search_term );
-
-                if ( $search_term_norm && $search_term_len > 3 && strlen( $search_term_norm ) > 2 ) {
-                    $search_term = $search_term_norm;
-                }
+                $relevance_equal = $relevance_scores['tax_name'] + 20 * $search_term_len;
+                $relevance_like = $relevance_scores['tax_name'] / 2 + 2 * $search_term_len;
 
                 $like = '%' . $wpdb->esc_like( $search_term ) . '%';
                 $like_unfiltered = '%' . $wpdb->esc_like( $this->search_string_unfiltered ) . '%';
+                $match_full_words = '\\b' . $wpdb->esc_like( $search_term ) . '\\b';
+
+                // match full words inside taxonomy name
+                $relevance_array[] = $wpdb->prepare( "( case when ( name REGEXP '%s' ) then {$relevance_equal} else 0 end )", $match_full_words);
 
                 if ( $this->search_rule === 'begins' ) {
-                    $relevance_array[] = $wpdb->prepare( "( case when ( name LIKE %s OR name LIKE %s ) then {$relevance} else 0 end )", $wpdb->esc_like( $search_term ) . '%', '% ' . $wpdb->esc_like( $search_term ) . '%' );
+                    $relevance_array[] = $wpdb->prepare( "( case when ( name LIKE %s OR name LIKE %s ) then {$relevance_like} else 0 end )", $wpdb->esc_like( $search_term ) . '%', '% ' . $wpdb->esc_like( $search_term ) . '%' );
                 } else {
-                    $relevance_array[] = $wpdb->prepare( "( case when ( name LIKE %s ) then {$relevance} else 0 end )", $like );
+                    $relevance_array[] = $wpdb->prepare( "( case when ( name LIKE %s ) then {$relevance_like} else 0 end )", $like );
                 }
 
                 if ( $terms_desc_search = apply_filters( 'aws_search_terms_description', false ) ) {
-                    $relevance_desc = 10 + 2 * $search_term_len;
+
+                    $relevance_desc = $relevance_scores['tax_desc'] / 2 + 2 * $search_term_len;
+                    $relevance_desc_equal = $relevance_scores['tax_desc'] + 20 * $search_term_len;
+
+                    $relevance_array[] = $wpdb->prepare( "( case when ( description REGEXP '%s' ) then {$relevance_desc_equal} else 0 end )", $match_full_words);
 
                     if ( $this->search_rule === 'begins' ) {
                         $relevance_array[] = $wpdb->prepare( "( case when ( description LIKE %s OR description LIKE %s ) then {$relevance_desc} else 0 end )", $wpdb->esc_like( $search_term ) . '%', '% ' . $wpdb->esc_like( $search_term ) . '%' );

@@ -354,6 +354,17 @@ if ( ! class_exists( 'AWS_Table_Data' ) ) :
              */
             do_action( 'aws_index_after_scrapping', $this->product, $this->id, $this->lang, $this->options );
 
+            /**
+             * Filters scrapped index data before saving
+             * @since 3.29
+             * @param array $this->scraped_data Indexed data
+             * @param object $this->product Current product
+             * @param integer $this->id Current product ID
+             * @param string $this->lang Current language
+             * @param array $this->options Array of index options
+             */
+            $this->scraped_data = apply_filters( 'aws_index_scraped_data', $this->scraped_data, $this->product, $this->id, $this->lang, $this->options );
+
             return $this->scraped_data;
 
         }

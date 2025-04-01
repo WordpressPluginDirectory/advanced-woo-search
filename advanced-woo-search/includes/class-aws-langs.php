@@ -43,6 +43,18 @@ if ( ! class_exists( 'AWS_Langs' ) ) :
          */
         public function __construct() {
 
+            /**
+             * Filters to disable hooks relates to specific languages
+             * @param bool $disable_hooks Disable or not language hooks
+             * @param string $locale Current locale
+             * @since 3.30
+             */
+            $disable_hooks = apply_filters( 'aws_disable_multilangs_hooks', false, get_locale() );
+
+            if ( $disable_hooks ) {
+                return;
+            }
+
             $reindex_version = AWS()->option_vars->get_reindex_version();
 
             // On search start

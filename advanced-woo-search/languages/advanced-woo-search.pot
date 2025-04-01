@@ -576,7 +576,7 @@ msgstr ""
 msgid "New Search Sources"
 msgstr ""
 
-msgid "Search additionally inside %sproduct attributes%s, %staxonomies%s and %scustom fields%s. Inside the plugin settings page it is possible to choose some specific sources that must be available for search ( for example only several product attributes ) or just search for all of them."
+msgid "Search additionally inside %sproduct attributes%s, %staxonomies%s, %scustom fields%s, %sunique number fields%s. Inside the plugin settings page it is possible to choose some specific sources that must be available for search ( for example only several product attributes ) or just search for all of them."
 msgstr ""
 
 msgid "Learn more"

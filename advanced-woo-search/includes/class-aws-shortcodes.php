@@ -182,13 +182,16 @@ if ( ! class_exists( 'AWS_Shortcodes' ) ) :
 
             if ( $terms ) {
 
+                $terms = sanitize_text_field( $terms );
+
                 $term_arr = array_map( 'trim', explode( ',', $terms ) );
 
                 if ( ! empty( $term_arr ) ) {
 
                     $new_terms = array();
                     foreach ( $term_arr as $term ) {
-                        $search_url = AWS_Helpers::get_search_term_url( $term );
+                        $term = esc_html( $term );
+                        $search_url = esc_url( AWS_Helpers::get_search_term_url( $term ) );
                         $new_terms[] = '<a href="' . $search_url . '" class="aws_term_suggestion">'. $term . '</a>';
                     }
 

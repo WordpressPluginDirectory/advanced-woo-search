@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/donate/?hosted_button_id=FDRDNZE6XAKE8
 Tags: woocommerce, search, product search, woocommerce search, live search
 Requires at least: 4.0
 Tested up to: 6.7
-Stable tag: 3.28
+Stable tag: 3.30
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,7 @@ Additional features available only in the PRO plugin version.
 * **Unlimited** amount of search form instances
 * Search for custom taxonomies and attributes **archive pages**
 * Support for **variable products**: show child products, parent product or both in search results.
+* Product **GTIN**, **UPC**, **EAN** or **ISBN** fields search.
 * Product **attributes** search ( including custom attributes)
 * Product **custom taxonomies** search
 * Product **custom fields** search
@@ -173,18 +174,30 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 
 [View full changelog](https://advanced-woo-search.com/guide/free-version/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
 
-= 3.28 ( 2024-03-03 ) =
+= 3.30 ( 2025-03-31 ) =
+* Update - Admin loading icons
+* Update - Relevance score calculation for taxonomies search results
+* Update - PRO admin section
+* Dev - Update aws_relevance_scores filter. Add more array values
+* Dev - Add aws_disable_multilangs_hooks hook
+
+= 3.29 ( 2025-03-17 ) =
+* Update - Integration for Elementor search form widget
+* Fix - aws_search_terms parameters escaping
+* Dev - Add aws_index_scraped_data filter
+
+= 3.28 ( 2025-03-03 ) =
 * Update - Tested with WC 9.7
 * Fix - Bug with additional slashed for text options
 
-= 3.27 ( 2024-02-17 ) =
+= 3.27 ( 2025-02-17 ) =
 * Fix - Highlight synonyms words for search results
 
-= 3.26 ( 2024-02-03 ) =
+= 3.26 ( 2025-02-03 ) =
 * Update - Enable gutenberg search block for navigation section
 * Update - Tested with WC 9.6
 
-= 3.25 ( 2024-01-20 ) =
+= 3.25 ( 2025-01-20 ) =
 * Dev - Add filter for search form shortcode parameters
 
 = 3.24 ( 2024-12-30 ) =
@@ -377,13 +390,3 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 * Update - Tested with WC 8.3
 * Fix - Integration with Elessi theme. Fix search form after using shop filters
 * Dev - Add aws_index_started action
-
-= 2.92 ( 2023-11-14 ) =
-* Add - Support for Hestia theme
-
-= 2.91 ( 2023-10-30 ) =
-* Update - Support for Astra theme. Fix broken search form in the header
-
-= 2.90 ( 2023-10-16 ) =
-* Update - Tested with WC 8.2
-* Fix - Pricing filter for default WooCommerce widgets
