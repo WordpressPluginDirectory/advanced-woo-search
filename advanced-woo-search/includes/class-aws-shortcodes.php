@@ -49,6 +49,9 @@ if ( ! class_exists( 'AWS_Shortcodes' ) ) :
             // Search terms links
             add_shortcode( 'aws_search_terms', array( $this, 'aws_search_terms' ) );
 
+            // Taxonomies terms results
+            add_shortcode( 'aws_taxonomy_terms_results', array( $this, 'aws_taxonomy_terms_results' ) );
+
         }
 
         /*
@@ -214,7 +217,135 @@ if ( ! class_exists( 'AWS_Shortcodes' ) ) :
             return $result;
 
         }
-        
+
+        /*
+         * Generate results for taxonomies terms search
+         * Created based on [product_categories] shortcode
+         */
+        public function aws_taxonomy_terms_results( $atts = array() ) {
+
+            $atts = shortcode_atts(
+                array(
+                    'limit'       => '-1',
+                    'columns'     => '4',
+                    'taxonomy'    => 'all',
+                    'force_terms' => '',
+                ),
+                $atts,
+                'aws_taxonomy_terms_results'
+            );
+
+            $terms = array();
+            $tax_array = array();
+            $ids = array();
+
+            if ( $atts['force_terms'] ) {
+
+                $force_terms = explode( ',', $atts['force_terms'] );
+                if ( ! empty( $force_terms ) ) {
+                    $ids = $force_terms;
+                }
+
+                $tax_array =  $atts['taxonomy'] == 'all' ? array() : array( $atts['taxonomy'] );
+
+            } else {
+
+                $s_data = apply_filters( 'aws_current_search_data', array() );
+
+                if ( empty( $s_data ) || ! isset( $_GET['type_aws'] ) ) {
+                    return '';
+                }
+
+                $taxonomies_archives = isset( $s_data['taxonomies_archives'] ) ? $s_data['taxonomies_archives'] : array();
+
+                if ( $atts['taxonomy'] == 'all' || ! $atts['taxonomy'] ) {
+
+                    $tax_array = $taxonomies_archives;
+
+                } elseif ( array_search( $atts['taxonomy'], $taxonomies_archives ) !== false ) {
+
+                    $tax_array = array( $atts['taxonomy'] );
+
+                }
+
+                if ( ! empty( $tax_array ) ) {
+
+                    $tax_search = new AWS_Tax_Search( $tax_array, $s_data );
+                    $custom_tax_array = $tax_search->get_results();
+
+                    if ( ! empty( $custom_tax_array ) ) {
+                        foreach ( $custom_tax_array as $tax_name => $tax_items ) {
+                            $tax_ids = array_column( $tax_items, 'id' );
+                            $ids = array_merge( $ids, $tax_ids );
+                        }
+                    }
+
+                }
+
+            }
+
+            if ( ! empty( $ids ) ) {
+
+                $atts['limit'] = '-1' === $atts['limit'] ? null : intval( $atts['limit'] );
+                if ( $atts['limit'] ) {
+                    $ids = array_slice( $ids, 0, $atts['limit'] );
+                }
+
+                $terms = get_terms( array(
+                    'taxonomy'   => $tax_array,
+                    'include'    => $ids,
+                    'hide_empty' => false,
+                    'orderby'    => 'include',
+                    //'order'      => 'ASC',
+                ) );
+
+            }
+
+            if ( empty( $terms ) ) {
+                return '';
+            }
+
+            $columns = absint( $atts['columns'] );
+
+            wc_set_loop_prop( 'columns', $columns );
+            wc_set_loop_prop( 'is_shortcode', true );
+
+            ob_start();
+
+            if ( $terms ) {
+                woocommerce_product_loop_start();
+
+                foreach ( $terms as $term ) {
+                    wc_get_template(
+                        'content-product_cat.php',
+                        array(
+                            'category' => $term,
+                        )
+                    );
+                }
+
+                woocommerce_product_loop_end();
+            }
+
+            wc_reset_loop();
+
+
+            $result = '<div class="aws-show-terms-shortcode woocommerce columns-' . $columns . '">' . ob_get_clean() . '</div>';
+
+            /**
+             * Filter shortcode results
+             * @param string $result Shortcode generated markup
+             * @param array $atts Shortcode parameters
+             * @param array $terms Array of taxonomy terms
+             * @since 3.31
+             */
+            $result = apply_filters( 'aws_taxonomy_terms_results_shortcode', $result, $atts, $terms );
+
+            return $result;
+
+        }
+
+
     }
 
 endif;

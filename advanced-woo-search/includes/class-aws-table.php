@@ -19,7 +19,7 @@ if ( ! class_exists( 'AWS_Table' ) ) :
         /**
          * @var AWS_Table Data
          */
-        private $data;
+        private $data = array();
 
         /**
          * Constructor
@@ -649,6 +649,10 @@ if ( ! class_exists( 'AWS_Table' ) ) :
                 return;
             }
 
+            if ( isset( $this->data['product_to_index'] ) && array_search( $product_id, $this->data['product_to_index'] ) !== false ) {
+                return;
+            }
+
             $wpdb->delete( $this->table_name, array( 'id' => $product_id ) );
 
             $posts = get_posts( array(
@@ -667,6 +671,8 @@ if ( ! class_exists( 'AWS_Table' ) ) :
             }
 
             do_action('aws_cache_clear');
+
+            $this->data['product_to_index'][] = $product_id;
 
         }
 

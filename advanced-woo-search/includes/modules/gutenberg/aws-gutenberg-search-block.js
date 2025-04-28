@@ -49,7 +49,8 @@
                                         onChange: ( value ) => {
                                             props.setAttributes( { placeholder: value } );
                                         },
-                                        value: props.attributes.placeholder
+                                        value: props.attributes.placeholder,
+                                        __nextHasNoMarginBottom: true
                                     }
                                 )
                             ),

@@ -322,7 +322,12 @@ AwsHooks.filters = AwsHooks.filters || {};
                 }
 
                 if ( ! resultNum ) {
+
+                    /* from 3.32 */
+                    methods.createAndDispatchEvent( document, 'awsNoResults', { term: searchFor, instance: instance, form: self, data: d } );
+
                     html += '<li class="aws_result_item aws_no_result">' + translate.noresults + '</li>';
+
                 }
 
 

@@ -113,6 +113,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 
             $s = $keyword ? esc_attr( $keyword ) : ( isset( $_POST['keyword'] ) ? esc_attr( $_POST['keyword'] ) : '' );
             $s = htmlspecialchars_decode( $s );
+            $s = preg_replace('/\s+/', ' ', trim( $s ) );
 
             $this->data['s_nonormalize'] = $s;
 
@@ -179,6 +180,28 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             $this->data['is_search_page'] = !! $keyword;
             $this->data['current_lang'] = $current_lang;
 
+
+            if ( $show_cats === 'true' ) {
+                $tax_to_display[] = 'product_cat';
+            }
+
+            if ( $show_tags === 'true' ) {
+                $tax_to_display[] = 'product_tag';
+            }
+
+            /**
+             * Filters array of custom taxonomies that must be displayed in search results
+             *
+             * @since 1.68
+             *
+             * @param array $taxonomies_archives Array of custom taxonomies
+             * @param string $s Search query
+             */
+            $taxonomies_archives = apply_filters( 'aws_search_results_tax_archives', $tax_to_display, $s );
+
+            $this->data['taxonomies_archives'] = $taxonomies_archives;
+
+
             $search_array = array_unique( explode( ' ', $s ) );
 
             $search_array = AWS_Helpers::filter_stopwords( $search_array );
@@ -237,24 +260,6 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                 }
 
                 if ( $output === 'all' ) {
-
-                    if ( $show_cats === 'true' ) {
-                        $tax_to_display[] = 'product_cat';
-                    }
-
-                    if ( $show_tags === 'true' ) {
-                        $tax_to_display[] = 'product_tag';
-                    }
-
-                    /**
-                     * Filters array of custom taxonomies that must be displayed in search results
-                     *
-                     * @since 1.68
-                     *
-                     * @param array $taxonomies_archives Array of custom taxonomies
-                     * @param string $s Search query
-                     */
-                    $taxonomies_archives = apply_filters( 'aws_search_results_tax_archives', $tax_to_display, $s );
 
                     if ( $taxonomies_archives && is_array( $taxonomies_archives ) && ! empty( $taxonomies_archives ) ) {
 

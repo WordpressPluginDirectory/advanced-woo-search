@@ -330,6 +330,16 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
 
             }
 
+            /**
+             * Filter array of relevance sql queries
+             * @param array $relevance_array Array with relevance sql queries
+             * @param array $taxonomy Taxonomy names array
+             * @param array $this->search_terms Search terms array
+             * @param array $this->data Search data
+             * @since 3.31
+             */
+            $relevance_array = apply_filters( 'aws_tax_search_relevance_array', $relevance_array, $this->taxonomy, $this->search_terms, $this->data );
+
             return $relevance_array;
 
         }
@@ -421,6 +431,16 @@ if ( ! class_exists( 'AWS_Tax_Search' ) ) :
                 }
 
             }
+
+            /**
+             * Filter array of search sql queries
+             * @param array $search_array Array with search sql queries
+             * @param array $taxonomy Taxonomy names array
+             * @param array $search_terms Search terms
+             * @param array $this->data Search data
+             * @since 3.31
+             */
+            $search_array = apply_filters( 'aws_tax_search_array', $search_array, $this->taxonomy, $search_terms, $this->data );
 
             return $search_array;
 

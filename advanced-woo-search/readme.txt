@@ -3,8 +3,8 @@ Contributors: Mihail Barinov
 Donate link: https://www.paypal.com/donate/?hosted_button_id=FDRDNZE6XAKE8
 Tags: woocommerce, search, product search, woocommerce search, live search
 Requires at least: 4.0
-Tested up to: 6.7
-Stable tag: 3.30
+Tested up to: 6.8
+Stable tag: 3.32
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -173,6 +173,19 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 == Changelog ==
 
 [View full changelog](https://advanced-woo-search.com/guide/free-version/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
+
+= 3.32 ( 2025-04-28 ) =
+* Dev - Add awsNoResults js event
+
+= 3.31 ( 2025-04-14 ) =
+* Add - New widget for block editor to show current taxonomy terms results
+* Add - New widget for Elementor to show current taxonomy terms results
+* Add - New integration for Elementor WC Categories widget to show current terms results
+* Add - aws_taxonomy_terms_results shortcode to display taxonomies archive pages results
+* Update - Tested with WC 9.8
+* Fix - Bug with running index multiply times for one product
+* Fix - Integration issue with Divi BodyCommerce plugin mini cart widget
+* Dev - Add aws_tax_search_array and aws_tax_search_relevance_array hooks
 
 = 3.30 ( 2025-03-31 ) =
 * Update - Admin loading icons
@@ -374,19 +387,3 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 = 2.96 ( 2024-01-08 ) =
 * Update - SQL query for taxonomies search results. Speed up search for multilingual results
 * Update - Woodmart theme support. Fix seamless integration for header
-
-= 2.95 ( 2023-12-25 ) =
-* Add - Support for WooCommerce Show Single Variations by Iconic plugin
-* Update - Tested with WC 8.4
-* Update - Integration with GA4
-* Dev - Add awsAnalytics js event
-
-= 2.94 ( 2023-12-12 ) =
-* Add - Support for WooCommerce Memberships plugin
-* Update - Notices about plugin integrations
-
-= 2.93 ( 2023-11-27 ) =
-* Update - WCFM plugin integration. Fix search form on stores list page sidebar
-* Update - Tested with WC 8.3
-* Fix - Integration with Elessi theme. Fix search form after using shop filters
-* Dev - Add aws_index_started action

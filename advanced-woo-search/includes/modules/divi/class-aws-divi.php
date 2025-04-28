@@ -161,8 +161,7 @@ if ( ! class_exists( 'AWS_Divi' ) ) :
                 if ( strpos( $output, 'aws-container' ) !== false ) {
                     $pattern = '/(<div class="aws-container"[\s\S]*?<form.*?<\/form><\/div>)/i';
                 }
-
-                $output = trim(preg_replace('/\s\s+/', ' ', $output));
+                
                 $output = preg_replace( $pattern, $form, $output );
 
             }

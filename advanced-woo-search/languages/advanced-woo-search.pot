@@ -878,3 +878,24 @@ msgstr ""
 
 msgid "Off. Instead show text \"Did you mean ...\" with a clickable list of fixed terms at the top of search results."
 msgstr ""
+
+msgid "Categories results"
+msgstr ""
+
+msgid "Categories results"
+msgstr ""
+
+msgid "Taxonomies Results"
+msgstr ""
+
+msgid "All"
+msgstr ""
+
+msgid "Results Count"
+msgstr ""
+
+msgid "Columns"
+msgstr ""
+
+msgid "Taxonomy"
+msgstr ""
