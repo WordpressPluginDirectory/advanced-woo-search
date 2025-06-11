@@ -151,6 +151,8 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             $search_rule       = AWS()->get_settings( 'search_rule' );
             $search_words_num  = AWS()->get_settings( 'search_words_num' );
             $fuzzy             = AWS()->get_settings( 'fuzzy' );
+            $search_page_highlight = AWS()->get_settings( 'search_page_highlight' );
+
 
             $search_in_arr = array();
 
@@ -177,6 +179,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             $this->data['search_rule']   = $search_rule;
             $this->data['search_words_num'] = $search_words_num;
             $this->data['fuzzy'] = $fuzzy;
+            $this->data['search_page_highlight'] = $search_page_highlight;
             $this->data['is_search_page'] = !! $keyword;
             $this->data['current_lang'] = $current_lang;
 
@@ -909,32 +912,6 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                  return $text;
             }
 
-            $pattern = array();
-
-            $search_terms = array();
-
-            if ( ! empty( $this->data['search_terms'] ) ) {
-                $search_terms = array_fill_keys( $this->data['search_terms'], 1);
-                $search_terms = AWS_Helpers::get_synonyms( $search_terms );
-                $search_terms = array_keys( $search_terms );
-            }
-
-            foreach( $search_terms as $search_in ) {
-
-                $search_in = preg_quote( $search_in, '/' );
-
-                if ( strlen( $search_in ) > 1 ) {
-                    $pattern[] = '(' . $search_in . ')+';
-                } else {
-                    $pattern[] = '\b[' . $search_in . ']{1}\b';
-                }
-
-            }
-
-            usort( $pattern, array( $this, 'sort_by_length' ) );
-            $pattern = implode( '|', $pattern );
-            $pattern = sprintf( '/%s/i', $pattern );
-
             /**
              * Tag to use for highlighting search words inside content
              * @since 1.88
@@ -942,9 +919,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
              */
             $highlight_tag = apply_filters( 'aws_highlight_tag', 'strong' );
 
-            $highlight_tag_pattern = '<' . $highlight_tag . '>${0}</' . $highlight_tag . '>';
-
-            $text = preg_replace($pattern, $highlight_tag_pattern, $text );
+            $text = AWS_Helpers::highlight_words( $text, $this->data, $highlight_tag );
 
             return $text;
 

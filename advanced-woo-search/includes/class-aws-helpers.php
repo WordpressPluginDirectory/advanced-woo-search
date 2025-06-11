@@ -22,7 +22,9 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
                 '@<style[^>]*?>.*?</style>@siU',
                 '@<![\s\S]*?--[ \t\n\r]*>@'
             );
-            $str = preg_replace( $search, '', $str );
+            $str = preg_replace( $search, ' ', $str );
+
+            $str = preg_replace('/\s+/', ' ', $str);
 
             $str = esc_attr( $str );
             $str = stripslashes( $str );
@@ -244,7 +246,7 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
                 }
 
             }
-
+            
             return $str_new_array;
 
         }
@@ -1360,6 +1362,59 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
 
             return $terms_suggestions;
 
+        }
+
+        /**
+         * Highlight text words
+         * @param string $text Text string
+         * @param array $data Search related data
+         * @param string $highlight_tag Html tag for highlight
+         * @return string
+         */
+        static public function highlight_words( $text, $data = array(), $highlight_tag = 'strong' ) {
+
+            $pattern = array();
+            $search_terms = array();
+
+            if ( ! empty( $data ) && ! empty( $data['search_terms'] ) ) {
+                $search_terms = array_fill_keys( $data['search_terms'], 1);
+                $search_terms = AWS_Helpers::get_synonyms( $search_terms );
+                $search_terms = array_keys( $search_terms );
+            }
+
+            foreach( $search_terms as $search_in ) {
+
+                $search_in = preg_quote( $search_in, '/' );
+
+                if ( strlen( $search_in ) > 1 ) {
+                    $pattern[] = '(' . $search_in . ')+';
+                } else {
+                    $pattern[] = '\b[' . $search_in . ']{1}\b';
+                }
+
+            }
+
+            if ( ! empty( $pattern ) ) {
+
+                usort( $pattern, array( 'AWS_Helpers', 'sort_by_length' ) );
+                $pattern = implode( '|', $pattern );
+                $pattern = sprintf( '/%s/i', $pattern );
+
+                $highlight_tag_pattern = '<' . $highlight_tag . '>$0</' . $highlight_tag . '>';
+
+                $text = preg_replace($pattern, $highlight_tag_pattern, $text );
+
+            }
+
+            return $text;
+
+        }
+
+        /*
+         * Sort array by its values length
+         */
+        static public function sort_by_length( $a, $b ) {
+            return strlen( $b ) - strlen( $a );
         }
 
     }

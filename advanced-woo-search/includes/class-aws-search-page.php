@@ -51,6 +51,9 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
          */
         public function setup() {
 
+            // Current search data
+            add_filter( 'aws_search_results_products_ids', array( $this, 'aws_search_results_products_ids' ), 10, 3 );
+
             // Make sure we return nothing for MySQL posts query
             add_filter( 'posts_request', array( $this, 'filter_posts_request' ), 999, 2 );
 
@@ -95,6 +98,18 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
             // Change default search page query
             add_filter( 'aws_search_page_custom_data', array( $this, 'aws_search_page_custom_data' ), 1 );
 
+            // Highlight search terms ( if enabled )
+            add_filter( 'the_title', array( $this, 'highlight_title' ), 9999, 2 );
+            add_filter( 'get_the_excerpt',  array( $this, 'highlight_excerpt' ), 9999, 2 );
+
+        }
+
+        /*
+         * Save current search data
+         */
+        public function aws_search_results_products_ids( $posts_ids, $s, $data ) {
+            $this->data['current_search_data'] = $data;
+            return $posts_ids;
         }
 
         /**
@@ -607,6 +622,52 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
                 $data['force_ids'] = true;
             }
             return $data;
+        }
+
+        /*
+         * Highlight search terms in product title
+         */
+        public function highlight_title( $title = '', $post_id = 0 ) {
+
+            if ( ! $title ) {
+                return $title;
+            }
+
+            if ( ! $post_id ) {
+                return $title;
+            }
+
+            $data = isset( $this->data['current_search_data'] ) ? $this->data['current_search_data'] : array();
+
+            if ( ! empty( $data ) && isset( $data['search_page_highlight'] ) && $data['search_page_highlight'] === 'true' ) {
+                if ( $title && isset( $_GET['type_aws'] ) && is_search() && is_woocommerce() && in_array( get_post_type( $post_id ), array( 'product', 'product_variation' ) ) ) {
+                    $title = AWS_Helpers::highlight_words( $title, $data, 'mark' );
+                }
+            }
+
+            return $title;
+
+        }
+
+        /*
+         * Highlight search terms in product excerpt
+         */
+        public function highlight_excerpt( $excerpt, $post = null ) {
+
+            if ( ! $post instanceof WP_Post ) {
+                return $excerpt;
+            }
+
+            $data = isset( $this->data['current_search_data'] ) ? $this->data['current_search_data'] : array();
+
+            if ( ! empty( $data ) && isset( $data['search_page_highlight'] ) && $data['search_page_highlight'] === 'true' ) {
+                if ( $excerpt && isset( $_GET['type_aws'] ) && is_search() && is_woocommerce() && in_array( $post->post_type, array( 'product', 'product_variation' ) ) ) {
+                    $excerpt = AWS_Helpers::highlight_words( $excerpt, $data, 'mark' );
+                }
+            }
+
+            return $excerpt;
+
         }
 
     }

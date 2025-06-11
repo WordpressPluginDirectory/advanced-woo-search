@@ -163,6 +163,9 @@ msgstr ""
 msgid "Using shortcode %s"
 msgstr ""
 
+msgid "Using a page builder - locate the built-in search form widget and add it to the desired location on the page."
+msgstr ""
+
 msgid "Add search form as a widget. Go to %s and drag&drop 'AWS Widget' to one of your widget areas"
 msgstr ""
 
@@ -811,6 +814,9 @@ msgid "Change query hook"
 msgstr ""
 
 msgid "If you have any problems with correct products results on the search results page - try to change this option."
+msgstr ""
+
+msgid "Highlight search words inside the search results page."
 msgstr ""
 
 msgid "Default"

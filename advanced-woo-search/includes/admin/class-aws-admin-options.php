@@ -343,6 +343,18 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                 )
             );
 
+            $options['general'][] = array(
+                "name"  => __( "Highlight words", "advanced-woo-search" ),
+                "desc"  => __( "Highlight search words inside the search results page.", "advanced-woo-search" ),
+                "id"    => "search_page_highlight",
+                "value" => 'false',
+                "type"  => "radio",
+                'choices' => array(
+                    'true'  => __( 'On', 'advanced-woo-search' ),
+                    'false'  => __( 'Off', 'advanced-woo-search' ),
+                )
+            );
+
             $options['performance'][] = array(
                 "name"    => __( "Search options", "advanced-woo-search" ),
                 "type"    => "heading"
