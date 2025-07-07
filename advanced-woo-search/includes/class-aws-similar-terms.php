@@ -41,6 +41,7 @@ if ( ! class_exists( 'AWS_Similar_Terms' ) ) :
                 'max_similar_terms' => 100,
                 'min_distance' => 2,
                 'allow_numeric' => false,
+                'exclude_sources' => array(),
             );
 
             /**
@@ -127,8 +128,15 @@ if ( ! class_exists( 'AWS_Similar_Terms' ) ) :
 
             $query_sources = '';
             if ( isset( $this->data['search_in'] ) && $this->data['search_in'] ) {
+
+                $search_in = $this->data['search_in'];
+
+                if ( isset( $this->fuzzy_params['exclude_sources'] ) && is_array( $this->fuzzy_params['exclude_sources'] ) && ! empty( $this->fuzzy_params['exclude_sources'] ) ) {
+                    $search_in = array_diff( $this->data['search_in'], $this->fuzzy_params['exclude_sources'] );
+                }
+
                 $search_in_arr_string = '';
-                foreach ( $this->data['search_in'] as $s_source ) {
+                foreach ( $search_in as $s_source ) {
                     $search_in_arr_string .= "'" . $s_source . "',";
                 }
                 $search_in_arr_string = rtrim( $search_in_arr_string, "," );

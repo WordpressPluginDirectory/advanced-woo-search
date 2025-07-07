@@ -80,10 +80,11 @@ if ( ! class_exists( 'AWS_Admin_Notices' ) ) :
                 && ! class_exists( 'WC_Memberships' )
                 && ! ( class_exists('Iconic_WSSV') || class_exists('JCK_WSSV') )
                 && ! in_array( 'wc-vendors/class-wc-vendors.php', $this->active_plugins )
+                && ! in_array( 'gtranslate/gtranslate.php', $this->active_plugins )
             ) {
                 return;
             }
-
+            
             $hide_option = get_option( 'aws_hide_int_notices' );
             $notice_top_message = sprintf( __( 'Hi! Looks like you are using some plugins that have the advanced integration with %s. Please find more details below.', 'advanced-woo-search' ), '<b>Advanced Woo Search PRO</b>' );
             $notice_message = '';
@@ -147,6 +148,11 @@ if ( ! class_exists( 'AWS_Admin_Notices' ) ) :
             if ( in_array( 'wc-vendors/class-wc-vendors.php', $this->active_plugins ) && ( ! $hide_option || array_search( 'wcvendors', $hide_option ) === false ) ) {
                 $notice_message .= '<li>' . __( 'WC Vendors plugin.', 'advanced-woo-search' ) . ' <a target="_blank" href="https://advanced-woo-search.com/features/wc-vendors-plugin-support/?utm_source=wp-plugin&utm_medium=integration_notice&utm_campaign=wcvendors">' . __( 'Learn more', 'advanced-woo-search' ) . '</a></li>';
                 $notice_id .= 'wcvendors|';
+            }
+
+            if ( in_array( 'gtranslate/gtranslate.php', $this->active_plugins ) && ( ! $hide_option || array_search( 'gtranslate', $hide_option ) === false ) ) {
+                $notice_message .= '<li>' . __( 'GTranslate plugin.', 'advanced-woo-search' ) . ' <a target="_blank" href="https://advanced-woo-search.com/guide/gtranslate/?utm_source=wp-plugin&utm_medium=integration_notice&utm_campaign=gtranslate">' . __( 'Learn more', 'advanced-woo-search' ) . '</a></li>';
+                $notice_id .= 'gtranslate|';
             }
 
             $notice_id = 'aws_hide_int_notices=' . urlencode( trim( $notice_id, '|' ) );

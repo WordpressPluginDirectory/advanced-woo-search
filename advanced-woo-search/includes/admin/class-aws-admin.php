@@ -78,13 +78,7 @@ class AWS_Admin {
 
         $nonce = wp_create_nonce( 'plugin-settings' );
 
-        $tabs = array(
-            'general'     => esc_html__( 'General', 'advanced-woo-search' ),
-            'performance' => esc_html__( 'Performance', 'advanced-woo-search' ),
-            'form'        => esc_html__( 'Search Form', 'advanced-woo-search' ),
-            'results'     => esc_html__( 'Search Results', 'advanced-woo-search' ),
-            'premium'     => esc_html__( 'Get Premium', 'advanced-woo-search' )
-        );
+        $tabs = AWS_Admin_Options::get_instance_tabs_names();
 
         $current_tab = empty( $_GET['tab'] ) ? 'general' : sanitize_text_field( $_GET['tab'] );
 

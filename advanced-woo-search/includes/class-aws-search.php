@@ -114,6 +114,13 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             $s = $keyword ? esc_attr( $keyword ) : ( isset( $_POST['keyword'] ) ? esc_attr( $_POST['keyword'] ) : '' );
             $s = htmlspecialchars_decode( $s );
             $s = preg_replace('/\s+/', ' ', trim( $s ) );
+            
+            /**
+             * Filters search string before normalization
+             * @since 3.37
+             * @param string $string
+             */
+            $s = apply_filters( 'aws_pre_normalized_search_string', $s );
 
             $this->data['s_nonormalize'] = $s;
 

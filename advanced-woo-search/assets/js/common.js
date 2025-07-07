@@ -137,6 +137,9 @@ AwsHooks.filters = AwsHooks.filters || {};
 
                 data = AwsHooks.apply_filters( 'aws_ajax_request_params', data, { instance: instance, form: self, data: d } );
 
+                // @since 3.38
+                ajaxUrl = AwsHooks.apply_filters( 'aws_ajax_request_url', ajaxUrl, { instance: instance, form: self, data: d, ajaxData: data } );
+
                 requests.push(
 
                     $.ajax({

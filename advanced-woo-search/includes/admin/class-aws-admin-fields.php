@@ -50,13 +50,22 @@ if ( ! class_exists( 'AWS_Admin_Fields' ) ) :
 
             foreach ( $this->options_array as $k => $value ) {
 
+                $opt_value = '';
+                if ( isset( $value['id'] ) && isset( $plugin_options[$value['id']] ) ) {
+                    $opt_value = $plugin_options[$value['id']];
+                } elseif ( isset( $value['value'] ) ) {
+                    $opt_value = $value['value'];
+                }
+
+                $disabled = isset( $value['disabled'] ) && $value['disabled'] ? 'disabled' : '';
+
                 switch ( $value['type'] ) {
 
                     case 'text': ?>
                         <tr valign="top">
                             <th scope="row"><?php echo esc_html( $value['name'] ); ?></th>
                             <td>
-                                <input type="text" name="<?php echo esc_attr( $value['id'] ); ?>" class="regular-text" value="<?php echo isset( $plugin_options[ $value['id'] ] ) ? esc_attr( stripslashes( $plugin_options[ $value['id'] ] ) ) : ''; ?>">
+                                <input <?php echo $disabled; ?> type="text" name="<?php echo esc_attr( $value['id'] ); ?>" class="regular-text" value="<?php echo esc_attr( stripslashes( $opt_value ) ); ?>">
                                 <br><span class="description"><?php echo wp_kses_post( $value['desc'] ); ?></span>
                             </td>
                         </tr>
@@ -66,9 +75,9 @@ if ( ! class_exists( 'AWS_Admin_Fields' ) ) :
                         <tr valign="top">
                             <th scope="row"><?php echo esc_html( $value['name'] ); ?></th>
                             <td>
-                                <input type="text" name="<?php echo esc_attr( $value['id'] ); ?>" class="regular-text" value="<?php echo esc_attr( stripslashes( $plugin_options[ $value['id'] ] ) ); ?>">
+                                <input <?php echo $disabled; ?> type="text" name="<?php echo esc_attr( $value['id'] ); ?>" class="regular-text" value="<?php echo esc_attr( stripslashes( $opt_value ) ); ?>">
                                 <br><span class="description"><?php echo wp_kses_post( $value['desc'] ); ?></span>
-                                <img style="display: block;max-width: 100px;margin-top: 20px;" src="<?php echo esc_url( $plugin_options[ $value['id'] ] ); ?>">
+                                <img style="display: block;max-width: 100px;margin-top: 20px;" src="<?php echo esc_url( $opt_value ); ?>">
                             </td>
                         </tr>
                         <?php break;
@@ -85,7 +94,7 @@ if ( ! class_exists( 'AWS_Admin_Fields' ) ) :
                         <tr valign="top">
                             <th scope="row"><?php echo esc_html( $value['name'] ); ?></th>
                             <td>
-                                <input type="number" <?php echo $params; ?> name="<?php echo esc_attr( $value['id'] ); ?>" class="regular-text" value="<?php echo esc_attr( stripslashes( $plugin_options[ $value['id'] ] ) ); ?>">
+                                <input <?php echo $disabled; ?> type="number" <?php echo $params; ?> name="<?php echo esc_attr( $value['id'] ); ?>" class="regular-text" value="<?php echo esc_attr( stripslashes($opt_value ) ); ?>">
                                 <br><span class="description"><?php echo wp_kses_post( $value['desc'] ); ?></span>
                             </td>
                         </tr>
@@ -97,8 +106,8 @@ if ( ! class_exists( 'AWS_Admin_Fields' ) ) :
                             <td>
                                 <?php $textarea_cols = isset( $value['cols'] ) ? $value['cols'] : "55"; ?>
                                 <?php $textarea_rows = isset( $value['rows'] ) ? $value['rows'] : "4"; ?>
-                                <?php $textarea_output = isset( $value['allow_tags'] ) ? wp_kses( $plugin_options[ $value['id'] ], AWS_Helpers::get_kses( $value['allow_tags'] ) ) : stripslashes( $plugin_options[ $value['id'] ] ); ?>
-                                <textarea id="<?php echo esc_attr( $value['id'] ); ?>" name="<?php echo esc_attr( $value['id'] ); ?>" cols="<?php echo $textarea_cols; ?>" rows="<?php echo $textarea_rows; ?>"><?php print $textarea_output; ?></textarea>
+                                <?php $textarea_output = isset( $value['allow_tags'] ) ? wp_kses( $opt_value, AWS_Helpers::get_kses( $value['allow_tags'] ) ) : stripslashes( $opt_value ); ?>
+                                <textarea <?php echo $disabled; ?> id="<?php echo esc_attr( $value['id'] ); ?>" name="<?php echo esc_attr( $value['id'] ); ?>" cols="<?php echo $textarea_cols; ?>" rows="<?php echo $textarea_rows; ?>"><?php print $textarea_output; ?></textarea>
                                 <br><span class="description"><?php echo wp_kses_post( $value['desc'] ); ?></span>
                             </td>
                         </tr>
@@ -108,9 +117,9 @@ if ( ! class_exists( 'AWS_Admin_Fields' ) ) :
                         <tr valign="top">
                             <th scope="row"><?php echo esc_html( $value['name'] ); ?></th>
                             <td>
-                                <?php $checkbox_options = $plugin_options[ $value['id'] ]; ?>
+                                <?php $checkbox_options = $opt_value; ?>
                                 <?php foreach ( $value['choices'] as $val => $label ) { ?>
-                                    <input type="checkbox" name="<?php echo esc_attr( $value['id'] . '[' . $val . ']' ); ?>" id="<?php echo esc_attr( $value['id'] . '_' . $val ); ?>" value="1" <?php checked( $checkbox_options[$val], '1' ); ?>> <label for="<?php echo esc_attr( $value['id'] . '_' . $val ); ?>"><?php echo esc_html( $label ); ?></label><br>
+                                    <input <?php echo $disabled; ?> type="checkbox" name="<?php echo esc_attr( $value['id'] . '[' . $val . ']' ); ?>" id="<?php echo esc_attr( $value['id'] . '_' . $val ); ?>" value="1" <?php checked( $checkbox_options[$val], '1' ); ?>> <label for="<?php echo esc_attr( $value['id'] . '_' . $val ); ?>"><?php echo esc_html( $label ); ?></label><br>
                                 <?php } ?>
                                 <br><span class="description"><?php echo wp_kses_post( $value['desc'] ); ?></span>
                             </td>
@@ -118,15 +127,11 @@ if ( ! class_exists( 'AWS_Admin_Fields' ) ) :
                         <?php break;
 
                     case 'radio': ?>
-                        <?php
-                        $disabled = isset( $value['disabled'] ) && $value['disabled'] ? 'disabled' : '';
-                        ?>
                         <tr valign="top">
                             <th scope="row"><?php echo esc_html( $value['name'] ); ?></th>
                             <td>
                                 <?php foreach ( $value['choices'] as $val => $label ) { ?>
-                                    <?php $option_val = isset( $plugin_options[ $value['id'] ] ) ? $plugin_options[ $value['id'] ] : ''; ?>
-                                    <input <?php echo $disabled; ?> class="radio" type="radio" name="<?php echo esc_attr( $value['id'] ); ?>" id="<?php echo esc_attr( $value['id'].$val ); ?>" value="<?php echo esc_attr( $val ); ?>" <?php checked( $option_val, $val ); ?>> <label for="<?php echo esc_attr( $value['id'].$val ); ?>"><?php echo esc_html( $label ); ?></label><br>
+                                    <input <?php echo $disabled; ?> class="radio" type="radio" name="<?php echo esc_attr( $value['id'] ); ?>" id="<?php echo esc_attr( $value['id'].$val ); ?>" value="<?php echo esc_attr( $val ); ?>" <?php checked( $opt_value, $val ); ?>> <label for="<?php echo esc_attr( $value['id'].$val ); ?>"><?php echo esc_html( $label ); ?></label><br>
                                 <?php } ?>
                                 <br><span class="description"><?php echo wp_kses_post( $value['desc'] ); ?></span>
                             </td>
@@ -137,10 +142,9 @@ if ( ! class_exists( 'AWS_Admin_Fields' ) ) :
                         <tr valign="top">
                             <th scope="row"><?php echo esc_html( $value['name'] ); ?></th>
                             <td>
-                                <select name="<?php echo esc_attr( $value['id'] ); ?>">
+                                <select <?php echo $disabled; ?> name="<?php echo esc_attr( $value['id'] ); ?>">
                                     <?php foreach ( $value['choices'] as $val => $label ) { ?>
-                                        <?php $option_val = isset( $plugin_options[ $value['id'] ] ) ? $plugin_options[ $value['id'] ] : ''; ?>
-                                        <option value="<?php echo esc_attr( $val ); ?>" <?php selected( $option_val, $val ); ?>><?php echo esc_html( $label ); ?></option>
+                                        <option value="<?php echo esc_attr( $val ); ?>" <?php selected( $opt_value, $val ); ?>><?php echo esc_html( $label ); ?></option>
                                     <?php } ?>
                                 </select>
                                 <br><span class="description"><?php echo wp_kses_post( $value['desc'] ); ?></span>
@@ -152,8 +156,8 @@ if ( ! class_exists( 'AWS_Admin_Fields' ) ) :
                         <tr valign="top">
                             <th scope="row"><?php echo esc_html( $value['name'] ); ?></th>
                             <td>
-                                <select name="<?php echo esc_attr( $value['id'].'[]' ); ?>" multiple class="chosen-select">
-                                    <?php $values = $plugin_options[ $value['id'] ]; ?>
+                                <select <?php echo $disabled; ?> name="<?php echo esc_attr( $value['id'].'[]' ); ?>" multiple class="chosen-select">
+                                    <?php $values = $opt_value; ?>
                                     <?php foreach ( $value['choices'] as $val => $label ) {  ?>
                                         <?php $selected = ( is_array( $values ) && in_array( $val, $values ) ) ? ' selected="selected" ' : ''; ?>
                                         <option value="<?php echo esc_attr( $val ); ?>"<?php echo $selected; ?>><?php echo esc_html( $label ); ?></option>
@@ -186,7 +190,7 @@ if ( ! class_exists( 'AWS_Admin_Fields' ) ) :
                                         $style = isset( $value['styles'] ) &&  isset( $value['styles'][$val] ) ? 'style="' . $value['styles'][$val] . ';"' : '';
                                         ?>
                                         <li class="option" <?php echo $style; ?>>
-                                            <input class="radio" type="radio" name="<?php echo esc_attr( $value['id'] ); ?>" id="<?php echo esc_attr( $value['id'].$val ); ?>" value="<?php echo esc_attr( $val ); ?>" <?php checked( $plugin_options[ $value['id'] ], $val ); ?>>
+                                            <input <?php echo $disabled; ?> class="radio" type="radio" name="<?php echo esc_attr( $value['id'] ); ?>" id="<?php echo esc_attr( $value['id'].$val ); ?>" value="<?php echo esc_attr( $val ); ?>" <?php checked( $opt_value, $val ); ?>>
                                             <span class="ico" style="background: url('<?php echo esc_url( AWS_URL . 'assets/img/' . $img ); ?>') no-repeat 50% 50%;"></span>
                                         </li>
                                     <?php } ?>
@@ -226,7 +230,7 @@ if ( ! class_exists( 'AWS_Admin_Fields' ) ) :
 
                                 <?php
                                 $all_buttons = $value['choices'];
-                                $active_buttons = explode( ',', $plugin_options[ $value['id'] ] );
+                                $active_buttons = explode( ',', $opt_value );
                                 $inactive_buttons = array_diff($all_buttons, $active_buttons);
                                 ?>
 
@@ -269,7 +273,7 @@ if ( ! class_exists( 'AWS_Admin_Fields' ) ) :
 
                                 </div>
 
-                                <input type="hidden" id="<?php echo esc_attr( $value['id'] ); ?>" name="<?php echo esc_attr( $value['id'] ); ?>" value="<?php echo esc_attr( $plugin_options[ $value['id'] ] ); ?>" />
+                                <input type="hidden" id="<?php echo esc_attr( $value['id'] ); ?>" name="<?php echo esc_attr( $value['id'] ); ?>" value="<?php echo esc_attr( $opt_value ); ?>" />
 
                             </td>
                         </tr>

@@ -5,7 +5,7 @@ Tags: woocommerce, search, product search, woocommerce search, live search
 Requires at least: 4.0
 Tested up to: 6.8
 Requires PHP: 7.0
-Stable tag: 3.36
+Stable tag: 3.38
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -94,7 +94,7 @@ Additional features that are available only in the PRO plugin version. [Get the 
 
 ## &#9881;&#65039; Search In Any Product Field
 
-Search for WooCommerce product via any possible products fields: **title**, **content**, **short description**, **categories**, **tags**, **ID**, **SKU**, **attributes** ( pro ), **custom attrbites** ( pro ), **custom taxonomies** ( pro ), **custom fields** ( pro ), **unique product number** ( GTIN, UPC, EAN, ISBN ) ( pro ).
+Search for WooCommerce product via any possible products fields: **title**, **content**, **short description**, **categories**, **tags**, **ID**, **SKU**, **brands** ( pro ), **attributes** ( pro ), **custom attrbites** ( pro ), **custom taxonomies** ( pro ), **custom fields** ( pro ), **unique product number** ( GTIN, UPC, EAN, ISBN ) ( pro ).
 
 ## &#128269; Powerful Search Engine
 
@@ -115,7 +115,7 @@ Search engine with powerful features.
 
 Customize the look and feel of plugin search results.
 
-* **Display any product** data inside the search results list. Hide or display product *image*, *title*, *description*, *price*, *categories*, *tags*, *sku*, *rating*, *stock status*, *sale badge*, *featured badge*, *attributes* etc.
+* **Display any product** data inside the search results list. Hide or display product *image*, *title*, *description*, *price*, *categories*, *tags*, *brands*, *sku*, *rating*, *stock status*, *sale badge*, *featured badge*, *attributes* etc.
 * Use **custom css styles** to create unique designs for your search results.
 * Special option to add **Add To Cart** button for search results. ( pro )
 * Select from one of predefined **search results layouts**. ( pro )
@@ -126,6 +126,7 @@ Customize the look and feel of plugin search results.
 Search for WooCommerce products and product taxonomies.
 
 * Search and display any WooCommerce product of any type - **simple product**, **variable product**, **product variations** ( pro ).
+* Search and display **product brands**. When users click these search results, they will be redirected to the brands archive page.
 * Search and display **product categories**. By clicking on such search results the user will be redirected to categories archive page.
 * Search and display **product tags**. By clicking on such search results the user will be redirected to the tags archive page.
 * Search and display **product taxonomies**. This includes any product related taxonomies like Brands, Manufacturer, etc. ( pro )
@@ -139,6 +140,7 @@ Plugin comes packed with a large number of build-in integrations. Each integrati
 * [ACF](https://advanced-woo-search.com/guide/acf-support/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo): Search for products and products taxonomies via Advanced Custom Field ( ACF ) fields values. Create search results filters based on these fields. Display any field values inside search results.
 * [Google Analytics](https://advanced-woo-search.com/guide/google-analytics/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo): Send search events right inside your GA property and analyze every user search query.
 * [WPML](https://advanced-woo-search.com/guide/wpml/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo): Show search results in current active site language. Translate plugin static strings with the help of WPML string translation.
+* [GTranslate](https://advanced-woo-search.com/guide/gtranslate/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo): Search WooCommerce products in the current site language and automatically translate all search results.
 * [Polylang](https://advanced-woo-search.com/guide/polylang/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo): Show results in current site languages and allows users to search via that language terms.
 * [Elementor](https://advanced-woo-search.com/guide/elementor/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo): Add search form via Elementor page builder, customize search results page, add taxonomies search results into search results page.
 * [Gutenberg](https://advanced-woo-search.com/guide/gutenberg/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo): Use build-in Gutenberg block to show plugin search form on any place of your site.
@@ -276,6 +278,15 @@ Please ask your question via the [support forum](https://wordpress.org/support/p
 == Changelog ==
 
 [View full changelog](https://advanced-woo-search.com/guide/free-version/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
+
+= 3.38 ( 2025-07-07 ) =
+* Update - Add new parameter for aws_fuzzy_params filter
+* Dev - Add aws_ajax_request_url js filter
+
+= 3.37 ( 2025-06-23 ) =
+* Update - Admin page notices
+* Dev - Add aws_pre_normalized_search_string filter
+* Dev - Admin page settings page update. Add default values for options
 
 = 3.36 ( 2025-06-10 ) =
 * Update - Tested with WC 9.9
@@ -479,11 +490,3 @@ Please ask your question via the [support forum](https://wordpress.org/support/p
 = 3.02 ( 2024-03-12 ) =
 * Update - Integration for WPML plugin. Fix indexation for product taxonomies
 * Dev - Add aws_index_before_scrapping and aws_index_after_scrapping hooks
-
-= 3.01 ( 2024-02-26 ) =
-* Update - Tested with WC 8.6
-* Update - Indexation for synonyms phrases
-* Fix - Bug with search results page integration with Elementor
-
-= 3.00 ( 2024-02-12 ) =
-* Add - New option to limit maximal number of search words

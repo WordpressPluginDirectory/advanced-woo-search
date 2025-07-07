@@ -791,6 +791,31 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
 
         }
 
+        /*
+         * Get an array of search form admin tabs names
+         * @return array
+         */
+        static public function get_instance_tabs_names() {
+
+            $tabs = array(
+                'general'     => esc_html__( 'General', 'advanced-woo-search' ),
+                'performance' => esc_html__( 'Performance', 'advanced-woo-search' ),
+                'form'        => esc_html__( 'Search Form', 'advanced-woo-search' ),
+                'results'     => esc_html__( 'Search Results', 'advanced-woo-search' ),
+                'premium'     => esc_html__( 'Get Premium', 'advanced-woo-search' )
+            );
+
+            /**
+             * Filter tabs names for search form instance
+             * @since 3.37
+             * @param array $tabs Array of tabs names
+             */
+            $tabs = apply_filters( 'aws_admin_instance_tabs_names', $tabs );
+
+            return $tabs;
+
+        }
+
     }
 
 endif;
