@@ -53,8 +53,6 @@ class AWS_Admin {
 
         add_action( 'admin_enqueue_scripts', array( &$this, 'admin_enqueue_scripts' ) );
 
-        add_filter( 'submenu_file', array( $this, 'submenu_file' ), 10, 2 );
-
         add_filter( 'aws_admin_page_options_current', array( $this, 'check_sources_in_index' ), 1 );
 
         add_action( 'aws_admin_change_state', array( $this, 'disable_not_indexed_sources' ), 1, 3 );
@@ -68,7 +66,8 @@ class AWS_Admin {
     public function add_admin_page() {
         add_menu_page( esc_html__( 'Adv. Woo Search', 'advanced-woo-search' ), esc_html__( 'Adv. Woo Search', 'advanced-woo-search' ), AWS_Helpers::user_admin_capability(), 'aws-options', array( &$this, 'display_admin_page' ), 'dashicons-search', 70 );
         add_submenu_page( 'aws-options', __( 'Settings', 'advanced-woo-search' ), __( 'Settings', 'advanced-woo-search'), AWS_Helpers::user_admin_capability(), 'aws-options', array( $this, 'display_admin_page' ) );
-        add_submenu_page( 'aws-options', __( 'Premium', 'advanced-woo-search' ),  '<span style="color:rgba(255, 255, 91, 0.8);">' . __( 'Premium', 'advanced-woo-search' ) . '</span>', AWS_Helpers::user_admin_capability(), admin_url( 'admin.php?page=aws-options&tab=premium' ) );
+        add_submenu_page( 'aws-options', __( 'Index Config', 'advanced-woo-search' ), __( 'Index Config', 'advanced-woo-search'), AWS_Helpers::user_admin_capability(), 'aws-performance', array( $this, 'display_admin_page' ) );
+        add_submenu_page( 'aws-options', __( 'Premium', 'advanced-woo-search' ),  '<span style="color:rgba(255, 255, 91, 0.8);">' . __( 'Premium', 'advanced-woo-search' ) . '</span>', AWS_Helpers::user_admin_capability(), 'aws-premium', array( $this, 'display_admin_page' ) );
     }
 
     /**
@@ -78,67 +77,49 @@ class AWS_Admin {
 
         $nonce = wp_create_nonce( 'plugin-settings' );
 
-        $tabs = AWS_Admin_Options::get_instance_tabs_names();
-
+        $current_page = isset( $_GET['page']  ) ? sanitize_text_field( $_GET['page'] ) : 'aws-options';
         $current_tab = empty( $_GET['tab'] ) ? 'general' : sanitize_text_field( $_GET['tab'] );
-
-        $tabs_html = '';
-
-        foreach ( $tabs as $name => $label ) {
-            $tabs_html .= '<a href="' . admin_url( 'admin.php?page=aws-options&tab=' . $name ) . '" class="nav-tab ' . ( $current_tab == $name ? 'nav-tab-active' : '' ) . '">' . $label . '</a>';
-
-        }
-
-        $tabs_html = '<h2 class="nav-tab-wrapper woo-nav-tab-wrapper">'.$tabs_html.'</h2>';
 
         if ( isset( $_POST["Submit"] ) && current_user_can( AWS_Helpers::user_admin_capability() ) && isset( $_POST["_wpnonce"] ) && wp_verify_nonce( $_POST["_wpnonce"], 'plugin-settings' ) ) {
             AWS_Admin_Options::update_settings();
         }
 
-
-        echo '<div id="aws-admin-header">';
-            echo '<div class="inner">';
-                echo '<div class="logo">';
-                    echo '<img src="' . AWS_URL . '/assets/img/logo.png' . '" alt="' . esc_html( 'logo', 'advanced-woo-search' ) . '">';
-                    echo '<span class="title">';
-                        echo esc_html( 'Advanced Woo Search', 'advanced-woo-search' );
-                    echo '</span>';
-                    echo '<span class="version">';
-                        echo 'v' . AWS_VERSION;
-                    echo '</span>';
-                echo '</div>';
-                echo '<div class="btns">';
-                    echo '<a class="button button-docs" href="https://advanced-woo-search.com/guide/?utm_source=wp-plugin&utm_medium=header&utm_campaign=guide" target="_blank">' . esc_html( 'Documentation', 'advanced-woo-search' ) . '</a>';
-                    echo '<a class="button button-support" href="https://advanced-woo-search.com/contact/?utm_source=wp-plugin&utm_medium=header&utm_campaign=support" target="_blank">' . esc_html( 'Support', 'advanced-woo-search' ) . '</a>';
-                echo '</div>';
-            echo '</div>';
-        echo '</div>';
-
+        echo AWS_Admin_Meta_Boxes::get_header();
 
         echo '<div class="wrap">';
 
         echo '<h1></h1>';
 
-        echo $tabs_html;
+        echo '<form data-current-tab="' . esc_attr( $current_tab ) . '" action="" name="aws_form" id="aws_form" method="post">';
 
-        echo '<form action="" name="aws_form" id="aws_form" method="post">';
+        if ( $current_page === 'aws-performance' ) {
 
-        switch ($current_tab) {
-            case('performance'):
-                new AWS_Admin_Fields( 'performance' );
-                break;
-            case('form'):
-                new AWS_Admin_Fields( 'form' );
-                break;
-            case('results'):
-                new AWS_Admin_Fields( 'results' );
-                break;
-            case('premium'):
-                new AWS_Admin_Page_Premium();
-                break;
-            default:
-                echo AWS_Admin_Meta_Boxes::get_general_tab_content();
-                new AWS_Admin_Fields( 'general' );
+            new AWS_Admin_Fields( 'performance' );
+
+        } elseif ( $current_page === 'aws-premium' ) {
+
+            new AWS_Admin_Page_Premium();
+
+        } else {
+
+            switch ($current_tab) {
+                case('search'):
+                    new AWS_Admin_Fields( 'search' );
+                    break;
+                case('form'):
+                    new AWS_Admin_Fields( 'form' );
+                    break;
+                case('results'):
+                    new AWS_Admin_Fields( 'results' );
+                    break;
+                case('suggestions'):
+                    new AWS_Admin_Fields( 'suggestions' );
+                    break;
+                default:
+                    echo AWS_Admin_Meta_Boxes::get_general_tab_content();
+                    new AWS_Admin_Fields( 'general' );
+            }
+
         }
 
         echo '<input type="hidden" name="_wpnonce" value="' . esc_attr( $nonce ) . '">';
@@ -169,14 +150,17 @@ class AWS_Admin {
      */
     public function admin_enqueue_scripts() {
 
-        if ( isset( $_GET['page'] ) && $_GET['page'] == 'aws-options' ) {
+        if ( isset( $_GET['page'] ) && in_array( $_GET['page'], array( 'aws-options', 'aws-premium', 'aws-performance' ) ) ) {
 
             $suffix = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '' : '.min';
 
             wp_enqueue_style( 'plugin-admin-style', AWS_URL . 'assets/css/admin' . $suffix . '.css', array(), AWS_VERSION );
             wp_enqueue_script( 'jquery' );
             wp_enqueue_script( 'jquery-ui-sortable' );
+
+            wp_enqueue_script( 'jquery-tiptip', AWS_URL . '/assets/js/jquery.tipTip.js', array( 'jquery' ), AWS_VERSION );
             wp_enqueue_script( 'plugin-admin-scripts', AWS_URL . 'assets/js/admin' . $suffix . '.js', array('jquery', 'jquery-ui-sortable'), AWS_VERSION );
+
             wp_localize_script( 'plugin-admin-scripts', 'aws_vars', array(
                 'ajaxurl' => admin_url( 'admin-ajax.php', 'relative' ),
                 'ajax_nonce' => wp_create_nonce( 'aws_admin_ajax_nonce' ),
@@ -184,16 +168,6 @@ class AWS_Admin {
 
         }
 
-    }
-
-    /*
-     * Change current class for premium tab
-     */
-    public function submenu_file( $submenu_file, $parent_file ) {
-        if ( $parent_file === 'aws-options' && isset( $_GET['tab'] ) && $_GET['tab'] === 'premium' ) {
-            $submenu_file = admin_url( 'admin.php?page=aws-options&tab=premium' );
-        }
-        return $submenu_file;
     }
 
     /*
@@ -210,7 +184,7 @@ class AWS_Admin {
                     if ( isset( $option['id'] ) && $option['id'] === 'search_in' && isset( $option['choices'] ) ) {
                         foreach( $option['choices'] as $choice_key => $choice_label ) {
                             if ( isset( $index_options['index'][$choice_key] ) && ! $index_options['index'][$choice_key] ) {
-                                $text = '<span style="color:#dc3232;">' . __( '(index disabled)', 'advanced-woo-search' ) . '</span>' . ' <a href="'.esc_url( admin_url('admin.php?page=aws-options&tab=performance#index_sources') ).'">' . __( '(enable)', 'advanced-woo-search' ) . '</a>';
+                                $text = '<span style="color:#dc3232;">' . __( '(index disabled)', 'advanced-woo-search' ) . '</span>' . ' <a href="'.esc_url( admin_url('admin.php?page=aws-performance#index_sources') ).'">' . __( '(enable)', 'advanced-woo-search' ) . '</a>';
                                 $options[$options_key][$key]['choices'][$choice_key] = $choice_label . ' ' . $text;
                             }
                         }

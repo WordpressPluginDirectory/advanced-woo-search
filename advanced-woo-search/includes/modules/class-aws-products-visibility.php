@@ -61,7 +61,7 @@ if ( ! class_exists( 'AWS_AFPVU' ) ) :
 
             $filter = $this->get_filtered_terms();
 
-            if ( isset( $filter['ids'] ) && ! empty( $filter['ids'] ) ) {
+            if ( isset( $filter['ids'] ) && ! empty( $filter['ids'] ) && array_filter( $filter['ids'] ) ) {
 
                 $relation = isset( $filter['relation'] ) && $filter['relation'] === 'show' ? 'IN' : 'NOT IN';
 
@@ -136,7 +136,7 @@ if ( ! class_exists( 'AWS_AFPVU' ) ) :
 
             $products_ids = array();
 
-            if ( !empty($afpvu_applied_categories) ) {
+            if ( ! empty( $afpvu_applied_categories ) && array_filter( $afpvu_applied_categories ) ) {
 
                 $product_args = array(
                     'numberposts' => -1,
@@ -154,6 +154,7 @@ if ( ! class_exists( 'AWS_AFPVU' ) ) :
                     ));
 
                 $products_ids = (array) get_posts($product_args);
+
             }
 
             $afpvu_applied_products = array_merge( (array) $afpvu_applied_products, (array) $products_ids );

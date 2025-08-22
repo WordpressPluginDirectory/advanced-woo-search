@@ -5,7 +5,7 @@ Tags: woocommerce, search, product search, woocommerce search, live search
 Requires at least: 4.0
 Tested up to: 6.8
 Requires PHP: 7.0
-Stable tag: 3.38
+Stable tag: 3.42
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -267,17 +267,44 @@ Yep. This plugin is always compatible with the latest version of Woocommerce?
 
 Please ask your question via the [support forum](https://wordpress.org/support/plugin/advanced-woo-search/) or plugin [contact page](https://advanced-woo-search.com/contact/).
 
+= How can I report security bugs? =
+
+You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team helps validate, triage and handle any security vulnerabilities. [Report a security vulnerability.]( https://patchstack.com/database/vdp/9e5fb546-2685-4bfa-8540-a5e14050084d )
+
 == Screenshots ==
 
-1. Search from front-end view
-1. Search form in sidebar added as widget
-2. Plugin settings page. General options
-3. Plugin settings page. Search form options
-4. Plugin settings page. Search results options
+1. Overview of search plugin
+2. Search in any product field
+3. Smart search engine
+4. Customize search results view
+5. Search for product taxonomies
+6. Search for variable products and product variations
+7. Filter search results
+8. Support for multilingual plugins
+9. Integrations
+10. Search suggestions
 
 == Changelog ==
 
 [View full changelog](https://advanced-woo-search.com/guide/free-version/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
+
+= 3.42 ( 2025-08-21 ) =
+* Fix - Integration bug with Products Visibility by User Roles plugin
+
+= 3.41 ( 2025-08-18 ) =
+* Add - Integration for TechStore theme
+* Update - Styles for admin settings page. Add togglers
+* Update - Move Stop Words and Synonyms settings to Index tab
+* Update - Admin settings page. Rename settings tabs
+
+= 3.40 ( 2025-08-04 ) =
+* Update - Styles and structure of plugin settings page
+* Fix - Add additional check for variations inside search results page to prevent errors
+
+= 3.39 ( 2025-07-22 ) =
+* Add - Integration for eCommerce Star theme
+* Update - Plugin settings page update. Add new pro options
+* Update - Tested with WC 10.0
 
 = 3.38 ( 2025-07-07 ) =
 * Update - Add new parameter for aws_fuzzy_params filter
@@ -476,17 +503,3 @@ Please ask your question via the [support forum](https://wordpress.org/support/p
 * Add - Support for Advance Product Search by themehunk
 * Update - Tested with WC 8.8
 * Fix - Search results sorting inside results page when using custom filters
-
-= 3.04 ( 2024-04-08 ) =
-* Add - Support for WooCommerce Product Search plugin
-* Update - Values for search page filters
-
-= 3.03 ( 2024-03-25 ) =
-* Update - Tested with WC 8.7
-* Update - Add loading icon for clear cache button inside settings page
-* Update - New values for orderby for better integration with themes
-* Fix - Bug with adding new products during index process
-
-= 3.02 ( 2024-03-12 ) =
-* Update - Integration for WPML plugin. Fix indexation for product taxonomies
-* Dev - Add aws_index_before_scrapping and aws_index_after_scrapping hooks

@@ -70,11 +70,7 @@ if ( ! class_exists( 'AWS_AWL' ) ) :
                                 "desc"  => __( "Show or not AWL plugin labels for all products inside search results.", "advanced-woo-search" ),
                                 "id"    => "show_awl_labels",
                                 "value" => 'true',
-                                "type"  => "radio",
-                                'choices' => array(
-                                    'true'  => __( 'On', 'advanced-woo-search' ),
-                                    'false' => __( 'Off', 'advanced-woo-search' )
-                                )
+                                "type"  => "toggler",
                             );
 
                         }

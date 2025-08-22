@@ -54,13 +54,12 @@ msgstr ""
 
 #: includes/options.php:111
 msgid ""
-"Smart scraping sentences with searching terms from product description."
+"Smartly scrape matching sentences from descriptions."
 msgstr ""
 
 #: includes/options.php:112
 msgid ""
-"First N words of product description ( number of words that you choose below."
-" )"
+"First N words of product description."
 msgstr ""
 
 #: advanced-woo-search.php:113
@@ -139,6 +138,9 @@ msgstr ""
 msgid "Automatically update plugin index table when product content was changed. This means that in search there will be always latest product data."
 msgstr ""
 
+msgid "Automatically sync index table."
+msgstr ""
+
 msgid "Turn this off if you have any problems with performance."
 msgstr ""
 
@@ -148,7 +150,10 @@ msgstr ""
 msgid "Seamless integration"
 msgstr ""
 
-msgid "Replace all the standard search forms on your website ( may not work with some themes )."
+msgid "Replace all the default search forms on your website."
+msgstr ""
+
+msgid "May not work with some themes."
 msgstr ""
 
 msgid "Activation"
@@ -205,10 +210,10 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-msgid "Text for show more button"
+msgid "'View All Results' text"
 msgstr ""
 
-msgid "Text for link to search results page at the bottom of search results block."
+msgid "Text for 'View All Results' link."
 msgstr ""
 
 #: includes/options.php:40
@@ -217,6 +222,9 @@ msgstr ""
 
 #: includes/options.php:41
 msgid "Text when there is no search results."
+msgstr ""
+
+msgid "HTML tags are allowed."
 msgstr ""
 
 #: includes/options.php:43
@@ -239,31 +247,37 @@ msgstr ""
 msgid "Show loader animation while searching."
 msgstr ""
 
-msgid "Show clear button"
+msgid "Clear button"
 msgstr ""
 
-msgid "Show 'Clear search string' button for desktop devices ( for mobile it is always visible )."
+msgid "Show 'Clear search string' button."
 msgstr ""
 
-msgid "Show 'View All Results'"
+msgid "Only for desktop devices. For mobile devices it is always visible."
 msgstr ""
 
-msgid "Show link to search results page at the bottom of search results block."
+msgid "'View All Results' button"
+msgstr ""
+
+msgid "Show link to the search results page."
+msgstr ""
+
+msgid "Displayed at the bottom of live search results block."
 msgstr ""
 
 msgid "Mobile full screen"
 msgstr ""
 
-msgid "Full screen search on focus. Will not work if the search form is inside the block with position: fixed."
+msgid "Full screen search on focus."
+msgstr ""
+
+msgid "Works only on mobile devices. Will not work if the search form is inside the block with position: fixed."
 msgstr ""
 
 msgid "Form Styling"
 msgstr ""
 
 msgid "Choose search form layout"
-msgstr ""
-
-msgid "Filter button will be visible only if you have more than one active filter for current search form instance."
 msgstr ""
 
 msgid "Highlight words"
@@ -293,9 +307,10 @@ msgid "Description source"
 msgstr ""
 
 #: includes/options.php:74
-msgid ""
-"From where to take product description.<br>If first source is empty data "
-"will be taken from other sources."
+msgid "From where to take product description."
+msgstr ""
+
+msgid "If first source is empty data will be taken from other sources."
 msgstr ""
 
 #: includes/options.php:79
@@ -311,7 +326,7 @@ msgid "Description length"
 msgstr ""
 
 #: includes/options.php:86
-msgid "Maximal allowed number of words for product description."
+msgid "Maximum product description length ( in words )."
 msgstr ""
 
 #: includes/options.php:93
@@ -390,6 +405,9 @@ msgstr ""
 msgid "Comma separated list of words that will be excluded from search."
 msgstr ""
 
+msgid "List of ignored search words."
+msgstr ""
+
 msgid "Re-index required on change."
 msgstr ""
 
@@ -397,6 +415,9 @@ msgid "Synonyms"
 msgstr ""
 
 msgid "Comma separated list of synonym words. Each group of synonyms must be on separated text line."
+msgstr ""
+
+msgid "List of synonyms words."
 msgstr ""
 
 msgid "Misspelling fix"
@@ -410,6 +431,9 @@ msgstr ""
 
 #: includes/options.php:42
 msgid "Use Google Analytics"
+msgstr ""
+
+msgid "Enable Google Analytics integration."
 msgstr ""
 
 #: includes/options.php:42
@@ -465,6 +489,9 @@ msgstr ""
 msgid "Click on the status icon to enable or disable the search source for products search."
 msgstr ""
 
+msgid "Product fields to search in."
+msgstr ""
+
 msgid "Search Source"
 msgstr ""
 
@@ -481,6 +508,9 @@ msgid "Archive pages"
 msgstr ""
 
 msgid "Search for taxonomies and displayed their archive pages in search results."
+msgstr ""
+
+msgid "Enable needed taxonomies search."
 msgstr ""
 
 msgid "Welcome to %s"
@@ -732,10 +762,16 @@ msgstr ""
 msgid "Search rule that will be used for terms search."
 msgstr ""
 
-msgid "( contains ). Search query can be inside any part of the product words ( beginning, end, middle ). Slow."
+msgid "( contains )"
 msgstr ""
 
-msgid "( begins ). Search query can be only at the beginning of the product words. Fast."
+msgid "Search query can be inside any part of the product words ( beginning, end, middle ). Slow."
+msgstr ""
+
+msgid "( begins )"
+msgstr ""
+
+msgid "Search query can be only at the beginning of the product words. Fast."
 msgstr ""
 
 msgid "AJAX timeout"
@@ -744,16 +780,25 @@ msgstr ""
 msgid "Time after user input that script is waiting before sending a search event to the server, ms."
 msgstr ""
 
+msgid "Timeout for ajax search event."
+msgstr ""
+
 msgid "Search words number"
 msgstr ""
 
 msgid "The maximum number of words allowed for the search. All extra words will be removed from the search query."
 msgstr ""
 
+msgid "Maximum allowed search words."
+msgstr ""
+
 msgid "Index table options"
 msgstr ""
 
 msgid "Overview"
+msgstr ""
+
+msgid "Set an options related to plugin index table."
 msgstr ""
 
 msgid "To perform the search plugin use a special index table. This table contains normalized words of all your products from all available sources."
@@ -789,10 +834,10 @@ msgstr ""
 msgid "Run shortcodes"
 msgstr ""
 
-msgid "Execute or not any shortcodes inside product content."
+msgid "Execute shortcodes inside product content."
 msgstr ""
 
-msgid "Search results page"
+msgid "Search Results Page"
 msgstr ""
 
 msgid "Enable results page"
@@ -801,13 +846,22 @@ msgstr ""
 msgid "Show plugin search results on a separated search results page. Will use your current theme products search results page template."
 msgstr ""
 
-msgid "Maximal total number of search results. Larger values can lead to slower search speed."
+msgid "Search results page support."
+msgstr ""
+
+msgid "Max total number of results for results page."
+msgstr ""
+
+msgid "Applied only for search results page, not AJAX live results. Larger values can lead to slower search speed."
 msgstr ""
 
 msgid "Results per page"
 msgstr ""
 
-msgid "Number of search results per page. Empty or 0 - use theme default value."
+msgid "Number of search results per results page."
+msgstr ""
+
+msgid "Empty or 0 - use theme default value."
 msgstr ""
 
 msgid "Change query hook"
@@ -816,7 +870,10 @@ msgstr ""
 msgid "If you have any problems with correct products results on the search results page - try to change this option."
 msgstr ""
 
-msgid "Highlight search words inside the search results page."
+msgid "Default query hook for results page."
+msgstr ""
+
+msgid "Highlight search terms inside results page."
 msgstr ""
 
 msgid "Default"
@@ -852,13 +909,13 @@ msgstr ""
 msgid "Products number"
 msgstr ""
 
-msgid "Maximum number of displayed products search results."
+msgid "Maximum displayed search results."
 msgstr ""
 
 msgid "Archive pages number"
 msgstr ""
 
-msgid "Maximum number of displayed archive pages search results."
+msgid "Maximum displayed archive search results."
 msgstr ""
 
 msgid "logo"
@@ -904,4 +961,214 @@ msgid "Columns"
 msgstr ""
 
 msgid "Taxonomy"
+msgstr ""
+
+msgid "(Pro)"
+msgstr ""
+
+msgid "GTIN, UPC, EAN, ISBN"
+msgstr ""
+
+msgid "Brand"
+msgstr ""
+
+msgid "Attributes"
+msgstr ""
+
+msgid "Taxonomies"
+msgstr ""
+
+msgid "Custom Fields"
+msgstr ""
+
+msgid "Search logic"
+msgstr ""
+
+msgid "Search rules."
+msgstr ""
+
+msgid "Choose between OR or AND search logic."
+msgstr ""
+
+msgid "OR. Show result if at least one word exists in product."
+msgstr ""
+
+msgid "AND. Show result if only all words exists in product."
+msgstr ""
+
+msgid "Exact match"
+msgstr ""
+
+msgid "Search only for full word matching or display results even if they match only part of word."
+msgstr ""
+
+msgid "Whole or partial search words matching."
+msgstr ""
+
+msgid "Yes. Search only for full words matching."
+msgstr ""
+
+msgid "No. Partial words match search."
+msgstr ""
+
+msgid "Open product in new tab"
+msgstr ""
+
+msgid "Open new window on product click."
+msgstr ""
+
+msgid "Style"
+msgstr ""
+
+msgid "Set style for search results output."
+msgstr ""
+
+msgid "Inline Style"
+msgstr ""
+
+msgid "Grid Style"
+msgstr ""
+
+msgid "Big Grid Style"
+msgstr ""
+
+msgid "Variable products"
+msgstr ""
+
+msgid "How to show variable products."
+msgstr ""
+
+msgid "Only parent, only child, both."
+msgstr ""
+
+msgid "Show only parent products"
+msgstr ""
+
+msgid "Show parent and child products"
+msgstr ""
+
+msgid "Show only child products"
+msgstr ""
+
+msgid "Products sale status"
+msgstr ""
+
+msgid "Search only for products with selected sale status"
+msgstr ""
+
+msgid "Show on-sale and not on-sale products"
+msgstr ""
+
+msgid "Show only on-sale products"
+msgstr ""
+
+msgid "Show only not on-sale products"
+msgstr ""
+
+msgid "Products visibility"
+msgstr ""
+
+msgid "Search only products with this visibilities."
+msgstr ""
+
+msgid "Catalog/search"
+msgstr ""
+
+msgid "Catalog"
+msgstr ""
+
+msgid "Hidden"
+msgstr ""
+
+msgid "Show rating"
+msgstr ""
+
+msgid "Show product rating."
+msgstr ""
+
+msgid "Show product brand"
+msgstr ""
+
+msgid "Show product brand values in search results."
+msgstr ""
+
+msgid "Show product GTIN, UPC, EAN or ISBN"
+msgstr ""
+
+msgid "Show product global unique id."
+msgstr ""
+
+msgid "Show 'Add to cart'"
+msgstr ""
+
+msgid "Show 'Add to cart' button for each search result."
+msgstr ""
+
+msgid "Show"
+msgstr ""
+
+msgid "Show with quantity box"
+msgstr ""
+
+msgid "Hide"
+msgstr ""
+
+msgid "Filter Results"
+msgstr ""
+
+msgid "Filtering rules for search results."
+msgstr ""
+
+msgid "Filter search results. You can include/exclude search results based on different rules."
+msgstr ""
+
+msgid "Combine filter rules to AND or OR logical blocks to create advanced filter logic."
+msgstr ""
+
+msgid "Please try not to use too many filters overwise this can impact on search speed."
+msgstr ""
+
+msgid "Products results"
+msgstr ""
+
+msgid "Filter products search results"
+msgstr ""
+
+msgid "Terms results"
+msgstr ""
+
+msgid "Filter taxonomies archive pages results"
+msgstr ""
+
+msgid "Users results"
+msgstr ""
+
+msgid "Filter users archive pages search results"
+msgstr ""
+
+msgid "Show automatic suggested search terms based on the current search query - right inside the search results list."
+msgstr ""
+
+msgid "Allows search suggestions to appear for both live search results and search results pages."
+msgstr ""
+
+msgid "Search Engine"
+msgstr ""
+
+msgid "Search Bar Settings"
+msgstr ""
+
+msgid "Live Results Settings"
+msgstr ""
+
+msgid "Results View"
+msgstr ""
+
+msgid "Search Query Suggestions"
+msgstr ""
+
+msgid "Search Config"
+msgstr ""
+
+msgid "Index Config"
 msgstr ""

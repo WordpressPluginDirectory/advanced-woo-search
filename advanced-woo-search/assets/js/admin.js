@@ -1,6 +1,14 @@
 jQuery(document).ready(function ($) {
     'use strict';
 
+    // Tooltips
+    $( '.aws-tip' ).tipTip( {
+        'attribute': 'data-tip',
+        'fadeIn': 50,
+        'fadeOut': 50,
+        'delay': 50,
+    } );
+
     var $reindexBlock = $('#aws-reindex');
     var $reindexBtn = $('#aws-reindex .button');
     var $reindexProgress = $('#aws-reindex .reindex-progress');

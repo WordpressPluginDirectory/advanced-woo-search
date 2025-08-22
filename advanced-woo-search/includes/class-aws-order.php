@@ -41,7 +41,7 @@ if ( ! class_exists( 'AWS_Order' ) ) :
             $new_products = array();
             $filters = array();
             $attr_filter = array();
-
+            
             if ( isset( $query->query_vars['meta_query'] ) ) {
                 $meta_query = $query->query_vars['meta_query'];
 
@@ -314,7 +314,13 @@ if ( ! class_exists( 'AWS_Order' ) ) :
 
                             if ( $parent_id !== $product_id && class_exists( 'WC_Product_Variation' ) ) {
                                 $terms = array();
-                                $variation_product = new WC_Product_Variation( $product_id );
+
+                                try {
+                                    $variation_product = new WC_Product_Variation( $product_id );
+                                } catch ( Exception $e ) {
+                                    $variation_product = false;
+                                }
+
                                 if ( $variation_product && method_exists( $variation_product, 'get_attributes' ) ) {
                                     $variation_attr = $variation_product->get_attributes();
                                     if ( $variation_attr && is_array( $variation_attr ) ) {
