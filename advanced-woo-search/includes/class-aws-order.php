@@ -62,6 +62,9 @@ if ( ! class_exists( 'AWS_Order' ) ) :
             if ( ! isset( $filters['in_status'] ) && isset( $_GET['in_stock'] ) ) {
                 $filters['in_status'] = in_array( strval(sanitize_text_field( $_GET['in_stock'] )), array( '1', 'true', 'yes', 'instock', 'in_stock' ) );
             }
+            if ( ! isset( $filters['in_status'] ) && isset( $_GET['stock'] ) ) {
+                $filters['in_status'] = in_array( strval(sanitize_text_field( $_GET['stock'] )), array( '1', 'true', 'yes', 'instock', 'in_stock' ) );
+            }
 
             if ( ! isset( $filters['price_min'] ) && isset( $_GET['min_price'] ) ) {
                 $filters['price_min'] = sanitize_text_field( $_GET['min_price'] );

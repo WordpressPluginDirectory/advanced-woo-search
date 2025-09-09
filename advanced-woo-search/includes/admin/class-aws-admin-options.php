@@ -17,14 +17,14 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
          * @param string $tab Tab name
 		 * @return array
          */
-        static public function get_default_settings( $tab = false ) {
+        static public function get_default_settings( $tab = false, $sec = 'none' ) {
 
-            $options = self::options_array( $tab );
+            $options = self::options_array( $tab, $sec );
             $default_settings = array();
 
             foreach ( $options as $section_name => $section ) {
 
-                foreach ( $section as $values ) {
+                foreach ($section as $values) {
 
                     if ( isset( $values['type'] ) && $values['type'] === 'heading' ) {
                         continue;
@@ -42,34 +42,9 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                         continue;
                     }
 
-                    if ( isset( $values['type'] ) && ( $values['type'] === 'checkbox' || $values['type'] === 'table' ) ) {
-                        foreach ( $values['choices'] as $key => $val ) {
-                            if ( strpos( $key, ':disabled' ) === false ) {
-                                $default_settings[ $values['id'] ][$key] = sanitize_text_field( $values['value'][$key] );
-                            }
-                        }
-                        continue;
-                    }
+                    $current_option = AWS_Admin_Helpers::get_current_option( $values, true );
 
-                    if ( $values['type'] === 'textarea' && isset( $values['allow_tags'] ) ) {
-                        $default_settings[$values['id']] = (string) wp_kses( stripslashes( html_entity_decode( $values['value'] ) ), AWS_Helpers::get_kses( $values['allow_tags'] ) );
-                        continue;
-                    }
-
-                    if ( $values['type'] === 'textarea' ) {
-                        if ( function_exists('sanitize_textarea_field') ) {
-                            $default_settings[ $values['id'] ] = (string) sanitize_textarea_field( $values['value'] );
-                        } else {
-                            $default_settings[ $values['id'] ] = (string) str_replace( "<\n", "&lt;\n", wp_strip_all_tags( $values['value'] ) );
-                        }
-                        continue;
-                    }
-
-                    $default_settings[$values['id']] = (string) sanitize_text_field( $values['value'] );
-
-                    if ( isset( $values['sub_option'] ) ) {
-                        $default_settings[$values['sub_option']['id']] = (string) sanitize_text_field( $values['sub_option']['value'] );
-                    }
+                    $default_settings[$values['id']] = $current_option;
 
                 }
 
@@ -84,8 +59,8 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
          */
         static public function update_settings() {
 
-            $options = self::options_array();
-            $update_settings = self::get_settings();
+            $options = self::options_array( false, 'none' );
+            $settings = self::get_settings();
 
             $current_page = isset( $_GET['page']  ) ? sanitize_text_field( $_GET['page'] ) : 'aws-options';
             $current_tab = empty( $_GET['tab'] ) ? 'general' : sanitize_text_field( $_GET['tab'] );
@@ -103,53 +78,15 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                     continue;
                 }
 
-                if ( $values['type'] === 'checkbox' ) {
+                $current_option = AWS_Admin_Helpers::get_current_option( $values );
 
-                    $checkbox_array = array();
+                $settings[ $values['id'] ] = $current_option;
 
-                    foreach ( $values['choices'] as $key => $value ) {
-                        $new_value = isset( $_POST[ $values['id'] ][$key] ) ? '1' : '0';
-                        $checkbox_array[$key] = (string) sanitize_text_field( $new_value );
-                    }
-
-                    $update_settings[ $values['id'] ] = $checkbox_array;
-
-                    continue;
-                }
-
-                if ( $values['type'] === 'toggler' ) {
-                    $new_value = isset( $_POST[ $values['id'] ] ) ? 'true' : 'false';
-                    $update_settings[ $values['id'] ] = sanitize_text_field( $new_value );
-                    continue;
-                }
-
-                $new_value = isset( $_POST[ $values['id'] ] ) ? $_POST[ $values['id'] ] : '';
-
-                if ( $values['type'] === 'textarea' && isset( $values['allow_tags'] ) ) {
-                    $update_settings[ $values['id'] ] = (string) wp_kses( stripslashes( html_entity_decode( $new_value ) ), AWS_Helpers::get_kses( $values['allow_tags'] ) );
-                    continue;
-                }
-
-                if ( $values['type'] === 'textarea' ) {
-                    if ( function_exists('sanitize_textarea_field') ) {
-                        $update_settings[ $values['id'] ] = (string) sanitize_textarea_field( $new_value );
-                    } else {
-                        $update_settings[ $values['id'] ] = (string) str_replace( "<\n", "&lt;\n", wp_strip_all_tags( $new_value ) );
-                    }
-                    continue;
-                }
-
-                $update_settings[ $values['id'] ] = (string) sanitize_text_field( $new_value );
-
-                if ( isset( $values['sub_option'] ) ) {
-                    $new_value = isset( $_POST[ $values['sub_option']['id'] ] ) ? $_POST[ $values['sub_option']['id'] ] : '';
-                    $update_settings[ $values['sub_option']['id'] ] = (string) sanitize_text_field( $new_value );
-                }
             }
 
-            update_option( 'aws_settings', $update_settings );
+            update_option( 'aws_settings', $settings );
 
-            AWS_Helpers::register_wpml_translations( $update_settings );
+            AWS_Helpers::register_wpml_translations( $settings );
 
             do_action( 'aws_settings_saved' );
 
@@ -683,24 +620,45 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
             );
 
             $options['results'][] = array(
-                "name"       => __( "Archive pages", "advanced-woo-search" ),
-                "desc"    => __( "Enable needed taxonomies search.", "advanced-woo-search" ),
-                "tip"    => __( "Search for taxonomies and displayed their archive pages in search results.", "advanced-woo-search" ),                'table_head' => __( 'Archive Pages', 'advanced-woo-search' ),
-                "id"         => "search_archives",
+                "name"    => __( "Archive pages", "advanced-woo-search" ),
+                "desc"    => __( "Enable needed taxonomies / users search.", "advanced-woo-search" ),
+                "tip"    => __( "Search for taxonomies and displayed their archive pages in search results.", "advanced-woo-search" ),
+                "table_head" => __( 'Archive Pages', 'advanced-woo-search' ),
+                "id"      => "search_archives",
+                "inherit" => "true",
                 "value" => array(
                     'archive_category' => 0,
                     'archive_tag'      => 0,
                 ),
                 "choices" => array(
-                    "archive_category" => __( "Category", "advanced-woo-search" ),
-                    "archive_tag"      => __( "Tag", "advanced-woo-search" ),
-                    "archive_brand:disabled"    => __( "Brand", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=logic">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
-                    "archive_tax:disabled"      => __( "Taxonomies", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=logic">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
-                    "archive_attr:disabled"     => __( "Attributes", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=logic">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
-                    "archive_users:disabled"    => __( "Users", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=logic">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
+                    "archive_category"    => array(
+                        'label'      => __( "Category", "advanced-woo-search" ),
+                        'suboptions' => array(),
+                    ),
+                    "archive_tag"    => array(
+                        'label'      => __( "Tag", "advanced-woo-search" ),
+                        'suboptions' => array(),
+                    ),
+                    "archive_brand:disabled"    => array(
+                        'label'      => __( "Brand", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=logic">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
+                        'suboptions' => array(),
+                    ),
+                    "archive_tax:disabled"     => array(
+                        'label'      => __( "Taxonomies", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=logic">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
+                        'suboptions' => array(),
+                    ),
+                    "archive_attr:disabled"     => array(
+                        'label'      => __( "Attributes", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=logic">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
+                        'suboptions' => array(),
+                    ),
+                    "archive_users:disabled"     => array(
+                        'label'      => __( "Users", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=logic">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
+                        'suboptions' => array(),
+                    ),
                 ),
-                "type"    => "table"
+                "type"    => "table_search_for"
             );
+
 
             $options['results'][] = array(
                 "name"  => __( "Archive pages number", "advanced-woo-search" ),

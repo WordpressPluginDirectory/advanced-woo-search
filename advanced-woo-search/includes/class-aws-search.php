@@ -149,8 +149,9 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             }
 
             $search_archives   = AWS()->get_settings( 'search_archives' );
-            $show_cats         = ( isset( $search_archives['archive_category'] ) && $search_archives['archive_category'] ) ? 'true' : 'false';
-            $show_tags         = ( isset( $search_archives['archive_tag'] ) && $search_archives['archive_tag'] ) ? 'true' : 'false';
+            $show_cats         = ( isset( $search_archives['archive_category'] ) && is_array( $search_archives['archive_category'] ) && isset( $search_archives['archive_category']['value'] ) && $search_archives['archive_category']['value'] === '1' ) ? 'true' : 'false';
+            $show_tags         = ( isset( $search_archives['archive_tag'] ) && is_array( $search_archives['archive_tag'] ) && isset( $search_archives['archive_tag']['value'] ) && $search_archives['archive_tag']['value'] === '1' ) ? 'true' : 'false';
+
             $results_num       = $keyword ? apply_filters( 'aws_page_results', 100 ) : AWS()->get_settings( 'results_num' );
             $pages_results_num = AWS()->get_settings( 'pages_results_num' );
             $search_in         = AWS()->get_settings( 'search_in' );

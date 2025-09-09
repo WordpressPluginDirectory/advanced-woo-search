@@ -1172,3 +1172,9 @@ msgstr ""
 
 msgid "Index Config"
 msgstr ""
+
+msgid "weight"
+msgstr ""
+
+msgid "selected"
+msgstr ""

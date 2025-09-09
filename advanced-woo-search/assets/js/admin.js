@@ -20,6 +20,16 @@ jQuery(document).ready(function ($) {
 
     var $clearCacheBtn = $('#aws-clear-cache .button');
 
+    // Edit source tables items
+    var editButton = $('.aws-table-sources .aws-actions [data-edit]');
+    editButton.on( 'click', function(e){
+        e.preventDefault();
+        var isActive = $(this).closest('.aws-table-sources-item').hasClass('on-edit');
+        $('.aws-table-sources .aws-table-sources-item').removeClass('on-edit');
+        if ( ! isActive ) {
+            $(this).closest('.aws-table-sources-item').addClass('on-edit');
+        }
+    } );
 
     // Reindex table
     $reindexBtn.on( 'click', function(e) {

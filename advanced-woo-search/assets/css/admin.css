@@ -118,7 +118,7 @@
     min-width: 170px;
     display: block;
     width: 100%;
-    max-width: 500px;
+    max-width: 450px;
 }
 
 #aws_form input[type="number"] {
@@ -623,7 +623,7 @@ h1.aws-instance-name {
 
 .aws-table.aws-table-sources {
     margin: 10px 0 10px;
-    width: 500px;
+    width: 450px;
 }
 
 .aws-table.aws-table-sources th.aws-actions {
@@ -700,6 +700,254 @@ h1.aws-instance-name {
 
 .aws-table.aws-table-sources td.aws-name.aws-disabled {
     color: rgba(44, 51, 56, 0.5);
+}
+
+/* New Sources Table */
+.aws-table-sources {
+    max-width: 550px;
+    margin: -5px 0 10px;
+    width: 450px;
+    box-sizing: border-box;
+}
+
+.aws-table-sources .aws-table-sources-head {
+    display: flex;
+    flex-flow: row wrap;
+    background: #fff;
+    border-bottom: 1px solid #c3c4c7;
+    padding: 10px 0;
+    font-weight: 600;
+}
+
+.aws-table-sources .aws-sort {
+    width: 10%;
+    color: #ccc;
+    speak: none;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
+    text-indent: 0;
+    text-align: center;
+    cursor: move;
+    vertical-align: middle;
+}
+
+.aws-table-sources .aws-sort span:before {
+    vertical-align: middle;
+}
+
+.aws-table-sources .aws-name {
+    width: 90%;
+}
+
+.aws-table-sources .aws-disabled .aws-name {
+    color: rgba(44, 51, 56, 0.5);
+}
+
+.aws-table-sources .aws-disabled .aws-toggle-label,
+.aws-table-sources .aws-disabled .aws-toggler {
+    cursor: default;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.aws-table-sources .aws-field-weight {
+    background: #f2f2f2;
+    border: 1px solid #d8d8d8;
+    border-radius: 3px;
+    color: #666;
+    font-size: 11px;
+    padding: 1px 3px;
+    display: inline-block;
+    line-height: 14px;
+    float: right;
+    margin-top: 5px;
+    margin-left: 5px;
+}
+
+.aws-table-sources .aws-active {
+    width: 15%;
+    text-align: center;
+}
+
+.aws-table-sources .aws-active .aws-yes,
+.aws-table-sources .aws-active .aws-no,
+.aws-table-sources .aws-active .aws-disabled {
+    background-color: #26CC06;
+    padding: 1px 7px;
+    color: #fff;
+    border-radius: 4px;
+    position: relative;
+    cursor: pointer;
+}
+
+.aws-table-sources .aws-active .aws-disabled {
+    background-color: #808080;
+    cursor: default;
+}
+
+.aws-table-sources .aws-active .aws-no {
+    background-color: #CC0606;
+}
+
+.aws-table-sources .aws-active .aws-yes,
+.aws-table-sources .aws-active .aws-disabled,
+.aws-table-sources .aws-active.active .aws-no {
+    display: none;
+}
+
+.aws-table-sources .aws-active.active .aws-yes {
+    display: inline;
+}
+
+.aws-table-sources .aws-active.disabled .aws-disabled {
+    display: inline !important;
+}
+
+.aws-table-sources .aws-active.disabled .aws-yes,
+.aws-table-sources .aws-active.disabled .aws-no {
+    display: none;
+}
+
+.aws-table-sources .aws-active:after {
+    content: "";
+    display: none;
+    margin: 0 auto;
+    width: 20px;
+    height: 20px;
+    background: url('../img/loader-2.svg') no-repeat 50% 50%;
+}
+
+.aws-table-sources .aws-active.loading .aws-yes,
+.aws-table-sources .aws-active.loading .aws-no {
+    display: none;
+}
+
+.aws-table-sources .aws-active.loading:after {
+    display: block;
+}
+
+
+.aws-table-sources .aws-actions {
+    width: 10%;
+}
+
+.aws-table-sources .aws-actions a{
+    display: block;
+    text-indent: -9999px;
+    position: relative;
+    padding: 0!important;
+    height: 1.8em!important;
+    min-height: 1.8em!important;
+    width: 1.8em;
+}
+
+.aws-table-sources .aws-actions a:after {
+    speak: none;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
+    text-indent: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-family: Dashicons;
+    line-height: 1.65;
+}
+
+.aws-table-sources .aws-actions a.edit:after {
+    content: "";
+}
+
+.aws-table-sources .aws-table-sources-item.on-edit .aws-actions a.edit:after {
+    content: "";
+}
+
+.aws-table-sources .aws-actions a.delete:after {
+    content: "";
+}
+
+.aws-table-sources .aws-actions a.delete:hover:after {
+    background: rgba(255, 0, 0, 0.2);
+}
+
+.aws-table-sources .aws-actions a.copy:after {
+    content: "";
+}
+
+.aws-table-sources .aws-actions a.loading:after {
+    content: "";
+    width: 15px;
+    margin-top: -7px;
+    height: 15px;
+    margin-left: 4px;
+    top: 50%;
+    position: absolute;
+    background: url('../img/loader-2.svg') no-repeat 50% 50%;
+}
+
+.aws-table-sources .aws-table-sources-head .aws-sort span {
+    vertical-align: middle;
+}
+
+.aws-table-sources .aws-table-sources-body {
+}
+
+.aws-table-sources .aws-table-sources-item {
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    padding: 6px 0;
+    line-height: 2em;
+    border-bottom: 1px solid #c3c4c7;
+}
+
+.aws-table-sources .aws-table-sources-item.ui-sortable-helper {
+    background: #f9f9f9;
+}
+
+.aws-table-sources .aws-table-sources-item .aws-table-sources-item-settings {
+    display: none;
+    padding: 15px 0;
+    margin-top: 7px;
+    border-top: 1px solid #c3c4c7;
+}
+
+.aws-table-sources .aws-table-sources-item.on-edit .aws-table-sources-item-settings {
+    display: block;
+}
+
+.aws-table-sources .aws-table-sources-item .aws-table-sources-item-settings .aws-settings-inner-table {
+    border-collapse: collapse;
+    clear: both;
+}
+
+.aws-table-sources .aws-table-sources-item .aws-table-sources-item-settings .aws-settings-inner-table input[type="number"],
+.aws-table-sources .aws-table-sources-item .aws-table-sources-item-settings .aws-settings-inner-table select,
+.aws-table-sources .aws-table-sources-item .aws-table-sources-item-settings .aws-settings-inner-table .select2-container {
+    max-width: 100% !important;
+    width: 100% !important;
+}
+
+.aws-table-sources .aws-table-sources-item .aws-table-sources-item-settings .aws-settings-inner-table td {
+    padding-right: 0;
+}
+
+.aws-group {
+    display: flex;
+    max-width: 450px;
+}
+
+.aws-group .aws-group-button {
+    min-width: 60px;
+    margin-left: 10px;
 }
 
 /* Premium tab */

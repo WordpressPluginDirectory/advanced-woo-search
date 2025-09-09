@@ -5,7 +5,7 @@ Tags: woocommerce, search, product search, woocommerce search, live search
 Requires at least: 4.0
 Tested up to: 6.8
 Requires PHP: 7.0
-Stable tag: 3.42
+Stable tag: 3.43
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -288,6 +288,14 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 [View full changelog](https://advanced-woo-search.com/guide/free-version/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
 
+= 3.43 ( 2025-09-08 ) =
+* Update - New view for Archive Pages option inside settings page
+* Update - Tested with WC 10.1
+* Fix - Update bug with filter by stock status for search results page
+* Fix - Bug with search page products display when only products IDs are returned
+* Dev - Update settings page html generator
+* Dev - Update settings page save functionality
+
 = 3.42 ( 2025-08-21 ) =
 * Fix - Integration bug with Products Visibility by User Roles plugin
 
@@ -496,10 +504,3 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * Update - Formula to calculate relevance score
 * Update - Support for Zephyr theme
 * Dev - New class for terms suggestions
-
-= 3.05 ( 2024-04-22 ) =
-* Add - Feature to fix misspellings inside search queries
-* Add - Support for Open Shop theme
-* Add - Support for Advance Product Search by themehunk
-* Update - Tested with WC 8.8
-* Fix - Search results sorting inside results page when using custom filters

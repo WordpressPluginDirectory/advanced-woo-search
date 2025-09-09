@@ -185,7 +185,8 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
                         $query->max_num_pages = ceil( count( $search_res['all'] ) / $posts_per_page );
 
                         foreach ( $search_res['products'] as $product ) {
-                            $products_ids[] = $product['id'];
+                            $pr_id = is_array( $product ) && isset( $product['id'] ) ? $product['id'] : intval( $product );
+                            $products_ids[] = $pr_id;
                         }
 
                         $posts = $products_ids;

@@ -487,6 +487,46 @@ if ( ! class_exists( 'AWS_Versions' ) ) :
 
                 }
 
+                if ( version_compare( $current_version, '3.43', '<' ) ) {
+
+                    $settings = get_option( 'aws_settings' );
+
+                    if ( $settings ) {
+
+                        $update = false;
+                        $search_archives_new = array();
+
+                        if ( isset( $settings['search_archives'] )  ) {
+
+                            $available_archives = array( 'archive_category', 'archive_tag' );
+
+                            foreach ( $available_archives as $search_archive_name ) {
+                                $val = '0';
+                                if ( isset( $settings['search_archives'][$search_archive_name] ) && $settings['search_archives'][$search_archive_name] ) {
+                                    if ( is_array( $settings['search_archives'][$search_archive_name] ) && isset( $settings['search_archives'][$search_archive_name]['value'] ) ) {
+                                        break;
+                                    }
+                                    $val = '1';
+                                }
+
+                                $update = true;
+
+                                $search_archives_new[$search_archive_name]['value'] = $val;
+
+                            }
+
+                        }
+
+                        $settings['search_archives'] = $search_archives_new;
+
+                        if ( $update ) {
+                            update_option( 'aws_settings', $settings );
+                        }
+
+                    }
+
+                }
+
             }
 
             update_option( 'aws_plugin_ver', AWS_VERSION );

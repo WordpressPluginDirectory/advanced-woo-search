@@ -3,13 +3,13 @@
 /*
 Plugin Name: Advanced Woo Search
 Description: Advance ajax WooCommerce product search.
-Version: 3.42
+Version: 3.43
 Author: ILLID
 Author URI: https://advanced-woo-search.com/
 Text Domain: advanced-woo-search
 Requires Plugins: woocommerce
 WC requires at least: 3.0.0
-WC tested up to: 10.0.0
+WC tested up to: 10.1.0
 */
 
 
@@ -107,7 +107,7 @@ final class AWS_Main {
      */
     private function define_constants() {
 
-        $this->define( 'AWS_VERSION', '3.42' );
+        $this->define( 'AWS_VERSION', '3.43' );
 
         $this->define( 'AWS_DIR', plugin_dir_path( AWS_FILE ) );
         $this->define( 'AWS_URL', plugin_dir_url( AWS_FILE ) );
@@ -145,6 +145,7 @@ final class AWS_Main {
         // Admin
         include_once( 'includes/admin/class-aws-admin-notices.php' );
         include_once( 'includes/admin/class-aws-admin.php' );
+        include_once( 'includes/admin/class-aws-admin-helpers.php' );
         include_once( 'includes/admin/class-aws-admin-ajax.php' );
         include_once( 'includes/admin/class-aws-admin-fields.php' );
         include_once( 'includes/admin/class-aws-admin-options.php' );
