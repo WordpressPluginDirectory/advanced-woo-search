@@ -1376,8 +1376,18 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
             $pattern = array();
             $search_terms = array();
 
-            if ( ! empty( $data ) && ! empty( $data['search_terms'] ) ) {
-                $search_terms = array_fill_keys( $data['search_terms'], 1);
+            if ( ! empty( $data ) ) {
+                if ( isset( $data['s_nonormalize'] ) && is_string( $data['s_nonormalize'] ) && $data['s_nonormalize'] ) {
+                    $search_terms_dirty = array_unique( explode( ' ', $data['s_nonormalize'] ) );
+                    $search_terms = array_merge( $search_terms, $search_terms_dirty );
+                }
+                if ( isset( $data['search_terms'] ) && ! empty( $data['search_terms'] ) ) {
+                    $search_terms = array_merge( $search_terms, $data['search_terms'] );
+                }
+            }
+
+            if ( $search_terms ) {
+                $search_terms = array_fill_keys( $search_terms, 1 );
                 $search_terms = AWS_Helpers::get_synonyms( $search_terms );
                 $search_terms = array_keys( $search_terms );
             }

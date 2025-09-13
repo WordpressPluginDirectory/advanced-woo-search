@@ -57,11 +57,11 @@ if ( ! class_exists( 'AWS_Elementor_Init' ) ) :
 
                 add_filter( 'elementor/widget/render_content', array( $this, 'elementor_render_content' ), 10, 2 );
 
-                // Elementor pro
-                if ( defined( 'ELEMENTOR_PRO_VERSION' ) ) {
-                    add_action( 'wp_footer', array( $this, 'elementor_pro_popup' ) );
-                }
+            }
 
+            // Elementor pro
+            if ( defined( 'ELEMENTOR_PRO_VERSION' ) ) {
+                add_action( 'wp_footer', array( $this, 'elementor_pro_popup' ) );
             }
 
             // Add new conrols for WC categories widget

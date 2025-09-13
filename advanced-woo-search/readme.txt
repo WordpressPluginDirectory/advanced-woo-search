@@ -5,7 +5,7 @@ Tags: woocommerce, search, product search, woocommerce search, live search
 Requires at least: 4.0
 Tested up to: 6.8
 Requires PHP: 7.0
-Stable tag: 3.43
+Stable tag: 3.44
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -288,6 +288,11 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 [View full changelog](https://advanced-woo-search.com/guide/free-version/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
 
+= 3.44 ( 2025-09-12 ) =
+* Update - Fix diacritic chars highlighting
+* Fix - Plugin search form init inside Elementor popups
+* Fix - Bug with double quotes inside SQL queries
+
 = 3.43 ( 2025-09-08 ) =
 * Update - New view for Archive Pages option inside settings page
 * Update - Tested with WC 10.1
@@ -498,9 +503,3 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 = 3.07 ( 2024-05-20 ) =
 * Add - Header for plugin admin page
-
-= 3.06 ( 2024-05-06 ) =
-* Add - Required plugins dependencies
-* Update - Formula to calculate relevance score
-* Update - Support for Zephyr theme
-* Dev - New class for terms suggestions

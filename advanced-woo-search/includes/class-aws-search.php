@@ -451,7 +451,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                 if ( $is_normal_term ) {
                     $search_array[] = $wpdb->prepare( '( term LIKE %s )', $like );
                 } else {
-                    $search_array[] = $wpdb->prepare( '( term = "%s" )', $search_term );
+                    $search_array[] = $wpdb->prepare( "( term = '%s' )", $search_term );
                 }
 
                 foreach ( $search_in_arr as $search_in_term ) {
