@@ -161,16 +161,15 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             $fuzzy             = AWS()->get_settings( 'fuzzy' );
             $search_page_highlight = AWS()->get_settings( 'search_page_highlight' );
 
-
             $search_in_arr = array();
-
-            if ( is_array( $search_in ) && ! empty( $search_in ) ) {
-                foreach( $search_in as $search_in_source => $search_in_active ) {
-                    if ( $search_in_active ) {
-                        $search_in_arr[] = $search_in_source;
+            if ( $search_in && is_array( $search_in ) ) {
+                foreach ( $search_in as $search_in_name => $search_in_params ) {
+                    if ( is_array( $search_in_params ) && isset( $search_in_params['value'] ) && $search_in_params['value'] === '1' ) {
+                        $search_in_arr[] = $search_in_name;
                     }
                 }
-            } elseif ( is_string( $search_in ) && $search_in ) {
+            } else {
+                // depricated
                 $search_in_arr = explode( ',',  $search_in );
             }
 

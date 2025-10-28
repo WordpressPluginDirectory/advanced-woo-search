@@ -51,7 +51,7 @@ if (!class_exists('AWS_Breakdance')) :
             }
 
         }
-        
+
         /*
          * Show labels for product title on single page
          */
@@ -63,10 +63,14 @@ if (!class_exists('AWS_Breakdance')) :
                 }
                 if ( strpos( $elementHtml, 'aws-container' ) === false ) {
 
+                    $aws_search_form = aws_get_search_form( false );
+                    $aws_search_form = str_replace( 'aws-search-field', 'aws-search-field js-search-form-field', $aws_search_form );
+                    $aws_search_form = str_replace( 'aws-search-form', 'aws-search-form js-search-form', $aws_search_form );
+
                     if ( $is_full_screen ) {
 
                         $pattern = '/(<div class="search-form__lightbox-container"[\S\s]*?<\/div>)/i';
-                        $search_from = aws_get_search_form( false );
+                        $search_from = $aws_search_form;
                         $search_from = str_replace( '<form', '<div', $search_from );
                         $search_from = str_replace( '</form>', '</div>', $search_from );
 
@@ -101,7 +105,7 @@ if (!class_exists('AWS_Breakdance')) :
                     } else {
 
                         $pattern = '/(<form[\S\s]*?<\/form>)/i';
-                        $elementHtml = preg_replace( $pattern, aws_get_search_form( false ), $elementHtml );
+                        $elementHtml = preg_replace( $pattern, $aws_search_form, $elementHtml );
 
                     }
                 }

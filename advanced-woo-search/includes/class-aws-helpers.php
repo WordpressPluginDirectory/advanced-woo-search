@@ -1163,23 +1163,34 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
             $do_shortcodes = apply_filters( 'aws_index_do_shortcodes', $index_shortcodes );
 
             $index_variations = $index_variations_option && $index_variations_option === 'false' ? false : true;
-            $index_title = is_array( $index_sources_option ) && isset( $index_sources_option['title'] ) && ! $index_sources_option['title']  ? false : true;
-            $index_content = is_array( $index_sources_option ) && isset( $index_sources_option['content'] ) && ! $index_sources_option['content']  ? false : true;
-            $index_sku = is_array( $index_sources_option ) && isset( $index_sources_option['sku'] ) && ! $index_sources_option['sku']  ? false : true;
-            $index_excerpt = is_array( $index_sources_option ) && isset( $index_sources_option['excerpt'] ) && ! $index_sources_option['excerpt']  ? false : true;
-            $index_category = is_array( $index_sources_option ) && isset( $index_sources_option['category'] ) && ! $index_sources_option['category']  ? false : true;
-            $index_tag = is_array( $index_sources_option ) && isset( $index_sources_option['tag'] ) && ! $index_sources_option['tag']  ? false : true;
-            $index_id = is_array( $index_sources_option ) && isset( $index_sources_option['id'] ) && ! $index_sources_option['id']  ? false : true;
+
+            // check all index fields - are they enabled
+            $index_fields_vals = array();
+            $all_avaialble_index_fields = array( 'title', 'content', 'sku',  'excerpt', 'category', 'tag', 'id' );
+            foreach ( $all_avaialble_index_fields as $index_field_name ) {
+                $enabled = false;
+                if ( is_array( $index_sources_option ) && isset( $index_sources_option[$index_field_name] ) ) {
+                    if ( is_array( $index_sources_option[$index_field_name] ) ) {
+                        if ( isset( $index_sources_option[$index_field_name]['value'] ) && $index_sources_option[$index_field_name]['value'] === '1' ) {
+                            $enabled = true;
+                        }
+                    } else {
+                        // depricated
+                        $enabled = $index_sources_option[$index_field_name];
+                    }
+                }
+                $index_fields_vals[$index_field_name] = $enabled;
+            }
 
             $index_vars = array(
                 'variations' => $index_variations,
-                'title' => $index_title,
-                'content' => $index_content,
-                'sku' => $index_sku,
-                'excerpt' => $index_excerpt,
-                'category' => $index_category,
-                'tag' => $index_tag,
-                'id' => $index_id,
+                'title' => $index_fields_vals['title'],
+                'content' => $index_fields_vals['content'],
+                'sku' => $index_fields_vals['sku'],
+                'excerpt' => $index_fields_vals['excerpt'],
+                'category' => $index_fields_vals['category'],
+                'tag' => $index_fields_vals['tag'],
+                'id' => $index_fields_vals['id'],
             );
 
             $options = array(

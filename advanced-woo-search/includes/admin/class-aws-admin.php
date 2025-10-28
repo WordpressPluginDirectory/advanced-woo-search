@@ -55,9 +55,6 @@ class AWS_Admin {
 
         add_filter( 'aws_admin_page_options_current', array( $this, 'check_sources_in_index' ), 1 );
 
-        add_action( 'aws_admin_change_state', array( $this, 'disable_not_indexed_sources' ), 1, 3 );
-
-
     }
 
     /**
@@ -158,12 +155,14 @@ class AWS_Admin {
             wp_enqueue_script( 'jquery' );
             wp_enqueue_script( 'jquery-ui-sortable' );
 
-            wp_enqueue_script( 'jquery-tiptip', AWS_URL . '/assets/js/jquery.tipTip.js', array( 'jquery' ), AWS_VERSION );
+            wp_enqueue_script( 'aws-tiptip', AWS_URL . '/assets/js/jquery.tipTip.js', array( 'jquery' ), AWS_VERSION );
             wp_enqueue_script( 'plugin-admin-scripts', AWS_URL . 'assets/js/admin' . $suffix . '.js', array('jquery', 'jquery-ui-sortable'), AWS_VERSION );
 
             wp_localize_script( 'plugin-admin-scripts', 'aws_vars', array(
                 'ajaxurl' => admin_url( 'admin-ajax.php', 'relative' ),
                 'ajax_nonce' => wp_create_nonce( 'aws_admin_ajax_nonce' ),
+                'index_text' => __( 'This field is not in the index. Do you want to enable indexing for it?', 'advanced-woo-search' ) . "\n" . __( 'Note: Please re-index the plugin table after enabling all needed fields.', 'advanced-woo-search' ),
+                'index_disable_text' => __( 'Disabling the index for this field will turn off searching by this field across all search forms ( if enabled ).', 'advanced-woo-search' ) . "\n" . __( 'Continue?', 'advanced-woo-search' ),
             ) );
 
         }
@@ -184,8 +183,8 @@ class AWS_Admin {
                     if ( isset( $option['id'] ) && $option['id'] === 'search_in' && isset( $option['choices'] ) ) {
                         foreach( $option['choices'] as $choice_key => $choice_label ) {
                             if ( isset( $index_options['index'][$choice_key] ) && ! $index_options['index'][$choice_key] ) {
-                                $text = '<span style="color:#dc3232;">' . __( '(index disabled)', 'advanced-woo-search' ) . '</span>' . ' <a href="'.esc_url( admin_url('admin.php?page=aws-performance#index_sources') ).'">' . __( '(enable)', 'advanced-woo-search' ) . '</a>';
-                                $options[$options_key][$key]['choices'][$choice_key] = $choice_label . ' ' . $text;
+                                $text = '<span data-index-disabled style="font-size:12px;color:#dc3232;">' . __( '(index disabled)', 'advanced-woo-search' ) . '</span>';
+                                $options[$options_key][$key]['choices'][$choice_key]['label'] = $choice_label['label'] . ' ' . $text;
                             }
                         }
                     }
@@ -195,21 +194,6 @@ class AWS_Admin {
         }
 
         return $options;
-
-    }
-
-    /*
-     * Disable sources that was excluded from index
-     */
-    public function disable_not_indexed_sources( $setting, $option, $state ) {
-
-        if ( $setting === 'index_sources' && $state ) {
-            $settings = AWS_Admin_Options::get_settings();
-            if ( isset( $settings['search_in'][$option] ) ) {
-                $settings['search_in'][$option] = 0;
-                update_option( 'aws_settings', $settings );
-            }
-        }
 
     }
 

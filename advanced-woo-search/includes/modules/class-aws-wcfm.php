@@ -51,6 +51,7 @@ if ( ! class_exists( 'AWS_WCFM' ) ) :
             add_filter( 'aws_search_query_array', array( $this, 'wcfm_search_query_array' ), 1 );
             add_filter( 'aws_terms_search_query', array( $this, 'wcfm_terms_search_query' ), 1, 2 );
             add_filter( 'aws_search_tax_results', array( $this, 'wcfm_search_tax_results' ), 1 );
+            add_filter( 'aws_indexed_content', array( $this, 'aws_indexed_content' ), 1, 3 );
             add_action( 'wp_head', array( $this, 'wp_head' ), 1 );
 
             // Stores list
@@ -232,6 +233,21 @@ if ( ! class_exists( 'AWS_WCFM' ) ) :
 
             return $result_array;
 
+        }
+
+        /*
+         * Add product vendor name inside index table
+         */
+        public function aws_indexed_content( $content, $id, $product ) {
+
+            if ( function_exists( 'wcfm_get_vendor_store_name_by_post' ) ) {
+                $vendor_name = wcfm_get_vendor_store_name_by_post( $id );
+                if ( $vendor_name ) {
+                    $content .= ' ' . $vendor_name;
+                }
+            }
+
+            return $content;
         }
 
         /*

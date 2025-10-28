@@ -3,13 +3,13 @@
 /*
 Plugin Name: Advanced Woo Search
 Description: Advance ajax WooCommerce product search.
-Version: 3.44
+Version: 3.47
 Author: ILLID
 Author URI: https://advanced-woo-search.com/
 Text Domain: advanced-woo-search
 Requires Plugins: woocommerce
 WC requires at least: 3.0.0
-WC tested up to: 10.1.0
+WC tested up to: 10.3.0
 */
 
 
@@ -77,6 +77,8 @@ final class AWS_Main {
 
         $this->define_constants();
 
+        $this->set_options_vars();
+
         $this->data['settings'] = get_option( 'aws_settings' );
 
 		add_filter( 'widget_text', 'do_shortcode' );
@@ -107,7 +109,7 @@ final class AWS_Main {
      */
     private function define_constants() {
 
-        $this->define( 'AWS_VERSION', '3.44' );
+        $this->define( 'AWS_VERSION', '3.47' );
 
         $this->define( 'AWS_DIR', plugin_dir_path( AWS_FILE ) );
         $this->define( 'AWS_URL', plugin_dir_url( AWS_FILE ) );
@@ -118,11 +120,22 @@ final class AWS_Main {
     }
 
     /**
+     * Set specific options variables
+     */
+    private function set_options_vars() {
+        if ( ! class_exists( 'AWS_Option_Vars', false ) ) {
+            include_once( 'includes/class-aws-option-vars.php' );
+        }
+        if ( ! $this->option_vars ) {
+            $this->option_vars = new AWS_Option_Vars();
+        }
+    }
+
+    /**
      * Include required core files used in admin and on the frontend.
      */
     public function includes() {
 
-        include_once( 'includes/class-aws-option-vars.php' );
         include_once( 'includes/class-aws-helpers.php' );
         include_once( 'includes/class-aws-versions.php' );
         include_once( 'includes/class-aws-cache.php' );
@@ -201,7 +214,9 @@ final class AWS_Main {
      * Init plugin classes
      */
     public function init() {
-        $this->option_vars = new AWS_Option_Vars();
+        if ( ! $this->option_vars ) {
+            $this->option_vars = new AWS_Option_Vars();
+        }
         $this->cache = AWS_Cache::factory();
         $this->table_updates = new AWS_Table_Updates();
         AWS_Integrations::instance();

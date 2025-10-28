@@ -1178,3 +1178,45 @@ msgstr ""
 
 msgid "selected"
 msgstr ""
+
+msgid "This field is not in the index. Do you want to enable indexing for it?"
+msgstr ""
+
+msgid "Note: Please re-index the plugin table after enabling all needed fields."
+msgstr ""
+
+msgid "Disabling the index for this field will turn off searching by this field across all search forms ( if enabled )."
+msgstr ""
+
+msgid "Continue?"
+msgstr ""
+
+msgid "Search Page"
+msgstr ""
+
+msgid "Common"
+msgstr ""
+
+msgid "Quick Filters"
+msgstr ""
+
+msgid "Non-Products Search Results"
+msgstr ""
+
+msgid "Filters"
+msgstr ""
+
+msgid "Create pre-defined search bar filters."
+msgstr ""
+
+msgid "PRO plugin version feature."
+msgstr ""
+
+msgid "Show quick search filters for plugin search bar."
+msgstr ""
+
+msgid "Create filters manually with full control or generate them automatically from taxonomies."
+msgstr ""
+
+msgid "Search Bar"
+msgstr ""

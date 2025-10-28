@@ -5,7 +5,7 @@ Tags: woocommerce, search, product search, woocommerce search, live search
 Requires at least: 4.0
 Tested up to: 6.8
 Requires PHP: 7.0
-Stable tag: 3.44
+Stable tag: 3.47
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -288,6 +288,21 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 [View full changelog](https://advanced-woo-search.com/guide/free-version/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
 
+= 3.47 ( 2025-10-27 ) =
+* Add - New init method for search forms js if default document ready event is not triggered
+* Update - Tested with WC 10.3
+* Update - Add settings page options dependencies
+* Update - Integration for WCFM plugin. Add products search via vendor store name
+* Fix - Integration with Breakdance plugin. Fix js errors for search form
+
+= 3.46 ( 2025-10-13 ) =
+* Fix - Integration issue with Elementor plugin when using seamless integration on header search form
+* Dev - Fix to early call for option_vars methods
+
+= 3.45 ( 2025-09-29 ) =
+* Update - Tested with WC 10.2
+* Update - Admin view for Index Sources and Search In options
+
 = 3.44 ( 2025-09-12 ) =
 * Update - Fix diacritic chars highlighting
 * Fix - Plugin search form init inside Elementor popups
@@ -480,26 +495,3 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * Dev - Add generate_combinations helper function
 * Dev - Add aws_search_page_posts_objects_ids filter hook
 * Dev - Add aws_search_notices filter
-
-= 3.09 ( 2024-06-17 ) =
-* Add - Support for The7 theme
-* Update - Integration with Shoptimizer theme
-* Fix - Disable misspelling fix for numeric search terms
-* Dev - Add new parameter for aws_search_results_products_ids filter
-* Dev - Add aws_search_no_results filter
-* Dev - Add aws_search_custom_results_data and aws_search_top_text filters
-
-= 3.08 ( 2024-06-05 ) =
-* Add - Integration for YITH WooCommerce Ajax Product Filter plugin
-* Update - Speed up search results page
-* Update - Integration with WOOF plugin
-* Update - Tested with WC 8.9
-* Update - Reduce the size of search results output
-* Fix - FaceWP plugin integration fix
-* Fix - Misspelling function now respect search terms sources
-* Dev - Replace aws_products_search_page_filtered and aws_products_order hooks
-* Dev - Add show_wcfm_badge filter
-* Dev - Update aws_searchpage_enabled function
-
-= 3.07 ( 2024-05-20 ) =
-* Add - Header for plugin admin page

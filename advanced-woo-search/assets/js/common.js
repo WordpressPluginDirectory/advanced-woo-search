@@ -846,11 +846,51 @@ AwsHooks.filters = AwsHooks.filters || {};
 
 
     // Call plugin method
-    $(document).ready( function() {
+
+    var awsInit = false;
+    var awsInitAttempts = 0
+
+    setTimeout(function () {
+
+        if ( ! awsInit ) {
+            // if document.ready is not fired - call aws manually
+            awsInitWhenReady();
+        }
+
+    }, 2000);
+
+    // try to init plugin
+    function awsInitWhenReady() {
+
+        awsInitAttempts++;
+
+        if ( awsInit || awsInitAttempts > 10 ) {
+            return;
+        }
+
+        if ( typeof $.fn.aws_search === 'undefined' ) {
+            setTimeout( awsInitWhenReady, 1000 );
+            return;
+        }
+
+        awsInitForAll();
+
+    }
+
+    // init plugin for all search forms on the page
+    function awsInitForAll() {
 
         $(selector).each( function() {
             $(this).aws_search();
         });
+
+        awsInit = true;
+
+    }
+
+    $(document).ready( function() {
+
+        awsInitForAll();
 
         // Enfold header
         $('[data-avia-search-tooltip]').on( 'click', function() {

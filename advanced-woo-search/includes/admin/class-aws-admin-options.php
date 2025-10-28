@@ -34,10 +34,6 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                         continue;
                     }
 
-                    if ( isset( $values['type'] ) && $values['type'] === 'table' && empty( $values['value'] ) ) {
-                        continue;
-                    }
-
                     if ( isset( $values['disabled'] ) && $values['disabled'] ) {
                         continue;
                     }
@@ -70,7 +66,7 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
 
             foreach ( $options[$current_tab] as $values ) {
 
-                if ( $values['type'] === 'heading' || $values['type'] === 'table' || $values['type'] === 'html' ) {
+                if ( $values['type'] === 'heading' || $values['type'] === 'html' ) {
                     continue;
                 }
 
@@ -161,14 +157,14 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
 
             $options['search'][] = array(
                 "name" => __( "Search Engine", "advanced-woo-search" ),
-                "id"   => "main",
+                "id"   => "search_engine",
                 "type" => "heading"
             );
 
             $options['search'][] = array(
                 "name"       => __( "Search in", "advanced-woo-search" ),
-                "desc"    => __( "Product fields to search in.", "advanced-woo-search" ),
-                "tip"    => __( "Click on the status icon to enable or disable the search source for products search.", "advanced-woo-search" ),
+                "desc"    => '',
+                "tip"    =>  __( "Product fields to search in.", "advanced-woo-search" ) . __( "Click on the status icon to enable or disable the search source for products search.", "advanced-woo-search" ),
                 "table_head" => __( 'Search Source', 'advanced-woo-search' ),
                 "id"         => "search_in",
                 "value"      => array(
@@ -181,18 +177,54 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                     'id'       => 0,
                 ),
                 "choices" => array(
-                    "title"    => __( "Title", "advanced-woo-search" ),
-                    "content"  => __( "Content", "advanced-woo-search" ),
-                    "sku"      => __( "SKU", "advanced-woo-search" ),
-                    "excerpt"  => __( "Short description", "advanced-woo-search" ),
-                    "category" => __( "Category", "advanced-woo-search" ),
-                    "tag"      => __( "Tag", "advanced-woo-search" ),
-                    "id"       => __( "ID", "advanced-woo-search" ),
-                    "gtin:disabled"  => __( "GTIN, UPC, EAN, ISBN", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=search_in">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
-                    "brand:disabled" => __( "Brand", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=search_in">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
-                    "attr:disabled"  => __( "Attributes", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=search_in">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
-                    "tax:disabled"   => __( "Taxonomies", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=search_in">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
-                    "meta:disabled"  => __( "Custom Fields", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=search_in">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
+                    "title"    => array(
+                        'label'      => __( "Title", "advanced-woo-search" ),
+                        'suboptions' => array(),
+                    ),
+                    "content"  => array(
+                        'label'      => __( "Content", "advanced-woo-search" ),
+                        'suboptions' => array(),
+                    ),
+                    "sku"      => array(
+                        'label'      => __( "SKU", "advanced-woo-search" ),
+                        'suboptions' => array(),
+                    ),
+                    "excerpt"  => array(
+                        'label'      => __( "Short description", "advanced-woo-search" ),
+                        'suboptions' => array(),
+                    ),
+                    "category"     => array(
+                        'label'      => __( "Category", "advanced-woo-search" ),
+                        'suboptions' => array(),
+                    ),
+                    "tag"     => array(
+                        'label'      => __( "Tag", "advanced-woo-search" ),
+                        'suboptions' => array(),
+                    ),
+                    "id"     => array(
+                        'label'      => __( "ID", "advanced-woo-search" ),
+                        'suboptions' => array(),
+                    ),
+                    "gtin:disabled"     => array(
+                        'label'      => __( "GTIN, UPC, EAN, ISBN", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=search_in">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
+                        'suboptions' => array(),
+                    ),
+                    "brand:disabled"     => array(
+                        'label'      => __( "Brand", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=search_in">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
+                        'suboptions' => array(),
+                    ),
+                    "attr:disabled"     => array(
+                        'label'      => __( "Attributes", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=search_in">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
+                        'suboptions' => array(),
+                    ),
+                    "tax:disabled"     => array(
+                        'label'      => __( "Taxonomies", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=search_in">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
+                        'suboptions' => array(),
+                    ),
+                    "meta:disabled"     => array(
+                        'label'      => __( "Custom Fields", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=search_in">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
+                        'suboptions' => array(),
+                    ),
                 ),
                 "type"    => "table"
             );
@@ -262,7 +294,8 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
 
             $options['search'][] = array(
                 "name"    => __( "Search Results Page", "advanced-woo-search" ),
-                "type"    => "heading"
+                "type"    => "heading",
+                "id" => 'search_page'
             );
 
             $options['search'][] = array(
@@ -413,7 +446,7 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
 
             $options['performance'][] = array(
                 "name"       => __( "Data to index", "advanced-woo-search" ),
-                "desc"       => __( "Choose what products data to add inside the plugin index table.", "advanced-woo-search" ),
+                "tip"       => __( "Choose what products data to add inside the plugin index table.", "advanced-woo-search" ),
                 "table_head" => __( 'What to index', 'advanced-woo-search' ),
                 "id"         => "index_sources",
                 "value" => array(
@@ -426,18 +459,54 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                     'id'       => 1,
                 ),
                 "choices" => array(
-                    "title"    => __( "Title", "advanced-woo-search" ),
-                    "content"  => __( "Content", "advanced-woo-search" ),
-                    "sku"      => __( "SKU", "advanced-woo-search" ),
-                    "excerpt"  => __( "Short description", "advanced-woo-search" ),
-                    "category" => __( "Category", "advanced-woo-search" ),
-                    "tag"      => __( "Tag", "advanced-woo-search" ),
-                    "id"       => __( "ID", "advanced-woo-search" ),
-                    "gtin:disabled"  => __( "GTIN, UPC, EAN, ISBN", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=index_sources">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
-                    "brand:disabled" => __( "Brand", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=index_sources">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
-                    "attr:disabled"  => __( "Attributes", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=index_sources">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
-                    "tax:disabled"   => __( "Taxonomies", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=index_sources">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
-                    "meta:disabled"  => __( "Custom Fields", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=index_sources">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
+                    "title"    => array(
+                        'label'      => __( "Title", "advanced-woo-search" ),
+                        'suboptions' => array(),
+                    ),
+                    "content"    => array(
+                        'label'      => __( "Content", "advanced-woo-search" ),
+                        'suboptions' => array(),
+                    ),
+                    "sku"    => array(
+                        'label'      => __( "SKU", "advanced-woo-search" ),
+                        'suboptions' => array(),
+                    ),
+                    "excerpt"    => array(
+                        'label'      => __( "Short description", "advanced-woo-search" ),
+                        'suboptions' => array(),
+                    ),
+                    "category"    => array(
+                        'label'      => __( "Category", "advanced-woo-search" ),
+                        'suboptions' => array(),
+                    ),
+                    "tag"    => array(
+                        'label'      => __( "Tag", "advanced-woo-search" ),
+                        'suboptions' => array(),
+                    ),
+                    "id"    => array(
+                        'label'      => __( "ID", "advanced-woo-search" ),
+                        'suboptions' => array(),
+                    ),
+                    "gtin:disabled"    => array(
+                        'label'      => __( "GTIN, UPC, EAN, ISBN", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=index_sources">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
+                        'suboptions' => array(),
+                    ),
+                    "brand:disabled"    => array(
+                        'label'      => __( "Brand", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=index_sources">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
+                        'suboptions' => array(),
+                    ),
+                    "attr:disabled"    => array(
+                        'label'      => __( "Attributes", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=index_sources">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
+                        'suboptions' => array(),
+                    ),
+                    "tax:disabled"    => array(
+                        'label'      => __( "Taxonomies", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=index_sources">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
+                        'suboptions' => array(),
+                    ),
+                    "meta:disabled"    => array(
+                        'label'      => __( "Custom Fields", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=index_sources">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
+                        'suboptions' => array(),
+                    ),
                 ),
                 "type"    => "table"
             );
@@ -473,7 +542,7 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
 
             $options['form'][] = array(
                 "name" => __( "Search Bar Settings", "advanced-woo-search" ),
-                "id"   => "main",
+                "id"   => "bar",
                 "type" => "heading"
             );
 
@@ -539,11 +608,12 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
             );
 
             $options['form'][] = array(
-                "name"  => __( "'View All Results' text", "advanced-woo-search" ),
+                "name"  => '<span class="dashicons dashicons-editor-break aws-subopts-icon"></span>' . __( "'View All Results' text", "advanced-woo-search" ),
                 "desc"  => __( "Text for 'View All Results' link.", "advanced-woo-search" ),
                 "id"    => "show_more_text",
                 "value" => __( "View all results", "advanced-woo-search" ),
-                "type"  => "text"
+                "type"  => "text",
+                "depends_on" => array( "show_more" => "true" ),
             );
 
             $options['form'][] = array(
@@ -568,11 +638,38 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                 )
             );
 
+            $options['form'][] = array(
+                "name"    => __( "Quick Filters", "advanced-woo-search" ),
+                "id"      => "quick_filters",
+                "desc"    => __( "Create pre-defined search bar filters.", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/features/filters-button/">'. __( "Learn more.", "advanced-woo-search" ) .'</a>',
+                "type"    => "heading"
+            );
+
+            $options['form'][] = array(
+                "name"    => __( "", "advanced-woo-search" ),
+                "desc"    => '',
+                "html"  => '<img style="max-width:370px;" alt="" src="' . AWS_URL . 'assets/img/pro/quick-filters.png' . '" />',
+                "id"      => "image",
+                "value"   => '',
+                "type"    => "html"
+            );
+
+            // pro only
+            $options['form'][] = array(
+                "name"         => __( "", "advanced-woo-search" ),
+                'heading_type' => 'text',
+                "desc"         => '<a href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=quick_filters" target="_blank">' . __( "PRO plugin version feature.", "advanced-woo-search" ) . '</a>' . '<br>' .
+                    __( "Show quick search filters for plugin search bar.", "advanced-woo-search" ) . '<br>' .
+                    __( "Create filters manually with full control or generate them automatically from taxonomies.", "advanced-woo-search" ) .
+                    '<br>',
+                "type"         => "heading",
+            );
+
             // Search Results Settings
 
             $options['results'][] = array(
                 "name" => __( "Live Results Settings", "advanced-woo-search" ),
-                "id"   => "main",
+                "id"   => "general",
                 "type" => "heading"
             );
 
@@ -614,56 +711,6 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
                 "name"  => __( "Products number", "advanced-woo-search" ),
                 "desc"  => __( "Maximum displayed search results.", "advanced-woo-search" ),
                 "id"    => "results_num",
-                "value" => 10,
-                "min" => 0,
-                "type"  => "number"
-            );
-
-            $options['results'][] = array(
-                "name"    => __( "Archive pages", "advanced-woo-search" ),
-                "desc"    => __( "Enable needed taxonomies / users search.", "advanced-woo-search" ),
-                "tip"    => __( "Search for taxonomies and displayed their archive pages in search results.", "advanced-woo-search" ),
-                "table_head" => __( 'Archive Pages', 'advanced-woo-search' ),
-                "id"      => "search_archives",
-                "inherit" => "true",
-                "value" => array(
-                    'archive_category' => 0,
-                    'archive_tag'      => 0,
-                ),
-                "choices" => array(
-                    "archive_category"    => array(
-                        'label'      => __( "Category", "advanced-woo-search" ),
-                        'suboptions' => array(),
-                    ),
-                    "archive_tag"    => array(
-                        'label'      => __( "Tag", "advanced-woo-search" ),
-                        'suboptions' => array(),
-                    ),
-                    "archive_brand:disabled"    => array(
-                        'label'      => __( "Brand", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=logic">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
-                        'suboptions' => array(),
-                    ),
-                    "archive_tax:disabled"     => array(
-                        'label'      => __( "Taxonomies", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=logic">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
-                        'suboptions' => array(),
-                    ),
-                    "archive_attr:disabled"     => array(
-                        'label'      => __( "Attributes", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=logic">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
-                        'suboptions' => array(),
-                    ),
-                    "archive_users:disabled"     => array(
-                        'label'      => __( "Users", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=logic">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
-                        'suboptions' => array(),
-                    ),
-                ),
-                "type"    => "table_search_for"
-            );
-
-
-            $options['results'][] = array(
-                "name"  => __( "Archive pages number", "advanced-woo-search" ),
-                "desc"  => __( "Maximum displayed archive search results.", "advanced-woo-search" ),
-                "id"    => "pages_results_num",
                 "value" => 10,
                 "min" => 0,
                 "type"  => "number"
@@ -744,8 +791,65 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
             );
 
             $options['results'][] = array(
-                "name"    => __( "Results View", "advanced-woo-search" ),
-                "type"    => "heading"
+                "name" => __( "Non-Products Search Results", "advanced-woo-search" ),
+                "id"   => "archives",
+                "type" => "heading"
+            );
+
+            $options['results'][] = array(
+                "name"    => __( "Archive pages", "advanced-woo-search" ),
+                "desc"    => __( "Enable needed taxonomies / users search.", "advanced-woo-search" ),
+                "tip"    => __( "Search for taxonomies and displayed their archive pages in search results.", "advanced-woo-search" ),
+                "table_head" => __( 'Archive Pages', 'advanced-woo-search' ),
+                "id"      => "search_archives",
+                "inherit" => "true",
+                "value" => array(
+                    'archive_category' => 0,
+                    'archive_tag'      => 0,
+                ),
+                "choices" => array(
+                    "archive_category"    => array(
+                        'label'      => __( "Category", "advanced-woo-search" ),
+                        'suboptions' => array(),
+                    ),
+                    "archive_tag"    => array(
+                        'label'      => __( "Tag", "advanced-woo-search" ),
+                        'suboptions' => array(),
+                    ),
+                    "archive_brand:disabled"    => array(
+                        'label'      => __( "Brand", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=logic">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
+                        'suboptions' => array(),
+                    ),
+                    "archive_tax:disabled"     => array(
+                        'label'      => __( "Taxonomies", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=logic">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
+                        'suboptions' => array(),
+                    ),
+                    "archive_attr:disabled"     => array(
+                        'label'      => __( "Attributes", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=logic">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
+                        'suboptions' => array(),
+                    ),
+                    "archive_users:disabled"     => array(
+                        'label'      => __( "Users", "advanced-woo-search" ) . ' <a target="_blank" href="https://advanced-woo-search.com/pricing/?utm_source=plugin&utm_medium=pro-option-link&utm_campaign=pricing&utm_content=logic">' . __( "(Pro)", "advanced-woo-search" ) . '</a>',
+                        'suboptions' => array(),
+                    ),
+                ),
+                "type"    => "table"
+            );
+
+
+            $options['results'][] = array(
+                "name"  => __( "Archive pages number", "advanced-woo-search" ),
+                "desc"  => __( "Maximum displayed archive search results.", "advanced-woo-search" ),
+                "id"    => "pages_results_num",
+                "value" => 10,
+                "min" => 0,
+                "type"  => "number"
+            );
+
+            $options['results'][] = array(
+                "name"    => __( "What Product Data to Display", "advanced-woo-search" ),
+                "type"    => "heading",
+                "id" => "view",
             );
 
             $options['results'][] = array(
@@ -958,7 +1062,7 @@ if ( ! class_exists( 'AWS_Admin_Options' ) ) :
             $tabs = array(
                 'general'     => esc_html__( 'General', 'advanced-woo-search' ),
                 'search'      => esc_html__( 'Search Config', 'advanced-woo-search' ),
-                'form'        => esc_html__( 'Search Form', 'advanced-woo-search' ),
+                'form'        => esc_html__( 'Search Bar', 'advanced-woo-search' ),
                 'results'     => esc_html__( 'Search Results', 'advanced-woo-search' ),
                 'suggestions' => esc_html__( 'Search Suggestions', 'advanced-woo-search' ) . ' <span class="aws-pro-badge">' . __( "PRO", "advanced-woo-search" ) . '</span>',
             );
