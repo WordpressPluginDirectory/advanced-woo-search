@@ -71,6 +71,7 @@ if ( ! class_exists( 'AWS_AWL' ) ) :
                                 "id"    => "show_awl_labels",
                                 "value" => 'true',
                                 "type"  => "toggler",
+                                "section" => "content",
                             );
 
                         }

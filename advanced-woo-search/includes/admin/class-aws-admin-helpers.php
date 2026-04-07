@@ -160,8 +160,10 @@ if ( ! class_exists( 'AWS_Admin_Helpers' ) ) :
 
                         // get options values inside 'suboptions' array
                         foreach ( $val['suboptions'] as $suboption_key => $suboption_val ) {
-                            $new_value = $default ? $suboption_val['value'] : AWS_Admin_Helpers::get_new_option_value( $field, $key, $suboption_val['id'] );
-                            $current_option[$key][$suboption_val['id']] = AWS_Admin_Helpers::prepare_settings( $suboption_val, $new_value );
+                            $sub_field = $suboption_val;
+                            $sub_field['id'] = $field['id'];
+                            $new_value = $default ? $suboption_val['value'] : AWS_Admin_Helpers::get_new_option_value( $sub_field, $key, $suboption_val['id'] );
+                            $current_option[$key][$suboption_val['id']] = AWS_Admin_Helpers::prepare_settings( $sub_field, $new_value );
                         }
 
                     } else {

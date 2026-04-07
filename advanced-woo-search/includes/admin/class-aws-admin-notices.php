@@ -171,7 +171,7 @@ if ( ! class_exists( 'AWS_Admin_Notices' ) ) :
 
                 $html .= '<div class="aws-integration-notice notice notice-success" style="position:relative;display:flex;">';
                     $html .= '<div style="margin: 20px 20px 0 0;" class="aws-integration-notice--logo">';
-                        $html .= '<img style="max-width:70px;border-radius:3px;" src="' . AWS_URL . 'assets/img/logo.jpeg' . '">';
+                        $html .= '<img style="max-width:70px;border-radius:3px;" src="' . AWS_URL . 'assets/img/square-logo.png' . '">';
                     $html .= '</div>';
                     $html .= '<div class="aws-integration-notice--content">';
                         $html .= '<h2>Advanced Woo Search: ' . __( 'Integrations for your plugins', 'advanced-woo-search' ) . '</h2>';

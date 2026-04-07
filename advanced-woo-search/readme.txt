@@ -3,9 +3,9 @@ Contributors: Mihail Barinov
 Donate link: https://www.paypal.com/donate/?hosted_button_id=FDRDNZE6XAKE8
 Tags: woocommerce, search, product search, woocommerce search, live search
 Requires at least: 4.0
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 7.0
-Stable tag: 3.47
+Stable tag: 3.59
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -288,6 +288,53 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 [View full changelog](https://advanced-woo-search.com/guide/free-version/?utm_source=wp-repo&utm_medium=listing&utm_campaign=aws-repo)
 
+= 3.59 ( 2026-04-06 ) =
+* Add - New options for non-products search results
+* Add - Options to set relevance weight for search fields
+
+= 3.58 ( 2026-03-23 ) =
+* Update - Fix support for Divi 5 theme
+
+= 3.57 ( 2026-03-23 ) =
+* Update - Add support for Divi 5 theme
+* Update - Tested with WC 10.6
+* Dev - Update functions for tables exists check
+
+= 3.56 ( 2026-03-09 ) =
+* Dev - Add aws_new_plugin_version_released hook
+
+= 3.55 ( 2026-02-16 ) =
+* Update - Admin page styles for integration notices
+
+= 3.54 ( 2026-02-06 ) =
+* Update - Tested with WC 10.5
+* Update - Plugin header details. Add homepage link
+
+= 3.53 ( 2026-02-02 ) =
+* Update - Change styles for dashboard settings page
+
+= 3.52 ( 2026-01-20 ) =
+* Add - Integration with Uncode theme
+
+= 3.51 ( 2026-01-05 ) =
+* Update - Integration for Hestia theme. Fix search bar styles
+
+= 3.50 ( 2025-12-15 ) =
+* Update - Tested with WC 10.4
+* Update - GA event parameters. Add new aws_has_results value
+* Fix - Integration with Brizy plugin. Fix search results page output
+* Fix - Search bar integration for Avada theme. Add auto focus for header search bar
+
+= 3.49 ( 2025-12-02 ) =
+* Update - Send new GA event when search returns no results
+* Dev - Update posts_ids_rewrite parameter. Dont overwrite taxonomies results
+
+= 3.48 ( 2025-11-17 ) =
+* Update - Fix admin link inside get started notice
+* Update - Add live loading for admin settings page
+* Fix - Bug with markup in seamless integration for Elementor search widget
+* Dev - Add posts_ids_rewrite parameter for third party search engines
+
 = 3.47 ( 2025-10-27 ) =
 * Add - New init method for search forms js if default document ready event is not triggered
 * Update - Tested with WC 10.3
@@ -430,68 +477,3 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 * Update - Support for Italian language
 * Update - Admin page notices about integrations
 * Dev - Update the structure of plugin tables
-
-= 3.17 ( 2024-10-01 ) =
-* Add - Support for Shopical theme
-* Add - Support for WooCommerce Product Table by Barn2 plugin
-* Fix - Index duplicated products when using WPML plugin
-* Fix - Bug with quick edit feature when using WPML plugin
-* Dev - New check for currently active plugins
-
-= 3.16 ( 2024-09-16 ) =
-* Add - Greek to latin characters replace
-* Add - Plurals support for different languages
-* Add - Support for Breakdance plugin
-* Update - Tested with WC 9.3
-* Update - On page stock status and sale filters
-* Fix - Show clear button on first search when ajax is disabled
-
-= 3.15 ( 2024-09-02 ) =
-* Update - Tested with WC 9.2
-* Update - Add new parameters for orderby
-* Update - Settings page text
-* Fix - Filter by attributes for the search page. Fix filtering by slugs with integers inside
-* Dev - Add additional check for product IDs inside search page
-
-= 3.14 ( 2024-08-12 ) =
-* Update - Integration with Oxygen theme
-* Fix - Filtering for search results page when using slugs with numbers inside URL for terms
-* Fix - Add new parameters for orderby function
-* Fix - Automatically index products that were restored from the trash
-* Dev - Fix functions naming
-
-= 3.13 ( 2024-08-05 ) =
-* Add - Integration with EAN for WooCommerce by WPFactory plugin
-* Fix - Bug with search results filtering via third party plugins
-* Fix - Bug when filtering product variations on search results page
-* Dev - New function to get current page id
-
-= 3.12 ( 2024-07-19 ) =
-* Fix - Bug with search results page taxonomies filters
-
-= 3.11 ( 2024-07-15 ) =
-* Add - Support for Filter Everything plugin
-* Update - Tested with WC 9.1
-* Update - Integration with WooCommerce Product Filter by WooBeWoo plugin
-* Update - Integration with Product Filters for WooCommerce plugin
-* Update - Integration with YITH WooCommerce Ajax Product Filter plugin
-* Update - Integration with BeRocket WooCommerce AJAX Products Filter plugin
-* Update - Filter for search results page. Inherit tax_query parameters
-* Update - Integration with Avada theme. Move js scripts to footer
-* Update - Integration with The7 theme. Fix submit button for search forms
-* Update - Admin notice about reindex on first plugin activation
-* Fix - Bug with calling search function inside wp admin orders page
-
-= 3.10 ( 2024-07-01 ) =
-* Add - New option to show fixed terms list inside search results
-* Add - Support for Hitek theme
-* Update - Change default value for Form Styling option
-* Update - Tested with WC 9.0
-* Update - Integration with Bricks theme
-* Fix - Return content and short description for post object inside search page
-* Dev - Add aws_search_fixed_terms_suggestions_num filter
-* Dev - Add js event aws_search_force to force search with specific terms
-* Dev - Add old/new pairs for similar terms output
-* Dev - Add generate_combinations helper function
-* Dev - Add aws_search_page_posts_objects_ids filter hook
-* Dev - Add aws_search_notices filter

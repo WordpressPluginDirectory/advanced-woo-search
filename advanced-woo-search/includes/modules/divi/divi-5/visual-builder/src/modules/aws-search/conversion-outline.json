@@ -1,0 +1,34 @@
+{
+  "advanced": {
+    "admin_label": "module.meta.adminLabel",
+    "animation": "module.decoration.animation",
+    "background": "module.decoration.background",
+    "disabled_on": "module.decoration.disabledOn",
+    "module": "module.advanced.htmlAttributes",
+    "overflow": "module.decoration.overflow",
+    "position_fields": "module.decoration.position",
+    "scroll": "module.decoration.scroll",
+    "sticky": "module.decoration.sticky",
+    "text": "module.advanced.text",
+    "transform": "module.decoration.transform",
+    "transition": "module.decoration.transition",
+    "z_index": "module.decoration.zIndex",
+    "margin_padding": "module.decoration.spacing",
+    "max_width": "module.decoration.sizing",
+    "height": "module.decoration.sizing",
+    "filters": {
+      "default": "module.decoration.filters"
+    },
+    "borders": {
+      "default": "module.decoration.border"
+    },
+    "box_shadow": {
+      "default": "module.decoration.boxShadow"
+    },
+    "link_options": "module.advanced.link"
+  },
+  "module": {
+    "form_id": "form_id.innerContent.*",
+    "placeholder": "placeholder.innerContent.*"
+  }
+}

@@ -597,6 +597,59 @@ if ( ! class_exists( 'AWS_Versions' ) ) :
 
                 }
 
+                if ( version_compare( $current_version, '3.59', '<' ) ) {
+
+                    $settings = get_option( 'aws_settings' );
+
+                    if ( $settings ) {
+
+                        $update = false;
+
+                        if ( isset( $settings['search_in'] )  ) {
+
+                            $search_in_def_weights = AWS_Helpers::get_default_relevance_scores();
+
+                            foreach( $search_in_def_weights as $source_name => $source_weight ) {
+                                if ( isset( $settings['search_in'][$source_name] ) && is_array( $settings['search_in'][$source_name] ) && ! isset( $settings['search_in'][$source_name]['weight'] ) ) {
+                                    $update = true;
+                                    $settings['search_in'][$source_name]['weight'] = $source_weight;
+                                }
+                            }
+
+                        }
+
+                        if ( ! isset( $settings['search_archives_count'] ) ) {
+                            $settings['search_archives_count'] = 'true';
+                            $update = true;
+                        }
+
+                        if ( ! isset( $settings['search_archives_empty'] ) ) {
+                            $settings['search_archives_empty'] = 'false';
+                            $update = true;
+                        }
+
+                        if ( ! isset( $settings['search_archives_heading'] ) ) {
+                            $settings['search_archives_heading'] = 'false';
+                            $update = true;
+                        }
+
+                        if ( ! isset( $settings['search_archives_hierarchy'] ) ) {
+                            $settings['search_archives_hierarchy'] = 'false';
+                            $update = true;
+                        }
+
+                        if ( $update ) {
+                            update_option( 'aws_settings', $settings );
+                        }
+
+                    }
+
+                }
+
+            }
+
+            if ( $current_version && $current_version !== AWS_VERSION ) {
+                do_action( 'aws_new_plugin_version_released', AWS_VERSION );
             }
 
             update_option( 'aws_plugin_ver', AWS_VERSION );

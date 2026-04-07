@@ -18,48 +18,52 @@ if ( ! class_exists( 'AWS_Admin_Meta_Boxes' ) ) :
         static public function get_general_tab_content() {
 
             $html = '';
+
+            $html = '<div data-tab="general">';
             
-            $html .= '<table class="form-table">';
-                $html .= '<tbody>';
-        
-                $html .= '<tr id="activation">';
-        
-                    $html .= '<th>' . esc_html__( 'Activation', 'advanced-woo-search' ) . '</th>';
-                    $html .='<td>';
-                        $html .='<div class="description activation">';
-                            $html .= esc_html__( 'In case you need to add plugin search form on your website, you can do it in several ways:', 'advanced-woo-search' ) . '<br>';
-                            $html .='<div class="list">';
-                                $html .='1. ' . sprintf(esc_html__( "Enable a %s option ( may not work with some themes )", 'advanced-woo-search' ), '<a href="#main">' . __( 'Seamless integration', 'advanced-woo-search' ) . '</a>' ) . '<br>';
-                                $html .='2. ' . sprintf( esc_html__( 'Using shortcode %s', 'advanced-woo-search' ), '<code>[aws_search_form]</code>' ) . '<br>';
-                                $html .='3. ' . esc_html__( 'Using a page builder - locate the built-in search form widget and add it to the desired location on the page.', 'advanced-woo-search' ). '<br>';
-                                $html .='4. ' . sprintf( esc_html__( "Add search form as a widget. Go to %s and drag&drop 'AWS Widget' to one of your widget areas", 'advanced-woo-search' ), '<a href="' . admin_url( 'widgets.php' ) . '" target="_blank">' . __( 'Widgets Screen', 'advanced-woo-search' ) . '</a>' ) . '<br>';
-                                $html .='5. ' . sprintf( esc_html__( 'Add PHP code to the necessary files of your theme: %s', 'advanced-woo-search' ), "<code>&lt;?php aws_get_search_form( true ); ?&gt;</code>" ) . '<br>';
+                $html .= '<table class="form-table">';
+                    $html .= '<tbody>';
+
+                    $html .= '<tr id="activation">';
+
+                        $html .= '<th>' . esc_html__( 'Activation', 'advanced-woo-search' ) . '</th>';
+                        $html .='<td>';
+                            $html .='<div class="description activation">';
+                                $html .= esc_html__( 'In case you need to add plugin search form on your website, you can do it in several ways:', 'advanced-woo-search' ) . '<br>';
+                                $html .='<div class="list">';
+                                    $html .='1. ' . sprintf(esc_html__( "Enable a %s option ( may not work with some themes )", 'advanced-woo-search' ), '<a href="#main">' . __( 'Seamless integration', 'advanced-woo-search' ) . '</a>' ) . '<br>';
+                                    $html .='2. ' . sprintf( esc_html__( 'Using shortcode %s', 'advanced-woo-search' ), '<code>[aws_search_form]</code>' ) . '<br>';
+                                    $html .='3. ' . esc_html__( 'Using a page builder - locate the built-in search form widget and add it to the desired location on the page.', 'advanced-woo-search' ). '<br>';
+                                    $html .='4. ' . sprintf( esc_html__( "Add search form as a widget. Go to %s and drag&drop 'AWS Widget' to one of your widget areas", 'advanced-woo-search' ), '<a href="' . admin_url( 'widgets.php' ) . '" target="_blank">' . __( 'Widgets Screen', 'advanced-woo-search' ) . '</a>' ) . '<br>';
+                                    $html .='5. ' . sprintf( esc_html__( 'Add PHP code to the necessary files of your theme: %s', 'advanced-woo-search' ), "<code>&lt;?php aws_get_search_form( true ); ?&gt;</code>" ) . '<br>';
+                                $html .='</div>';
                             $html .='</div>';
-                        $html .='</div>';
-                    $html .='</td>';
+                        $html .='</td>';
 
-                $html .= '</tr>';
-        
-                $html .= '<tr>';
+                    $html .= '</tr>';
 
-                    $html .='<th>';
-                        $html .= esc_html__( 'Reindex table', 'advanced-woo-search' ) ;
-                        $html .=' <span class="aws-help-tip aws-tip" data-tip="'. esc_attr( sprintf( esc_html__( 'This action only need for %s one time %s - after you activate this plugin. After this all products changes will be re-indexed automatically.', 'advanced-woo-search' ), '<strong>', '</strong>' ) ) .'"></span>';
-                    $html .='</th>';
+                    $html .= '<tr>';
 
-                    $html .= '<td>';
-                        $html .= '<div id="aws-reindex"><input class="button" type="button" value="' . esc_attr__( 'Reindex table', 'advanced-woo-search' ) . '"><span class="loader"></span><span class="reindex-progress">0%</span><span class="reindex-notice">' . __( 'Please do not close the page.', 'advanced-woo-search' ) . '</span></div>';
-                        $html .= '<p class="description">' .
-                            __( 'Update all data in plugins index table. Index table - table with products data where plugin is searching all typed terms.<br>Use this button if you think that plugin not shows last actual data in its search results.<br>' .
-                            '<strong>CAUTION:</strong> this can take large amount of time.', 'advanced-woo-search' ) . sprintf( __( 'Index table options can be found inside %s section.', 'advanced-woo-search' ), '<a href="'.esc_url( admin_url('admin.php?page=aws-performance') ).'">' . __( 'Index Config', 'advanced-woo-search' ) . '</a>' ) . '<br><br>' .
-                            esc_html__( 'Products in index:', 'advanced-woo-search' ) . '<span id="aws-reindex-count"> <strong>' . AWS_Helpers::get_indexed_products_count() . '</strong></span>';
-                        $html .= '</p>';
-                    $html .= '</td>';
-        
-                $html .= '</tr>';
-        
-                $html .= '</tbody>';
-            $html .= '</table>';
+                        $html .='<th>';
+                            $html .= esc_html__( 'Reindex table', 'advanced-woo-search' ) ;
+                            $html .=' <span class="aws-help-tip aws-tip" data-tip="'. esc_attr( sprintf( esc_html__( 'This action only need for %s one time %s - after you activate this plugin. After this all products changes will be re-indexed automatically.', 'advanced-woo-search' ), '<strong>', '</strong>' ) ) .'"></span>';
+                        $html .='</th>';
+
+                        $html .= '<td>';
+                            $html .= '<div id="aws-reindex"><input class="button" type="button" value="' . esc_attr__( 'Reindex table', 'advanced-woo-search' ) . '"><span class="loader"></span><span class="reindex-progress">0%</span><span class="reindex-notice">' . __( 'Please do not close the page.', 'advanced-woo-search' ) . '</span></div>';
+                            $html .= '<p class="description">' .
+                                __( 'Update all data in plugins index table. Index table - table with products data where plugin is searching all typed terms.<br>Use this button if you think that plugin not shows last actual data in its search results.<br>' .
+                                '<strong>CAUTION:</strong> this can take large amount of time.', 'advanced-woo-search' ) . sprintf( __( 'Index table options can be found inside %s section.', 'advanced-woo-search' ), '<a href="'.esc_url( admin_url('admin.php?page=aws-performance') ).'">' . __( 'Index Config', 'advanced-woo-search' ) . '</a>' ) . '<br><br>' .
+                                esc_html__( 'Products in index:', 'advanced-woo-search' ) . '<span id="aws-reindex-count"> <strong>' . AWS_Helpers::get_indexed_products_count() . '</strong></span>';
+                            $html .= '</p>';
+                        $html .= '</td>';
+
+                    $html .= '</tr>';
+
+                    $html .= '</tbody>';
+                $html .= '</table>';
+
+            $html .= '</div>';
 
             return $html;
             
@@ -87,7 +91,7 @@ if ( ! class_exists( 'AWS_Admin_Meta_Boxes' ) ) :
                                     $html .= '<ul>';
                                         $html .= '<li><strong>1.</strong> <strong>' . __( 'Index plugin table.', 'advanced-woo-search' ) . '</strong> ' . __( 'Click on the \'Reindex table\' button and wait till the index process is finished.', 'advanced-woo-search' ) . '</li>';
                                         $html .= '<li><strong>2.</strong> <strong>' . __( 'Set plugin settings.', 'advanced-woo-search' ) . '</strong> ' . __( 'Leave it to default values or customize some of them.', 'advanced-woo-search' ) . '</li>';
-                                        $html .= '<li><strong>3.</strong> <strong>' . __( 'Add search form.', 'advanced-woo-search' ) . '</strong> ' . sprintf( __( 'There are several ways you can add a search form to your site. Use the \'Seamless integration\' option, shortcode, widget or custom php function. Read more inside %s section or read %s.', 'advanced-woo-search' ), '<a href="#activation">' .  __( 'Activation', 'advanced-woo-search' ) . '</a>', '<a target="_blank" href="https://advanced-woo-search.com/guide/search-form/">' .  __( 'guide article', 'advanced-woo-search' ) . '</a>' ) . '</li>';
+                                        $html .= '<li><strong>3.</strong> <strong>' . __( 'Add search form.', 'advanced-woo-search' ) . '</strong> ' . sprintf( __( 'There are several ways you can add a search form to your site. Use the \'Seamless integration\' option, shortcode, widget or custom php function. Read more inside %s section or read %s.', 'advanced-woo-search' ), '<a href="'. admin_url( 'admin.php?page=aws-options#activation' )  .'">' .  __( 'Activation', 'advanced-woo-search' ) . '</a>', '<a target="_blank" href="https://advanced-woo-search.com/guide/search-form/">' .  __( 'guide article', 'advanced-woo-search' ) . '</a>' ) . '</li>';
                                         $html .= '<li><strong>4.</strong> <strong>' . __( 'Finish!', 'advanced-woo-search' ) . '</strong> ' . __( 'Now all is set and you can check your search form on the pages where you add it.', 'advanced-woo-search' ) . '</li>';
                                     $html .= '</ul>';
                                 $html .= '</div>';
@@ -165,9 +169,10 @@ if ( ! class_exists( 'AWS_Admin_Meta_Boxes' ) ) :
                         echo '</span>';
                     echo '</div>';
                     echo '<div class="btns">';
-                        echo '<a class="button button-pro" href="' . admin_url( 'admin.php?page=aws-premium' ) . '">' . esc_html( 'Get Premium', 'advanced-woo-search' ) . '</a>';
-                        echo '<a class="button button-docs" href="https://advanced-woo-search.com/guide/?utm_source=wp-plugin&utm_medium=header&utm_campaign=guide" target="_blank">' . esc_html( 'Documentation', 'advanced-woo-search' ) . '</a>';
-                        echo '<a class="button button-support" href="https://advanced-woo-search.com/contact/?utm_source=wp-plugin&utm_medium=header&utm_campaign=support" target="_blank">' . esc_html( 'Support', 'advanced-woo-search' ) . '</a>';
+                        echo '<a class="button-pro" href="' . admin_url( 'admin.php?page=aws-premium' ) . '">' . esc_html( 'Get Premium', 'advanced-woo-search' ) . '</a>';
+                        echo '<a class="button-docs" href="https://advanced-woo-search.com/guide/?utm_source=wp-plugin&utm_medium=header&utm_campaign=guide" target="_blank">' . esc_html( 'Documentation', 'advanced-woo-search' ) . '</a>';
+                        echo '<a class="button-support" href="https://advanced-woo-search.com/contact/?utm_source=wp-plugin&utm_medium=header&utm_campaign=support" target="_blank">' . esc_html( 'Support', 'advanced-woo-search' ) . '</a>';
+                        echo '<span class="version">v'. AWS_VERSION .'</span>';
                     echo '</div>';
                 echo '</div>';
 

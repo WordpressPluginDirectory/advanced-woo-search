@@ -462,13 +462,20 @@ if ( ! class_exists( 'AWS_Search_Page' ) ) :
          * Check some strings inside body classes
          */
         function body_class( $classes ) {
+
             foreach( $classes as $class ) {
                 if ( $class && strpos( $class, 'elementor-page-' ) !== false ) {
                     $this->data['is_elementor'] = true;
                     break;
                 }
             }
+
+            if ( isset( $this->data['all_products'] ) && empty( $this->data['all_products'] ) ) {
+                $classes[] = 'aws-no-results';
+            }
+
             return $classes;
+
         }
 
         /*

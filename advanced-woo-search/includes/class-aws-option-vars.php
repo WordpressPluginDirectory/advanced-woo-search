@@ -82,19 +82,21 @@ if ( ! class_exists( 'AWS_Option_Vars' ) ) :
          */
         public function is_index_table_not_exists() {
 
-            if ( isset( $this->data['index_table_exists'] ) ) {
-                return $this->data['index_table_exists'];
+            if ( isset( $this->data['is_index_table_not_exists'] ) ) {
+                return $this->data['is_index_table_not_exists'];
             }
 
             global $wpdb;
 
             $table_name = $wpdb->prefix . AWS_INDEX_TABLE_NAME;
 
-            $is_exists = $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" ) != $table_name;
+            $result = $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" );
 
-            $this->data['index_table_exists'] = $is_exists;
+            $is_not_exists = empty( $result );
 
-            return $is_exists;
+            $this->data['is_index_table_not_exists'] = $is_not_exists;
+
+            return $is_not_exists;
 
         }
 
@@ -104,19 +106,21 @@ if ( ! class_exists( 'AWS_Option_Vars' ) ) :
          */
         public function is_cache_table_not_exists() {
 
-            if ( isset( $this->data['cache_table_exists'] ) ) {
-                return $this->data['cache_table_exists'];
+            if ( isset( $this->data['is_cache_table_not_exists'] ) ) {
+                return $this->data['is_cache_table_not_exists'];
             }
 
             global $wpdb;
 
             $table_name = $wpdb->prefix . AWS_CACHE_TABLE_NAME;
 
-            $is_exists = $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" ) != $table_name;
+            $result = $wpdb->get_var( "SHOW TABLES LIKE '{$table_name}'" );
 
-            $this->data['cache_table_exists'] = $is_exists;
+            $is_not_exists = empty( $result );
 
-            return $is_exists;
+            $this->data['is_cache_table_not_exists'] = $is_not_exists;
+
+            return $is_not_exists;
 
         }
 

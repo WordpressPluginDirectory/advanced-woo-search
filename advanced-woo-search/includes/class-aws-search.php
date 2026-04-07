@@ -154,6 +154,10 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 
             $results_num       = $keyword ? apply_filters( 'aws_page_results', 100 ) : AWS()->get_settings( 'results_num' );
             $pages_results_num = AWS()->get_settings( 'pages_results_num' );
+            $search_archives_heading = AWS()->get_settings( 'search_archives_heading' );
+            $search_archives_hierarchy = AWS()->get_settings( 'search_archives_hierarchy' );
+            $search_archives_count = AWS()->get_settings( 'search_archives_count' );
+            $search_archives_empty = AWS()->get_settings( 'search_archives_empty' );
             $search_in         = AWS()->get_settings( 'search_in' );
             $outofstock        = AWS()->get_settings( 'outofstock' );
             $search_rule       = AWS()->get_settings( 'search_rule' );
@@ -180,8 +184,14 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             $this->data['s'] = $s;
             $this->data['results_num']  = $results_num;
             $this->data['pages_results_num']  = $pages_results_num;
+            $this->data['search_archives']    = $search_archives;
+            $this->data['search_archives_heading'] = $search_archives_heading;
+            $this->data['search_archives_hierarchy'] = $search_archives_hierarchy;
+            $this->data['search_archives_count'] = $search_archives_count;
+            $this->data['search_archives_empty'] = $search_archives_empty;
             $this->data['search_terms'] = array();
             $this->data['search_in']    = $search_in_arr;
+            $this->data['search_in_weights']  = $this->get_search_in_weights();
             $this->data['outofstock']   = $outofstock;
             $this->data['search_rule']   = $search_rule;
             $this->data['search_words_num'] = $search_words_num;
@@ -244,7 +254,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 
             if ( ! empty( $this->data['search_terms'] ) ) {
 
-                if ( ! empty( $this->data['search_in'] ) && $this->data['results_num'] ) {
+                if ( ! empty( $this->data['search_in'] ) && $this->data['results_num'] && ! isset( $this->data['posts_ids_rewrite'] ) ) {
 
                     $posts_ids = $this->query_index_table();
 
@@ -280,6 +290,11 @@ if ( ! class_exists( 'AWS_Search' ) ) :
 
                 }
 
+            }
+
+            // Received $posts_ids from third party source
+            if ( isset( $this->data['posts_ids_rewrite'] ) && is_array( $this->data['posts_ids_rewrite'] )  ) {
+                $posts_ids = $this->data['posts_ids_rewrite'];
             }
 
             /**
@@ -394,36 +409,33 @@ if ( ! class_exists( 'AWS_Search' ) ) :
                 $search_term_len = strlen( $search_term );
                 $is_normal_term = $search_term_len > 1;
 
-                $relevance_params = array(
-                    'title' => array(
-                        'full' => $relevance_scores['title'] + 20 * $search_term_len,
-                        'like' => $relevance_scores['title'] / 5 + 2 * $search_term_len,
-                    ),
-                    'content' => array(
-                        'full' => $relevance_scores['content'] + 4 * $search_term_len,
-                        'like' => $relevance_scores['content'] + 1 * $search_term_len,
-                    ),
-                    'excerpt' => array(
-                        'full' => $relevance_scores['content'] + 4 * $search_term_len,
-                        'like' => $relevance_scores['content'] + 1 * $search_term_len,
-                    ),
-                    'category' => array(
-                        'full' => $relevance_scores['other'],
-                        'like' => $relevance_scores['other'] / 5,
-                    ),
-                    'tag' => array(
-                        'full' => $relevance_scores['other'],
-                        'like' => $relevance_scores['other'] / 5,
-                    ),
-                    'sku' => array(
-                        'full' => $relevance_scores['sku'],
-                        'like' => $relevance_scores['sku'] / 5,
-                    ),
-                    'id' => array(
-                        'full' => $relevance_scores['id'],
-                        'like' => $relevance_scores['id'] / 10,
-                    ),
-                );
+                $relevance_params = array();
+
+                if ( $relevance_scores ) {
+                    foreach ( $relevance_scores as $relevance_score_name => $relevance_score_value ) {
+
+                        $full_score = $relevance_score_value;
+                        $like_score = $relevance_score_value / 5;
+
+                        if ( $relevance_score_name === 'title' ) {
+                            $full_score = $relevance_score_value + 20 * $search_term_len;
+                            $like_score = $relevance_score_value / 5 + 2 * $search_term_len;
+                        }
+                        elseif ( $relevance_score_name === 'content' || $relevance_score_name === 'excerpt' ) {
+                            $full_score = $relevance_score_value + 4 * $search_term_len;
+                            $like_score = $relevance_score_value + 1 * $search_term_len;
+                        }
+                        elseif ( $relevance_score_name === 'id' ) {
+                            $like_score = $relevance_score_value / 10;
+                        }
+
+                        $relevance_params[$relevance_score_name] = array(
+                            'full' => $full_score,
+                            'like' => $like_score,
+                        );
+
+                    }
+                }
 
                 /**
                  * Array of relevance parameters
@@ -548,7 +560,7 @@ if ( ! class_exists( 'AWS_Search' ) ) :
              * @param array $query Query string
              */
             $sql = apply_filters( 'aws_search_query_string', $sql );
-
+            
             $this->data['query_params'] = $query;
 
             $this->data['sql'] = $sql;
@@ -556,6 +568,29 @@ if ( ! class_exists( 'AWS_Search' ) ) :
             $posts_ids = $this->get_posts_ids( $sql );
 
             return $posts_ids;
+
+        }
+
+        /*
+         * Get weights for search in sources
+         */
+        private function get_search_in_weights() {
+
+            $search_in = AWS()->get_settings( 'search_in' );
+
+            $search_in_weights_arr = array();
+
+            if ( $search_in && is_array( $search_in ) ) {
+
+                foreach ( $search_in as $search_in_name => $search_in_params ) {
+                    if ( is_array( $search_in_params ) && isset( $search_in_params['weight'] ) ) {
+                        $search_in_weights_arr[$search_in_name] = $search_in_params['weight'];
+                    }
+                }
+
+            }
+
+            return $search_in_weights_arr;
 
         }
 

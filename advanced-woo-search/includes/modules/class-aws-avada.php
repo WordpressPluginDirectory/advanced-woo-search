@@ -90,21 +90,28 @@ if ( ! class_exists( 'AWS_Avada' ) ) :
         public function avada_wp_footer() { ?>
 
             <script>
-
                 window.addEventListener('load', function() {
-                    var awsSearch = document.querySelectorAll(".fusion-menu .fusion-main-menu-search a, .fusion-flyout-menu-icons .fusion-icon-search");
-                    if ( awsSearch ) {
-                        for (var i = 0; i < awsSearch.length; i++) {
-                            awsSearch[i].addEventListener('click', function() {
-                                window.setTimeout(function(){
-                                    document.querySelector(".fusion-menu .fusion-main-menu-search .aws-search-field, .fusion-flyout-search .aws-search-field").focus();
-                                }, 100);
-                            }, false);
-                        }
+                    var awsSearch = document.querySelectorAll(
+                        ".fusion-menu .fusion-main-menu-search a, .fusion-flyout-menu-icons .fusion-icon-search"
+                    );
+
+                    if (!awsSearch.length) {
+                        return;
                     }
 
-                }, false);
-
+                    for (var i = 0; i < awsSearch.length; i++) {
+                        awsSearch[i].addEventListener('click', function() {
+                            window.setTimeout(function() {
+                                var field = document.querySelector(
+                                    ".fusion-menu .fusion-main-menu-search .aws-search-field, .fusion-flyout-search .aws-search-field, .fusion-main-menu.search-open .aws-search-field"
+                                );
+                                if (field) {
+                                    field.focus();
+                                }
+                            }, 100);
+                        });
+                    }
+                });
             </script>
 
         <?php }

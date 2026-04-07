@@ -99,23 +99,12 @@ class AWS_Admin {
 
         } else {
 
-            switch ($current_tab) {
-                case('search'):
-                    new AWS_Admin_Fields( 'search' );
-                    break;
-                case('form'):
-                    new AWS_Admin_Fields( 'form' );
-                    break;
-                case('results'):
-                    new AWS_Admin_Fields( 'results' );
-                    break;
-                case('suggestions'):
-                    new AWS_Admin_Fields( 'suggestions' );
-                    break;
-                default:
-                    echo AWS_Admin_Meta_Boxes::get_general_tab_content();
-                    new AWS_Admin_Fields( 'general' );
-            }
+            echo AWS_Admin_Meta_Boxes::get_general_tab_content();
+            new AWS_Admin_Fields( 'general' );
+            new AWS_Admin_Fields( 'search' );
+            new AWS_Admin_Fields( 'form' );
+            new AWS_Admin_Fields( 'results' );
+            new AWS_Admin_Fields( 'suggestions' );
 
         }
 

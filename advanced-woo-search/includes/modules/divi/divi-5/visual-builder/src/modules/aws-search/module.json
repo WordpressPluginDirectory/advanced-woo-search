@@ -1,0 +1,44 @@
+{
+  "name": "aws/search",
+  "d4Shortcode": "aws",
+  "title": "Advanced Woo Search",
+  "titles": "Advanced Woo Searches",
+  "category": "module",
+  "attributes": {
+    "module": {
+      "type": "object",
+      "selector": "{{selector}}",
+      "default": {
+        "meta": {
+          "adminLabel": {
+            "desktop": {
+              "value": "Advanced Woo Search"
+            }
+          }
+        }
+      }
+    },
+    "placeholder": {
+      "type": "object",
+      "selector": "{{selector}}",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": ""
+          }
+        }
+      }
+    },
+    "form_id": {
+      "type": "object",
+      "selector": "{{selector}}",
+      "default": {
+        "innerContent": {
+          "desktop": {
+            "value": "1"
+          }
+        }
+      }
+    }
+  }
+}

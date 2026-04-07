@@ -358,6 +358,24 @@
     color: #21759b;
 }
 
+.aws-search-result .aws_result_title .aws_result_heading {
+    display: block;
+    color: #aaaaaa;
+    font-size: 11px;
+    line-height: 1;
+    font-weight: normal;
+    padding-bottom: 3px;
+}
+
+.aws-search-result .aws_result_title .aws_result_hierarchy {
+    display: block;
+    color: #aaaaaa;
+    font-size: 10px;
+    line-height: 1;
+    font-weight: normal;
+    padding-top: 2px;
+}
+
 .aws-search-result .aws_result_featured {
     margin: 0 6px 0 0;
     position: relative;

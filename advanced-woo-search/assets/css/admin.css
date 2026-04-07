@@ -109,6 +109,7 @@
 
 #aws_form .aws-heading {
     margin-right: -100px;
+    margin-top: 5px;
 }
 
 #aws_form select,
@@ -249,6 +250,34 @@
 
 #aws_form [data-tab="suggestions"] .submit {
     display: none;
+}
+
+#aws_form [data-tab] {
+    display: none;
+}
+
+#aws_form [data-tab="performance"],
+#aws_form [data-tab="gtranslate"]{
+    display: block;
+}
+
+#aws_form[data-current-tab="general"] [data-tab="general"] {
+    display: block;
+}
+#aws_form[data-current-tab="search"] [data-tab="search"] {
+    display: block;
+}
+#aws_form[data-current-tab="form"] [data-tab="form"] {
+    display: block;
+}
+#aws_form[data-current-tab="results"] [data-tab="results"] {
+    display: block;
+}
+#aws_form[data-current-tab="suggestions"] [data-tab="suggestions"] {
+    display: block;
+}
+#aws_form [data-aws-hidden] {
+    display: none !important;
 }
 
 h1.aws-instance-name {
@@ -426,7 +455,7 @@ h1.aws-instance-name {
     position: relative;
 }
 
-#aws-admin-header .inner .logo .version {
+#aws-admin-header .inner .version {
     background: #f0f0f1;
     display: inline-block;
     padding: 0 8px;
@@ -442,12 +471,30 @@ h1.aws-instance-name {
 }
 
 #aws-admin-header .inner .btns {
+    display: flex;
+    align-items: center;
 }
 
 #aws-admin-header .inner .btns a {
-    padding: 6px 12px;
+    padding: 6px 10px;
     line-height: 1;
     margin-left: 5px;
+    display: inline-flex;
+    text-decoration: none;
+    font-size: 13px;
+    vertical-align: text-top;
+    align-items: center;
+    color: #64707B;
+}
+
+
+#aws-admin-header .inner .btns a:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+#aws-admin-header .inner .btns a:hover {
+    color: #8156b3;
 }
 
 #aws-admin-header .inner .btns a:before,
@@ -464,7 +511,8 @@ h1.aws-instance-name {
     line-height: 1;
     margin-right: 4px;
     vertical-align: text-top;
-    font-size: 15px;
+    font-size: 20px;
+    color: #8156b3;
 }
 #aws-admin-header .inner .btns a.button-docs:before {
     content: "\f318";
@@ -480,6 +528,12 @@ h1.aws-instance-name {
     vertical-align: bottom;
     margin-left: 2px;
     margin-right: 0;
+    color: #64707B;
+}
+
+#aws-admin-header .inner .btns a.button-docs:hover:after,
+#aws-admin-header .inner .btns a.button-support:hover:after {
+    color: #8156b3;
 }
 
 #aws-admin-header .inner .btns a.button-pro:before {
@@ -489,7 +543,8 @@ h1.aws-instance-name {
 #aws-admin-header .inner .btns a.button-pro {
     color: #50575e;
     background: #FFF7C7;
-    border: 1px solid #50575e;
+    border-radius: 3px;
+    margin-right: 8px;
 }
 
 #aws-admin-header .inner .btns a.button-pro:hover {
@@ -532,8 +587,8 @@ h1.aws-instance-name {
     font-weight: 600;
     font-size: 14px;
     line-height: 20px;
-    padding: 10px 0;
-    margin-right: 24px;
+    padding: 10px 6px;
+    margin-right: 12px;
     text-decoration: none;
     color: #505050;
     margin-bottom: -1px;
@@ -544,6 +599,10 @@ h1.aws-instance-name {
 #aws-admin-subheader .inner .aws-tabs .aws-nav-tab.aws-nav-tab-active:hover {
     border-color: #007cba;
     color: #070707;
+}
+
+#aws-admin-subheader .inner .aws-tabs .aws-nav-tab.aws-nav-tab-active {
+    pointer-events: none;
 }
 
 #aws-admin-subheader .inner .aws-tabs .aws-nav-tab:hover {
@@ -574,37 +633,33 @@ h1.aws-instance-name {
 
 #aws_form .aws-admin-sections li {
     display: inline-block;
-    padding-right: 7px;
-}
-
-#aws_form .aws-admin-sections li:after {
-    content: "|";
-}
-
-#aws_form .aws-admin-sections li:last-of-type:after {
-    content: '';
+    padding-right: 2px;
 }
 
 #aws_form .aws-admin-sections li a {
-    padding-right: 7px;
-    color: #135e96;
+    display: inline-block;
+    color: #505050;
     text-decoration: none;
     font-size: 13px;
-
+    padding: 5px 10px;
+    border-radius: 3px;
 }
 
 #aws_form .aws-admin-sections li a.aws-active {
     color: #000;
     pointer-events: none;
-    font-weight: 600;
+    background-color: #d7dade;
 }
 
 #aws_form .aws-admin-sections li a:hover {
-    text-decoration: underline;
+    text-decoration: none;
+    color: #2271b1;
+    background-color: #e7e7e7;
 }
 
 #aws_form .aws-admin-sections li a.aws-active:hover {
     text-decoration: none;
+    color: #000;
 }
 
 #aws_form .aws-admin-sections li a:focus {

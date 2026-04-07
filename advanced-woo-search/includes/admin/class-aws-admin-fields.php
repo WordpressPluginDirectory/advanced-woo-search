@@ -27,6 +27,8 @@ if ( ! class_exists( 'AWS_Admin_Fields' ) ) :
 
         private $current_opt_value;
 
+        private $active_section = false;
+
         private $depends_on = array();
 
         /*
@@ -94,6 +96,7 @@ if ( ! class_exists( 'AWS_Admin_Fields' ) ) :
 
             $id = isset( $field['id'] ) && $field['id'] ? $field['id'] : '';
             $parent_id = isset( $field['parent_id'] ) && $field['parent_id'] ? $field['parent_id'] : $id;
+            $is_child_opt = isset( $field['is_child_opt'] ) && $field['is_child_opt'] ? $field['is_child_opt'] : false;
 
             $this->current_opt_value = '';
             if ( isset( $field['current_opt_value'] ) && $field['current_opt_value'] ) {
@@ -104,11 +107,21 @@ if ( ! class_exists( 'AWS_Admin_Fields' ) ) :
                 $this->current_opt_value = $field['value'];
             }
 
+            $section = '';
+            $is_hidden = '';
+
+            if ( ! $is_child_opt ) {
+                $section = isset( $field['section'] ) && $field['section'] ? ' data-section="'. esc_attr( $field['section'] ) .'"' : ' data-section="main"';
+                $is_hidden = isset( $field['section'] ) && $this->active_section && $this->active_section !== $field['section'] ? ' style="display:none;"' : '';
+            }
+
             $this->is_disabled = isset( $field['disabled'] ) && $field['disabled'] ? 'disabled' : '';
             $disabled_row_class = $this->is_disabled ? ' class="aws-disabled"' : '';
 
             // is field is hidden because of dependencies
-            $is_hidden = $this->is_field_depends( $field ) ? ' style="display:none;"' : '';
+            $hidden_by_dependency = $this->is_field_depends( $field ) || $field['type'] === 'hidden' ? ' data-aws-hidden="true"' : '';
+
+            $this->is_disabled = isset( $field['disabled'] ) && $field['disabled'] ? 'disabled' : '';
 
             $depends_on = '';
             if ( $parent_id && isset( $this->depends_on[$parent_id] ) ) {
@@ -129,7 +142,7 @@ if ( ! class_exists( 'AWS_Admin_Fields' ) ) :
 
             $html = '';
 
-            $html .= '<tr'. $disabled_row_class .' data-option="'. esc_attr( $parent_id ) .'"' . $depends_on . $is_hidden . '>';
+            $html .= '<tr'. $section .' data-option="'. esc_attr( $parent_id ) .'"' . $depends_on . $disabled_row_class . $is_hidden . $hidden_by_dependency . '>';
 
                 $html .= '<th scope="row">';
                     $html .= $heading_before;
@@ -183,6 +196,20 @@ if ( ! class_exists( 'AWS_Admin_Fields' ) ) :
             $html = '';
 
             $html .= '<input ' . $this->is_disabled . ' type="text" name="'. esc_attr( $field['id'] ) .'" class="regular-text" value="'. esc_attr( stripslashes( $this->current_opt_value ) ) .'">';
+
+            return $html;
+
+        }
+
+        /*
+         * Hidden field type html markup
+         * @return string
+         */
+        private function get_field_hidden( $field ) {
+
+            $html = '';
+
+            $html .= '<input ' . $this->is_disabled . ' type="hidden" name="'. esc_attr( $field['id'] ) .'" class="regular-text" value="'. esc_attr( stripslashes( $this->current_opt_value ) ) .'">';
 
             return $html;
 
@@ -519,6 +546,7 @@ if ( ! class_exists( 'AWS_Admin_Fields' ) ) :
                                                 $suboption['current_opt_value'] = isset( $table_options[$val] ) && isset( $table_options[$val][$subid] ) ? $table_options[$val][$subid] : '';
                                                 $suboption['id'] = $field_name . '[' . $subid . ']';
                                                 $suboption['parent_id'] = $field_name . '[' . $subid . ']';
+                                                $suboption['is_child_opt'] = true;
                                                 $html .= $this->generate_field( $suboption );
                                             }
 
@@ -684,31 +712,43 @@ if ( ! class_exists( 'AWS_Admin_Fields' ) ) :
          */
         private function generate_sections_tabs() {
 
-            $sections = array(
-                'search' => array(
-                    '#search_engine' => __( 'Search Engine', 'advanced-woo-search' ),
-                    '#search_page' => __( 'Search Page', 'advanced-woo-search' )
-                ),
-                'form' => array(
-                    '#bar' => __( 'Common', 'advanced-woo-search' ),
-                    '#quick_filters' => __( 'Quick Filters', 'advanced-woo-search' ),
-                ),
-                'results' => array(
-                    '#general' => __( 'Common', 'advanced-woo-search' ),
-                    '#archives' => __( 'Non-Products Search Results', 'advanced-woo-search' ),
-                    '#view' => __( 'Content', 'advanced-woo-search' ),
-                    '#excludeinclude' => __( 'Filters', 'advanced-woo-search' ),
-                ),
-            );
+            $section_names = AWS_Admin_Options::get_sections_names();
 
-            if ( isset( $sections[$this->tab_name] ) && is_array( $sections[$this->tab_name] ) ) {
+            $sections = array();
+            foreach ( $this->options_array as $k => $field ) {
+                if ( isset( $field['section'] ) && $field['section'] ) {
+                    $section_id = $field['section'];
+                    if ( ! isset( $sections[$section_id] ) ) {
+                        $section_name = isset( $section_names[$section_id] ) ? $section_names[$section_id] : $section_id;
+                        $sections[$section_id] = $section_name;
+                    }
+                }
+            }
+
+            if ( $sections && count( $sections ) > 1 ) {
 
                 echo '<ul class="aws-admin-sections">';
 
-                foreach ( $sections[$this->tab_name] as $subtab_link => $subtab_name ) {
+                $num = 0;
+
+                foreach ( $sections as $section_id => $section_name ) {
+
+                    if ( ! $this->active_section ) {
+                        $this->active_section = $section_id;
+                    }
+
+                    $is_active = '';
+
+                    if ( ! $num ) {
+                        $is_active = ' class="aws-active"';
+                    }
+
                     echo '<li>';
-                        echo '<a href="'. esc_url( $subtab_link ) .'">'. esc_html( $subtab_name ) .'</a>';
+                        echo '<a'. $is_active .' href="#" data-section-name="'. $section_id .'">'. $section_name .'</a>';
                     echo '</li>';
+
+                    $num++;
+
                 }
 
                 echo '</ul>';

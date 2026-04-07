@@ -108,7 +108,7 @@ if ( ! class_exists( 'AWS_Elementor_Init' ) ) :
 
             if ( method_exists( $widget, 'get_name' ) && $widget->get_name() === 'search' ) {
                 $content = preg_replace( '/<search[\S\s]*?<\/search>/i', aws_get_search_form( false ), $content );
-                $content .= '<div style="display:none;" class="e-search"><button class="e-search-submit  " type="submit"><span class=""></span></button><input class="e-search-input" type="search" name="s" value="" ><div class="e-search-results-container"></div class="e-search-results"></div></div></div></div>';
+                $content .= '<div style="display:none;" class="e-search"><button class="e-search-submit  " type="submit"><span class=""></span></button><input class="e-search-input" type="search" name="s" value="" ><div class="e-search-results-container"><div class="e-search-results"></div></div></div>';
                 return $content;
             }
 

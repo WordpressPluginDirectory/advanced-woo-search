@@ -1209,15 +1209,13 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
          */
         static public function get_relevance_scores( $data ) {
 
-            $relevance_array = array(
-                'title'   => 350,
-                'content' => 100,
-                'id'      => 300,
-                'sku'     => 300,
-                'other'   => 35,
-                'tax_name'  => 350,
-                'tax_desc'  => 100,
-            );
+            $relevance_array = AWS_Helpers::get_default_relevance_scores();
+
+            if ( $data && isset( $data['search_in_weights'] ) && is_array( $data['search_in_weights'] ) ) {
+                foreach ( $data['search_in_weights'] as $field => $weight ) {
+                    $relevance_array[$field] = (int) $weight;
+                }
+            }
 
             /**
              * Change relevance scores for product search fields
@@ -1230,6 +1228,64 @@ if ( ! class_exists( 'AWS_Helpers' ) ) :
             $relevance_array = shortcode_atts( $relevance_array, $relevance_array_filtered, 'aws_relevance_scores' );
 
             return $relevance_array;
+
+        }
+
+        /**
+         * Get array of default relevance scores
+         * @return array $default_relevance_array
+         */
+        static public function get_default_relevance_scores() {
+
+            $default_relevance_array = array(
+                'title'     => 350,
+                'content'   => 100,
+                'sku'       => 300,
+                'excerpt'   => 100,
+                'category'  => 35,
+                'tag'       => 35,
+                'id'        => 300,
+                'other'     => 35,
+                'tax_name'  => 350,
+                'tax_desc'  => 100,
+            );
+
+            return $default_relevance_array;
+
+        }
+
+        /*
+         * Find duplicates in $relevance_params and combine them
+         * @return array $relevance_sources_groups
+         */
+        static public function grouped_similar_relevance_scores( $relevance_params, $search_in_arr ) {
+
+            $grouped = array();
+
+            foreach ($relevance_params as $key => $values) {
+                $groupKey = $values['full'] . '_' . $values['like'];
+
+                if ( array_search( $key, $search_in_arr ) !== false ) {
+
+                    if (!isset($grouped[$groupKey])) {
+                        $grouped[$groupKey] = [
+                            'full' => $values['full'],
+                            'like' => $values['like'],
+                            'sources' => [],
+                        ];
+                    }
+
+                    $grouped[$groupKey]['sources'][] = $key;
+
+                }
+
+            }
+
+            $relevance_sources_groups = array_values(array_filter($grouped, function ($group) {
+                return count($group['sources']) > 1;
+            }));
+
+            return $relevance_sources_groups;
 
         }
 

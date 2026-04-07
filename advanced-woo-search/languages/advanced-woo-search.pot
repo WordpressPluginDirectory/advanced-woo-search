@@ -1176,6 +1176,9 @@ msgstr ""
 msgid "weight"
 msgstr ""
 
+msgid "Weight of this search source. The higher the value, the more impact it has on product ranking. Range 1 - 999."
+msgstr ""
+
 msgid "selected"
 msgstr ""
 
@@ -1219,4 +1222,43 @@ msgid "Create filters manually with full control or generate them automatically 
 msgstr ""
 
 msgid "Search Bar"
+msgstr ""
+
+msgid "Search Engine Settings"
+msgstr ""
+
+msgid "Styles"
+msgstr ""
+
+msgid "Non-Products Results"
+msgstr ""
+
+msgid "Show count"
+msgstr ""
+
+msgid "Show the number of products next to each item."
+msgstr ""
+
+msgid "Show empty"
+msgstr ""
+
+msgid "Show archive pages that do not contain any products."
+msgstr ""
+
+msgid "Show images"
+msgstr ""
+
+msgid "Show images for archive page results, if available."
+msgstr ""
+
+msgid "Show taxonomy name"
+msgstr ""
+
+msgid "Show the taxonomy name next to each result."
+msgstr ""
+
+msgid "Show hierarchy"
+msgstr ""
+
+msgid "Show parent terms for hierarchical taxonomies."
 msgstr ""
